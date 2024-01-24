@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { AuthService } from './services/auth.service';
-import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
-import { Auth } from './schemas/auth';
+import { Store, select } from '@ngrx/store';
+import { checkSession } from './store/auth.actions';
+import { auth } from './store/auth.selector';
 
 
 @Component({
@@ -15,10 +15,10 @@ import { Auth } from './schemas/auth';
 })
 export class AppComponent {
   title = 'beskid-frontend';
-  auth$: Observable<Auth>;
+  auth$ = this.store.pipe(select(auth));
 
-  constructor(authService: AuthService) {
-    this.auth$ = authService.newSession();
+  constructor(private store: Store) {
+    this.store.dispatch(checkSession());
   }
 
 }
