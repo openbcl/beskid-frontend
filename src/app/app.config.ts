@@ -2,7 +2,7 @@ import { ApplicationConfig, importProvidersFrom, isDevMode } from '@angular/core
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment';
 import { provideState, provideStore } from '@ngrx/store';
@@ -10,6 +10,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AuthEffects } from './store/auth.effects';
 import { authFeatureKey, authReducer } from './store/auth.reducer';
+import { tokenInterceptor } from './shared/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,9 +20,9 @@ export const appConfig: ApplicationConfig = {
             allowedDomains: [environment.domain, environment.backend]
         }
     })),
-    provideRouter(routes, withComponentInputBinding()),
-    provideHttpClient(),
     { provide: JwtHelperService },
+    provideRouter(routes, withComponentInputBinding()),
+    provideHttpClient(withInterceptors([tokenInterceptor])),
     provideStore(),
     provideState({ name: authFeatureKey, reducer: authReducer }),
     provideEffects(AuthEffects),

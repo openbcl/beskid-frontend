@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { Store, select } from '@ngrx/store';
-import { checkSession } from './store/auth.actions';
+import { checkSession, deleteSession } from './store/auth.actions';
 import { auth } from './store/auth.selector';
 
 
@@ -21,4 +21,7 @@ export class AppComponent {
     this.store.dispatch(checkSession());
   }
 
+  deleteSession() {
+    this.store.dispatch(deleteSession());
+  }
 }
