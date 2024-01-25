@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CreateTaskDto, Task, TaskTraining } from '../store/task';
-import { TaskResultEvaluation } from '../store/result';
 import { environment } from '../../environments/environment';
+import { CreateTaskDto, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +35,7 @@ export class TaskService {
   }
 
   findTaskResult(taskId: string, fileId: string) {
-    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`);
+    return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`);
   }
 
   evaluateTaskResult(taskId: string, fileId: string, evaluation: TaskResultEvaluation) {
