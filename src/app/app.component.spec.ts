@@ -1,10 +1,21 @@
 import { TestBed } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
 import { AppComponent } from './app.component';
+import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { StoreMock } from './testing/mocks';
+
 
 describe('AppComponent', () => {
+  let actions$: Observable<any>;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [provideMockActions(() => actions$), {
+        provide: Store,
+        useValue: StoreMock
+      }]
     }).compileComponents();
   });
 
