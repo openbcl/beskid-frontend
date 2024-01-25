@@ -11,6 +11,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AuthEffects } from './store/auth.effects';
 import { authFeatureKey, authReducer } from './store/auth.reducer';
 import { tokenInterceptor } from './shared/token.interceptor';
+import { ModelEffects } from './store/model.effects';
+import { modelFeatureKey, modelReducer } from './store/model.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,7 +27,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideStore(),
     provideState({ name: authFeatureKey, reducer: authReducer }),
-    provideEffects(AuthEffects),
+    provideState({ name: modelFeatureKey, reducer: modelReducer }),
+    provideEffects(AuthEffects, ModelEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
 ]
 };
