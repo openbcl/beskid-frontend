@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { Task, TaskResultEvaluation, TaskTraining } from './task';
+import { ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
 
 export const addTask = createAction(
   '[Task] Add Task',
-  props<{ taskId: number }>()
+  props<{ taskId: string }>()
 );
 
 export const addTaskSuccess = createAction(
@@ -18,7 +18,7 @@ export const addTaskFailure = createAction(
 
 export const findTask = createAction(
   '[Task] Find Task',
-  props<{ taskId: number }>()
+  props<{ taskId: string }>()
 );
 
 export const findTaskSuccess = createAction(
@@ -47,7 +47,7 @@ export const findTasksFailure = createAction(
 
 export const editTask = createAction(
   '[Task] Edit Task',
-  props<{ taskId: number, training: TaskTraining }>()
+  props<{ taskId: string, training: TaskTraining }>()
 );
 
 export const editTaskSuccess = createAction(
@@ -62,11 +62,12 @@ export const editTaskFailure = createAction(
 
 export const deleteTask = createAction(
   '[Task] Delete Task',
-  props<{ taskId: number }>()
+  props<{ taskId: string }>()
 );
 
 export const deleteTaskSuccess = createAction(
-  '[Task] Delete Task Success'
+  '[Task] Delete Task Success',
+  props<{ taskId: string }>()
 );
 
 export const deleteTaskFailure = createAction(
@@ -76,7 +77,7 @@ export const deleteTaskFailure = createAction(
 
 export const runTask = createAction(
   '[Task] Run Task',
-  props<{ taskId: number, modelId: number, resolution: number }>()
+  props<{ taskId: string, modelId: number, resolution: number }>()
 );
 
 export const runTaskSuccess = createAction(
@@ -91,12 +92,12 @@ export const runTaskFailure = createAction(
 
 export const findTaskResult = createAction(
   '[Task] Find Task Result',
-  props<{ taskId: number, fileId: string }>()
+  props<{ taskId: string, fileId: string }>()
 );
 
 export const findTaskResultSuccess = createAction(
   '[Task] Find Task Result Success',
-  props<{ data: any }>()
+  props<{ taskId: string, fileId: string, resultValue: ResultValue }>()
 );
 
 export const findTaskResultFailure = createAction(
@@ -106,7 +107,7 @@ export const findTaskResultFailure = createAction(
 
 export const evaluateTaskResult = createAction(
   '[Task] Evaluate Task Result',
-  props<{ taskId: number, fileId: string, evaluation: TaskResultEvaluation }>()
+  props<{ taskId: string, fileId: string, evaluation: TaskResultEvaluation }>()
 );
 
 export const evaluateTaskResultSuccess = createAction(

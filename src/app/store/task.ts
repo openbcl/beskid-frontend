@@ -21,11 +21,16 @@ export enum TaskResultEvaluation {
   NEGATIVE = 'NEGATIVE',
 }
 
-export interface TaskResult {
+export interface TaskResult extends ResultValue{
   filename: string;
   uriFile: string;
   uriData: string;
   date: Date;
   model: Model;
   evaluation: TaskResultEvaluation;
+}
+
+export interface ResultValue {
+  data?: any;
+  file?: any;
 }
