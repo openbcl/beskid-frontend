@@ -1,4 +1,4 @@
-import { TaskResult } from "./result";
+import { Model } from "./model";
 
 export enum TaskTraining {
   DISABLED = 'DISABLED',
@@ -15,3 +15,17 @@ export interface Task {
 
 export interface CreateTaskDto extends Pick<Task, 'values'>{};
 
+export enum TaskResultEvaluation {
+  NEUTRAL = 'NEUTRAL',
+  POSITIVE = 'POSITIVE',
+  NEGATIVE = 'NEGATIVE',
+}
+
+export interface TaskResult {
+  filename: string;
+  uriFile: string;
+  uriData: string;
+  date: Date;
+  model: Model;
+  evaluation: TaskResultEvaluation;
+}
