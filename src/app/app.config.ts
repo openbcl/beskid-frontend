@@ -14,6 +14,7 @@ import { tokenInterceptor } from './shared/token.interceptor';
 import { ModelEffects } from './store/model.effects';
 import { modelFeatureKey, modelReducer } from './store/model.reducer';
 import { taskFeatureKey, taskReducer } from './store/task.reducer';
+import { TaskEffects } from './store/task.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: authFeatureKey, reducer: authReducer }),
     provideState({ name: modelFeatureKey, reducer: modelReducer }),
     provideState({ name: taskFeatureKey, reducer: taskReducer }),
-    provideEffects(AuthEffects, ModelEffects),
+    provideEffects(AuthEffects, ModelEffects, TaskEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
 ]
 };

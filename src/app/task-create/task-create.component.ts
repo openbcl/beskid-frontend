@@ -1,0 +1,61 @@
+import { Component } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { TableModule } from 'primeng/table';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ButtonModule } from 'primeng/button';
+import { addTask } from '../store/task.actions';
+import { TaskTraining } from '../store/task';
+
+@Component({
+  selector: 'be-task-create',
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, InputTextareaModule, ButtonModule],
+  templateUrl: './task-create.component.html',
+  styleUrl: './task-create.component.scss'
+})
+export class TaskCreateComponent { 
+  numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
+
+  form = this.fb.group({
+    values: this.fb.array<string>([], { validators: [Validators.required]}),
+    training: false
+  });
+
+  constructor(
+    private fb: FormBuilder,
+    private store: Store
+  ) { }
+
+  updateValues(input: string) {
+    const values = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value && value.match(this.numberPattern)).map(value => 
+      this.fb.control(value, { validators: [Validators.pattern(this.numberPattern)] })
+    );
+    this.form.controls.values.clear();
+    if (values.length >= 100) {
+      values.forEach(value => this.form.controls.values.push(value));
+    } else if (!!input?.length) {
+      const wrongValues = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value?.length && !value.match(this.numberPattern));
+      const errors = [];
+      if (values.length + wrongValues.length < 100) {
+        errors.push('You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.');
+      }
+      if (!!wrongValues.length) {
+        errors.push(`You have submitted ${values.length} correct and ${wrongValues.length} incorrect values.`);
+        errors.push(`The following values do not appear to represent numbers: ${wrongValues.join(', ')}`);
+      }
+      // TODO: Error-Toast
+      console.log(errors);
+    }
+  }
+
+  addTask() {
+    const createTask = {
+      values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
+      training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
+    };
+    this.store.dispatch(addTask({ createTask }))
+  }
+}

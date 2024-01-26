@@ -1,0 +1,23 @@
+<textarea rows="5" cols="30" (input)="updateValues($any($event).target.value)"></textarea>
+<form #myForm [formGroup]="form" class="grid">
+  <p-table [value]="form.controls.values.controls" styleClass="foobar p-datatable-striped" [scrollable]="true" scrollHeight="flex">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="table-nr-column">Nr</th>
+            <th>Value</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+      <ng-container formArrayName="values">  
+        <tr >
+            <td class="table-nr-column">{{rowIndex + 1}}</td>
+            <td>
+              <input pInputText [formControlName]="rowIndex" />
+            </td>
+        </tr>
+      </ng-container>
+    </ng-template>
+  </p-table>
+  <p-inputSwitch formControlName="training"></p-inputSwitch>
+</form>
+<p-button label="Submit" [disabled]="form.invalid" (click)="addTask()"></p-button>

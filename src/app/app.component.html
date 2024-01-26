@@ -1,21 +1,2 @@
-<h1>Session</h1>
-@if (auth$ | async; as auth) {
-  <p>Session ID: {{ auth.sessionId }}</p>
-  <p>Token: {{ auth.token }}</p>
-} @else {
-  <p>Querying session data...</p>
-}
-<button type="button" (click)="deleteSession()">Delete and renew session</button>
-<h1>All models</h1>
-@for (model of models$ | async; track model.id) {
-  <li>Name: {{ model.name }}, ID: {{ model.id }}, Resolutions: {{ model.resolutions }}</li>
-} @empty {
-  Querying models...
-}
-<h1>Selected model</h1>
-@if (model$ | async; as model) {
-  <p>Name: {{ model.name }}, ID: {{ model.id }}, Resolutions: {{ model.resolutions }}</p>
-} @else {
-  <p>Querying selected model...</p>
-}
+<be-task-create></be-task-create>
 <router-outlet />
