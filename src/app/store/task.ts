@@ -13,7 +13,7 @@ export interface Task {
   results: TaskResult[];
 }
 
-export interface CreateTaskDto extends Pick<Task, 'values'>{};
+export interface CreateTaskDto extends Pick<Task, 'values' | 'training'>{};
 
 export enum TaskResultEvaluation {
   NEUTRAL = 'NEUTRAL',
