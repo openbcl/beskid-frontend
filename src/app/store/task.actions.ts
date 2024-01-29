@@ -112,7 +112,7 @@ export const evaluateTaskResult = createAction(
 
 export const evaluateTaskResultSuccess = createAction(
   '[Task] Evaluate Task Result Success',
-  props<{ task: Task }>()
+  props<{ task: Task, evaluation: TaskResultEvaluation }>()
 );
 
 export const evaluateTaskResultFailure = createAction(

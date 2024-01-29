@@ -3,6 +3,7 @@ import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { TaskService } from "../services/task.service";
 import { catchError, map, of, switchMap } from "rxjs";
 import * as TaskActions from './task.actions';
+import * as ToastActions from './toast.actions';
 
 
 @Injectable()
@@ -16,6 +17,14 @@ export class TaskEffects {
         catchError(error => of(TaskActions.addTaskFailure({ error })))
       )
     )
+  ));
+
+  addTaskSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.addTaskSuccess),
+    switchMap(action => of(ToastActions.toastSuccess({
+      summary: 'Task successfully created!',
+      detail: action.task.id
+    })))
   ));
 
   findTask$ = createEffect(() => this.actions$.pipe(
@@ -48,6 +57,14 @@ export class TaskEffects {
     )
   ));
 
+  editTaskSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.editTaskSuccess),
+    switchMap(action => of(ToastActions.toastSuccess({
+      summary: 'Task successfully edited!',
+      detail: `Training ${action.task.training}`
+    })))
+  ));
+
   deleteTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTask),
     switchMap(action =>
@@ -56,6 +73,14 @@ export class TaskEffects {
         catchError(error => of(TaskActions.deleteTaskFailure({ error })))
       )
     )
+  ));
+
+  deleteTaskSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.deleteTaskSuccess),
+    switchMap(action => of(ToastActions.toastInfo({
+      summary: 'Task successfully deleted!',
+      detail: `Training ${action.taskId}`
+    })))
   ));
 
   runTask$ = createEffect(() => this.actions$.pipe(
@@ -67,6 +92,15 @@ export class TaskEffects {
       )
     )
   ));
+
+  runTaskSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.runTaskSuccess),
+    switchMap(action => of(ToastActions.toastSuccess({
+      summary: 'Task run successfully completed!',
+      detail: action.task.id
+    })))
+  ));
+
 
   findTaskResult$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.findTaskResult),
@@ -82,10 +116,18 @@ export class TaskEffects {
     ofType(TaskActions.evaluateTaskResult),
     switchMap(action =>
       this.taskService.evaluateTaskResult(action.taskId, action.fileId, action.evaluation).pipe(
-        map(task => TaskActions.evaluateTaskResultSuccess({ task })),
+        map(task => TaskActions.evaluateTaskResultSuccess({ task, evaluation: action.evaluation })),
         catchError(error => of(TaskActions.evaluateTaskResultFailure({ error })))
       )
     )
+  ));
+
+  evaluateTaskResultSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.evaluateTaskResultSuccess),
+    switchMap(action => of(ToastActions.toastSuccess({
+      summary: 'Task result successfully evaluated!',
+      detail: `Result is ${action.evaluation}`
+    })))
   ));
 
   constructor(

@@ -3,6 +3,7 @@ import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { AuthService } from "../services/auth.service";
 import { catchError, filter, map, of, switchMap } from "rxjs";
 import * as AuthActions from './auth.actions';
+import * as ToastActions from './toast.actions';
 
 
 @Injectable()
@@ -16,6 +17,13 @@ export class AuthEffects {
         catchError(error => of(AuthActions.newSessionFailure({ error })))
       )
     )
+  ));
+
+  newSessionSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(AuthActions.newSessionSuccess),
+    switchMap(action => of(ToastActions.toastInfo({
+      summary: 'Welcome!'
+    })))
   ));
 
   renewSession$ = createEffect(() => this.actions$.pipe(
