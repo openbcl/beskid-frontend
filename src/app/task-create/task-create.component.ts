@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { isDevMode } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
@@ -18,6 +19,7 @@ import { toastError } from '../store/toast.actions';
   styleUrl: './task-create.component.scss'
 })
 export class TaskCreateComponent {
+  isDevMode = isDevMode;
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
   help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 
@@ -59,6 +61,10 @@ export class TaskCreateComponent {
       }
       errors.forEach(detail => this.store.dispatch(toastError({ summary: 'Format Error', detail })));
     }
+  }
+
+  addRandomValues() {
+    this.updateValues([ ...Array(100) ].map(() => (Math.random() * 100).toExponential(18)).join(','))
   }
 
   addTask() {

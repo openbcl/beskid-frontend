@@ -8,6 +8,9 @@
         </div>
         <div class="flex flex-wrap column-gap-2 row-gap-2">
           <p-button label="Clear values" [disabled]="!form.controls.values.controls.length" icon="fas fa-xmark" severity="danger" (click)="form.controls.values.clear()"></p-button>
+          @if (isDevMode()) {
+            <p-button label="Add random values" icon="fas fa-wand-sparkles" severity="warning" (click)="addRandomValues()"></p-button>
+          }
           <p-button label="Paste from Clipboard" icon="far fa-paste" (click)="pasteFromClipboard()"></p-button>
         </div>
       </div>
