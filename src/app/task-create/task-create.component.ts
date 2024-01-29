@@ -4,20 +4,21 @@ import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 
 @Component({
   selector: 'be-task-create',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, InputTextareaModule, ButtonModule],
+  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule],
   templateUrl: './task-create.component.html',
   styleUrl: './task-create.component.scss'
 })
-export class TaskCreateComponent { 
+export class TaskCreateComponent {
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
+  help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 
   form = this.fb.group({
     values: this.fb.array<string>([], { validators: [Validators.required]}),
@@ -29,18 +30,27 @@ export class TaskCreateComponent {
     private store: Store
   ) { }
 
+  async pasteFromClipboard() {
+    const clipboard = await navigator.clipboard.readText();
+    if (clipboard) {
+      this.updateValues(clipboard)
+    } else {
+      console.log('Can not access clipboard.');
+    }
+  }
+
   updateValues(input: string) {
     const values = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value && value.match(this.numberPattern)).map(value => 
       this.fb.control(value, { validators: [Validators.pattern(this.numberPattern)] })
     );
     this.form.controls.values.clear();
-    if (values.length >= 100) {
+    if (values.length == 100) {
       values.forEach(value => this.form.controls.values.push(value));
     } else if (!!input?.length) {
       const wrongValues = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value?.length && !value.match(this.numberPattern));
       const errors = [];
       if (values.length + wrongValues.length < 100) {
-        errors.push('You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.');
+        errors.push(this.help);
       }
       if (!!wrongValues.length) {
         errors.push(`You have submitted ${values.length} correct and ${wrongValues.length} incorrect values.`);

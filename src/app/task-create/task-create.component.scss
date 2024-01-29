@@ -6,3 +6,9 @@ th.table-nr-column {
 td.table-nr-column {
   text-align: right;
 }
+
+tr.be-footer > td  {
+  span {
+    font-weight: 400 !important;
+  }
+}

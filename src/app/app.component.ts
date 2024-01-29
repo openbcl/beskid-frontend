@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { checkSession } from './store/auth.actions';
 import { TaskCreateComponent } from "./task-create/task-create.component";
+import { PrimeNGConfig } from 'primeng/api';
 
 
 @Component({
@@ -15,7 +16,8 @@ import { TaskCreateComponent } from "./task-create/task-create.component";
 export class AppComponent {
   title = 'beskid-frontend';
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private primengConfig: PrimeNGConfig) {
+    this.primengConfig.ripple = true;
     this.store.dispatch(checkSession());
   }
 }
