@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
+import { toastError } from '../store/toast.actions';
 
 @Component({
   selector: 'be-task-create',
@@ -35,7 +36,7 @@ export class TaskCreateComponent {
     if (clipboard) {
       this.updateValues(clipboard)
     } else {
-      console.log('Can not access clipboard.');
+      this.store.dispatch(toastError({ summary: 'Browser Error', detail: 'Can not access clipboard.' }))
     }
   }
 
@@ -56,8 +57,7 @@ export class TaskCreateComponent {
         errors.push(`You have submitted ${values.length} correct and ${wrongValues.length} incorrect values.`);
         errors.push(`The following values do not appear to represent numbers: ${wrongValues.join(', ')}`);
       }
-      // TODO: Error-Toast
-      console.log(errors);
+      errors.forEach(detail => this.store.dispatch(toastError({ summary: 'Format Error', detail })));
     }
   }
 

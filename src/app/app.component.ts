@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { checkSession } from './store/auth.actions';
 import { TaskCreateComponent } from "./task-create/task-create.component";
 import { PrimeNGConfig } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 @Component({
@@ -11,7 +12,7 @@ import { PrimeNGConfig } from 'primeng/api';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, TaskCreateComponent]
+    imports: [RouterOutlet, TaskCreateComponent, ToastModule]
 })
 export class AppComponent {
   title = 'beskid-frontend';

@@ -14,7 +14,7 @@
   </ng-template>
     <ng-template pTemplate="header">
         <tr>
-            <th class="table-nr-column">Nr</th>
+            <th class="table-nr-column">Nr.</th>
             <th>Value</th>
         </tr>
     </ng-template>
@@ -34,7 +34,7 @@
           <div class="flex flex-wrap column-gap-2 row-gap-2 align-items-center justify-content-between">
             <div class="flex column-gap-2 align-items-center">
               <p-inputSwitch ariaLabel="foobar" formControlName="training"></p-inputSwitch>
-              <span>Provide for AI training</span>
+              <span>Provide data for AI training</span>
               <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm. "></i>
             </div>
             <p-button label="Submit" [disabled]="form.invalid" severity="success" (click)="addTask()"></p-button>
