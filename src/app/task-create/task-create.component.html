@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <p-table [value]="form.controls.values.controls" styleClass="foobar p-datatable-striped" [scrollable]="true" scrollHeight="flex">
+  <p-table [value]="form.controls.values.controls" styleClass="p-datatable-striped" [scrollable]="true" scrollHeight="80vh">
     <ng-template pTemplate="caption">
       <div class="flex flex-wrap column-gap-2 row-gap-2 align-items-center justify-content-between">
         <div class="flex column-gap-2 align-items-center">
@@ -36,7 +36,7 @@
         <td colspan="2">
           <div class="flex flex-wrap column-gap-2 row-gap-2 align-items-center justify-content-between">
             <div class="flex column-gap-2 align-items-center">
-              <p-inputSwitch ariaLabel="foobar" formControlName="training"></p-inputSwitch>
+              <p-inputSwitch formControlName="training"></p-inputSwitch>
               <span>Provide data for AI training</span>
               <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm. "></i>
             </div>

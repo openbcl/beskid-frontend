@@ -1,0 +1,44 @@
+input[type=checkbox] {
+  display: none;
+}
+
+.be-tasksSidebarToggleIcon {
+  box-sizing: border-box;
+  cursor: pointer;
+  position: relative;
+  z-index: 99;
+  width: 2rem;
+  display: block
+}
+
+.be-hamburger-line-1, .be-hamburger-line-2, .be-hamburger-line-3 {
+  transition: all 0.3s;
+  height: 3px;
+  width: 100%;
+  background-color: var(--primary-color-text);
+}
+
+.be-hamburger-line-2, .be-hamburger-line-3 {
+  margin-top: 0.3rem;
+}
+
+
+input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-1 {
+  transform: rotate(135deg);
+}
+
+input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-2 {
+  opacity: 0;
+}
+
+input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-3 {
+  transform: rotate(-135deg);
+  margin-top:-11px;
+}
+
+.p-toolbar-group-center {
+  span.be-pageTitle {
+    font-size: 1.5rem;
+    color: var(--primary-color-text);
+  }
+}

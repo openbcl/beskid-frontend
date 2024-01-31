@@ -2,3 +2,45 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
+
+body {
+  height: calc(100vh - 0.5rem);
+}
+
+be-toolbar {
+  padding: 0 !important;
+  @media only screen and (min-width: 576px) {
+    padding: 0.5rem 0.5rem 0 0 !important;
+  }
+  .p-toolbar.p-component {
+    border-radius: 0;
+    border: unset;
+    @media only screen and (min-width: 576px) {
+      border-top-right-radius: 5rem;
+      border-bottom-right-radius: 5rem;
+    }
+    background-color: var(--primary-color);
+    height: 5rem;
+    padding: 0;
+    padding-right: 0.5rem;
+  }
+  p-speeddial {
+    .p-speeddial {
+      position: relative;
+    }
+    .p-speeddial-mask {
+      background-color: rgba(255, 255, 255, .9);
+      /* if backdrop support: very transparent and blurred */
+      @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+        background-color: rgba(255, 255, 255, .5);
+        -webkit-backdrop-filter: blur(0.25em);
+        backdrop-filter: blur(0.25rem);
+      }
+    }
+  }
+}
+
+be-task-list {
+  background: linear-gradient(-60deg, var(--primary-100) 0%, var(--primary-color) 80%);
+  height: calc(100vh - 5.5rem);
+}

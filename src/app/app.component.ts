@@ -5,6 +5,8 @@ import { checkSession } from './store/auth.actions';
 import { TaskCreateComponent } from "./task-create/task-create.component";
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { TaskListComponent } from "./task-list/task-list.component";
+import { ToolbarComponent } from "./toolbar/toolbar.component";
 
 
 @Component({
@@ -12,7 +14,7 @@ import { ToastModule } from 'primeng/toast';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, TaskCreateComponent, ToastModule]
+    imports: [RouterOutlet, TaskCreateComponent, ToastModule, TaskListComponent, ToolbarComponent]
 })
 export class AppComponent {
   title = 'beskid-frontend';
