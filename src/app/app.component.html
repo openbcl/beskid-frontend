@@ -1,9 +1,9 @@
-<div class="grid">
-  <be-toolbar class="col-12"></be-toolbar>
-  <be-task-list class="fadeinleft animation-duration-300 col-12 sm:col-5 md:col-4 lg:col-3 xl:col-2"></be-task-list>
-  <div id="be-content" class="col" >
-    <be-task-create></be-task-create>
-  </div>
+<be-toolbar [(showTaskListSidebar)]="showTaskListSidebar"></be-toolbar>
+<div class="flex flex-wrap" >
+  @if (showTaskListSidebar) {
+    <be-task-list class="flex-grow-1 md:flex-grow-0"></be-task-list>
+  }
+  <be-task-create class="be-content flex-grow-1"></be-task-create>
 </div>
 <router-outlet />
 <p-toast position="bottom-center"></p-toast>

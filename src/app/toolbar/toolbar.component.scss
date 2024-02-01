@@ -2,11 +2,10 @@ input[type=checkbox] {
   display: none;
 }
 
-.be-tasksSidebarToggleIcon {
+.be-taskListSidebarToggleIcon {
   box-sizing: border-box;
   cursor: pointer;
   position: relative;
-  z-index: 99;
   width: 2rem;
   display: block
 }
@@ -23,15 +22,15 @@ input[type=checkbox] {
 }
 
 
-input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-1 {
+input[type=checkbox]:checked ~ .be-taskListSidebarToggleIcon > .be-hamburger-line-1 {
   transform: rotate(135deg);
 }
 
-input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-2 {
+input[type=checkbox]:checked ~ .be-taskListSidebarToggleIcon > .be-hamburger-line-2 {
   opacity: 0;
 }
 
-input[type=checkbox]:checked ~ .be-tasksSidebarToggleIcon > .be-hamburger-line-3 {
+input[type=checkbox]:checked ~ .be-taskListSidebarToggleIcon > .be-hamburger-line-3 {
   transform: rotate(-135deg);
   margin-top:-11px;
 }

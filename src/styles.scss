@@ -4,33 +4,33 @@
 @import "primeflex/primeflex.scss";
 
 body {
-  height: calc(100vh - 0.5rem);
+  margin: 0;
 }
 
 be-toolbar {
+  display: contents;
   padding: 0 !important;
-  @media only screen and (min-width: 576px) {
-    padding: 0.5rem 0.5rem 0 0 !important;
-  }
+  
   .p-toolbar.p-component {
+    position: relative;
+    z-index: 90;
+    box-shadow: 0 0.25rem 5px var(--primary-700);
     border-radius: 0;
     border: unset;
-    @media only screen and (min-width: 576px) {
-      border-top-right-radius: 5rem;
-      border-bottom-right-radius: 5rem;
-    }
     background-color: var(--primary-color);
     height: 5rem;
     padding: 0;
-    padding-right: 0.5rem;
+    padding-right: 1.5rem;
   }
   p-speeddial {
     .p-speeddial {
       position: relative;
     }
     .p-speeddial-mask {
+      height: calc(100vh);
+      pointer-events: fill; 
+      overflow: hidden;
       background-color: rgba(255, 255, 255, .9);
-      /* if backdrop support: very transparent and blurred */
       @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
         background-color: rgba(255, 255, 255, .5);
         -webkit-backdrop-filter: blur(0.25em);
@@ -41,6 +41,10 @@ be-toolbar {
 }
 
 be-task-list {
-  background: linear-gradient(-60deg, var(--primary-100) 0%, var(--primary-color) 80%);
-  height: calc(100vh - 5.5rem);
+  background-color: var(--primary-100);
+  height: calc(100vh - 5rem);
+}
+
+.be-content {
+  margin: 0.75rem 0.5rem 0.5rem 0.5rem;
 }

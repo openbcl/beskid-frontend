@@ -19,6 +19,8 @@ import { ToolbarComponent } from "./toolbar/toolbar.component";
 export class AppComponent {
   title = 'beskid-frontend';
 
+  showTaskListSidebar = false;
+
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
     this.store.dispatch(checkSession());
