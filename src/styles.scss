@@ -1,10 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/themes/lara-light-teal/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
 
+html, body {
+  overscroll-behavior-y: none;
+}
+
 body {
-  margin: 0;
+  margin: 0; 
+  background-color: var(--highlight-text-color);
 }
 
 be-toolbar {
@@ -14,7 +19,7 @@ be-toolbar {
   .p-toolbar.p-component {
     position: relative;
     z-index: 90;
-    box-shadow: 0 0.25rem 5px var(--primary-700);
+    box-shadow: 0 0.25rem 5px var(--primary-800);
     border-radius: 0;
     border: unset;
     background-color: var(--primary-color);
@@ -46,5 +51,13 @@ be-task-list {
 }
 
 .be-content {
-  margin: 0.75rem 0.5rem 0.5rem 0.5rem;
+  padding: 1rem;
+}
+
+.p-scrollpanel.be-scrollpanel {
+  .p-scrollpanel-bar {
+    background-color: var(--primary-400);
+    opacity: 1;
+    transition: background-color .2s;
+  }
 }
