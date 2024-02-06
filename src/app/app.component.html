@@ -1,9 +1,7 @@
 <be-toolbar [(showTaskListSidebar)]="showTaskListSidebar"></be-toolbar>
-<div class="flex flex-wrap" >
-  @if (showTaskListSidebar) {
-    <be-task-list class="fadeinleft flex-grow-1 md:flex-grow-0 p-2"></be-task-list>
-  }
-  <be-task-create class="be-content flex-grow-1"></be-task-create>
+<be-task-list class="animation-duration-150 {{showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
+<div class="be-content {{showTaskListSidebar && 'be-sidebar-visible'}}" >
+  <be-task-create></be-task-create>
 </div>
 <router-outlet />
 <p-toast position="bottom-center"></p-toast>

@@ -3,6 +3,10 @@
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
 
+html {
+  min-height: calc(100% + env(safe-area-inset-top));
+}
+
 html, body {
   overscroll-behavior-y: none;
 }
@@ -12,22 +16,38 @@ body {
   background-color: var(--highlight-text-color);
 }
 
+.fadeoutleft {
+  visibility: collapse;
+  transition: visibility 0.15s;
+}
+
 be-toolbar {
-  display: contents;
-  padding: 0 !important;
   
+  p-toolbar {
+    position: fixed;
+    top: 0;
+    z-index: 90;
+    width: 100%;
+  }
+
   .p-toolbar.p-component {
     position: relative;
-    z-index: 90;
     box-shadow: 0 0.25rem 5px var(--primary-800);
     border-radius: 0;
     border: unset;
-    background-color: var(--primary-color);
-    height: 5rem;
+    background: var(--primary-color);
+    padding-top: env(safe-area-inset-top) !important;
     padding: 0;
-    padding-right: 1.5rem;
+    padding-right: 1rem;
+    @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+      background: color-mix(in srgb, var(--primary-color) 70%, transparent);
+      -webkit-backdrop-filter: blur(0.5rem) brightness(160%);
+      backdrop-filter: blur(0.5rem) brightness(160%);
+    }
   }
   p-speeddial {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
     .p-speeddial {
       position: relative;
     }
@@ -46,12 +66,31 @@ be-toolbar {
 }
 
 be-task-list {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 5rem);
   background-color: var(--primary-100);
-  height: calc(100vh - 5rem);
+  height: 100vh;
+  z-index: 80;
+  padding-left: env(safe-area-inset-right) !important;
+  @media screen and (max-width: 700px) {
+    width: 100vw;
+  }
 }
 
 .be-content {
+  padding-top: calc(env(safe-area-inset-top) + 6rem)!important;
   padding: 1rem;
+  transition: margin-left 0.15s;
+}
+.be-content.be-sidebar-visible {
+  @media screen and (min-width: 701px) {
+    margin-left: 16.5rem;
+  }
+  @media screen and (max-width: 700px) {
+    margin-left: 100vw;
+    visibility: collapse;
+    transition: visibility 0.15s;
+  }
 }
 
 .p-scrollpanel.be-scrollpanel {
