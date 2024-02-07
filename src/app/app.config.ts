@@ -8,6 +8,7 @@ import { environment } from '../environments/environment';
 import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideServiceWorker } from '@angular/service-worker';
 import { MessageService } from 'primeng/api';
 import { AuthEffects } from './store/auth.effects';
 import { authFeatureKey, authReducer } from './store/auth.reducer';
@@ -36,6 +37,10 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: modelFeatureKey, reducer: modelReducer }),
     provideState({ name: taskFeatureKey, reducer: taskReducer }),
     provideEffects(AuthEffects, ModelEffects, TaskEffects, ToastEffects),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+    provideServiceWorker('ngsw-worker.js', {
+        enabled: !isDevMode(),
+        registrationStrategy: 'registerWhenStable:30000'
+    })
 ]
 };
