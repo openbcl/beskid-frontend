@@ -1,0 +1,7 @@
+<ul>
+  @if (task$ | async; as task) {
+    @for (value of task.values; track value) {
+      <li>{{ value }}</li>
+    }
+  }
+</ul>

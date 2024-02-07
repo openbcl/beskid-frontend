@@ -1,9 +1,10 @@
-<p-scrollPanel [style]="{ height: 'calc(100% - 5rem)' }" styleClass="be-scrollpanel">
-  <div class="flex flex-column overflow-x-visible p-2">
-    @for (task of tasks$ | async; track task.id) {
-      <be-task-item [task]="task" [nr]="$index + 1" class="mt-2 mr-1 ml-1"></be-task-item>
-    } @empty {
-      <p>No tasks found!</p>
-    }
-  </div>
-</p-scrollPanel>
+<div class="be-bt-add-task flex justify-content-center">
+  <p-button label="Add task" icon="fas fa-plus" severity="info" routerLink="create"></p-button>
+</div>
+<div class="flex flex-column be-scroll-list">
+  @for (task of tasks$ | async; track task.id) {
+    <be-task-item [task]="task" [nr]="$index + 1" class="{{$first ? 'mt-7' : 'mt-2'}} mr-1 ml-1"></be-task-item>
+  } @empty {
+    <p>No tasks found!</p>
+  }
+</div>

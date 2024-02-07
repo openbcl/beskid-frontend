@@ -7,6 +7,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { PanelModule } from 'primeng/panel';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
@@ -14,7 +15,7 @@ import { toastError } from '../store/toast.actions';
 @Component({
   selector: 'be-task-create',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule],
+  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule, PanelModule],
   templateUrl: './task-create.component.html',
   styleUrl: './task-create.component.scss'
 })

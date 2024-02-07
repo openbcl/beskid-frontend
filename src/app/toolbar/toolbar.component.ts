@@ -3,12 +3,12 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'be-toolbar',
   standalone: true,
-  imports: [ToolbarModule, SpeedDialModule, ToggleButtonModule],
+  imports: [ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })

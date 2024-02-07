@@ -3,12 +3,44 @@
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
 
-html {
-  min-height: calc(100% + env(safe-area-inset-top));
+::-webkit-scrollbar {
+  width: 0.75rem;
+  margin: 1rem;
 }
 
-html, body {
-  overscroll-behavior-y: none;
+::-webkit-scrollbar-track {
+  box-shadow: none; 
+  border-radius: 0x;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color); 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-600); 
+}
+
+html {
+  min-height: calc(100% + env(safe-area-inset-top));
+  overflow: hidden;
+}
+
+.be-header, .be-header-tiny {
+ height: 4rem;
+}
+
+@media screen and (max-width: 475px) {
+  .be-header {
+    display:none
+   }
+}
+
+@media screen and (min-width: 476px) {
+  .be-header-tiny {
+    display:none
+   }
 }
 
 body {
@@ -19,10 +51,12 @@ body {
 .fadeoutleft {
   visibility: collapse;
   transition: visibility 0.15s;
+  .be-bt-add-task .p-button-label {
+    display: none;
+  }
 }
 
 be-toolbar {
-  
   p-toolbar {
     position: fixed;
     top: 0;
@@ -43,6 +77,12 @@ be-toolbar {
       background: color-mix(in srgb, var(--primary-color) 70%, transparent);
       -webkit-backdrop-filter: blur(0.5rem) brightness(160%);
       backdrop-filter: blur(0.5rem) brightness(160%);
+    }
+    .p-toolbar-group-start {
+      width: 6rem;
+    }
+    .p-toolbar-group-end {
+      width: 5rem;
     }
   }
   p-speeddial {
@@ -75,28 +115,44 @@ be-task-list {
   @media screen and (max-width: 700px) {
     width: 100vw;
   }
+
+  .be-bt-add-task {
+    height: 0;
+    button {
+      border-radius: 0;
+      border: unset;
+      z-index: 1;
+      box-shadow: 0 0rem 1rem var(--primary-800);
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 25px;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  .be-scroll-list {
+    overflow-y: scroll;
+    height: calc(100vh - 5rem);
+    padding: 0 0 0.5rem 0.5rem;
+    @supports (-webkit-touch-callout: none) {
+      padding: 0 0.5rem 0.5rem 0.5rem;
+    }
+  }
 }
 
 .be-content {
-  padding-top: calc(env(safe-area-inset-top) + 6rem)!important;
-  padding: 1rem;
+  padding: calc(env(safe-area-inset-top) + 6rem) 1rem 1rem calc(env(safe-area-inset-left) + 1rem);
   transition: margin-left 0.15s;
+  overflow-y: auto;
+  height: 100vh;
 }
+
 .be-content.be-sidebar-visible {
   @media screen and (min-width: 701px) {
-    margin-left: 16.5rem;
+    margin-left: 16rem;
   }
   @media screen and (max-width: 700px) {
     margin-left: 100vw;
     visibility: collapse;
     transition: visibility 0.15s;
-  }
-}
-
-.p-scrollpanel.be-scrollpanel {
-  .p-scrollpanel-bar {
-    background-color: var(--primary-400);
-    opacity: 1;
-    transition: background-color .2s;
   }
 }

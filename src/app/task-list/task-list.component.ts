@@ -3,15 +3,16 @@ import { findTasks } from '../store/task.actions';
 import { Store } from '@ngrx/store';
 import { tasks } from '../store/task.selector';
 import { AsyncPipe } from '@angular/common';
-import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { TaskItemComponent } from "../task-item/task-item.component";
+import { RouterLink } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'be-task-list',
     standalone: true,
     templateUrl: './task-list.component.html',
     styleUrl: './task-list.component.scss',
-    imports: [AsyncPipe, ScrollPanelModule, TaskItemComponent]
+    imports: [AsyncPipe, TaskItemComponent, RouterLink, ButtonModule]
 })
 export class TaskListComponent {
 

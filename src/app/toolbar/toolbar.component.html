@@ -7,10 +7,11 @@
       <div class="be-hamburger-line-3"></div>
     </label>
   </div>
-  <div class="p-toolbar-group-center">
-    <span class="be-pageTitle">BESKID</span>
+  <div class="p-toolbar-group-center cursor-pointer" routerLink="/">
+    <img alt="BESKID" draggable="false" class="be-header-tiny select-none" src="assets/icons/header_tiny_light_monochrome.png">
+    <img alt="BESKID" draggable="false" class="be-header select-none" src="assets/icons/header_light_monochrome.png">
   </div>
-  <div class="p-toolbar-group-end">
-    <p-speedDial [model]="avatarItems" [radius]=120 showIcon="far fa-user" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+  <div class="p-toolbar-group-end flex-row-reverse">
+    <p-speedDial [model]="avatarItems" [radius]=90 showIcon="far fa-user" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
   </div>
 </p-toolbar>
