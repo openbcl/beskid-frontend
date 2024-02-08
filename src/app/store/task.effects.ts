@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { TaskService } from "../services/task.service";
-import { catchError, map, of, switchMap } from "rxjs";
+import { catchError, map, of, switchMap, tap } from "rxjs";
 import * as TaskActions from './task.actions';
 import * as ToastActions from './toast.actions';
 
@@ -21,6 +22,7 @@ export class TaskEffects {
 
   addTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.addTaskSuccess),
+    tap(action => this.router.navigate(['tasks', action.task.id])),
     switchMap(action => of(ToastActions.toastSuccess({
       summary: 'Task successfully created!',
       detail: action.task.id
@@ -132,6 +134,7 @@ export class TaskEffects {
 
   constructor(
     private actions$: Actions,
+    private router: Router,
     private taskService: TaskService
   ) {}
 

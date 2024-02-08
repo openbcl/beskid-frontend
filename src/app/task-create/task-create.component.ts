@@ -37,9 +37,9 @@ export class TaskCreateComponent {
   async pasteFromClipboard() {
     const clipboard = await navigator.clipboard.readText();
     if (clipboard) {
-      this.updateValues(clipboard)
+      this.updateValues(clipboard);
     } else {
-      this.store.dispatch(toastError({ summary: 'Browser Error', detail: 'Can not access clipboard.' }))
+      this.store.dispatch(toastError({ summary: 'Browser Error', detail: 'Can not access clipboard.' }));
     }
   }
 
@@ -65,7 +65,7 @@ export class TaskCreateComponent {
   }
 
   addRandomValues() {
-    this.updateValues([ ...Array(100) ].map(() => (Math.random() * 100).toExponential(18)).join(','))
+    this.updateValues([ ...Array(100) ].map(() => (Math.random() * 100).toExponential(18)).join(','));
   }
 
   addTask() {
@@ -73,6 +73,6 @@ export class TaskCreateComponent {
       values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
       training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
     };
-    this.store.dispatch(addTask({ createTask }))
+    this.store.dispatch(addTask({ createTask }));
   }
 }
