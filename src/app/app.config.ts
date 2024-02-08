@@ -9,7 +9,7 @@ import { provideState, provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideServiceWorker } from '@angular/service-worker';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthEffects } from './store/auth.effects';
 import { authFeatureKey, authReducer } from './store/auth.reducer';
 import { tokenInterceptor } from './shared/token.interceptor';
@@ -29,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     })),
     { provide: JwtHelperService },
     { provide: MessageService },
+    { provide: ConfirmationService },
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideStore(),

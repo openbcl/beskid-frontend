@@ -1,5 +1,6 @@
 import { createReducer, on } from "@ngrx/store";
 import { Task } from "./task";
+import { newSessionSuccess } from "./auth.actions";
 import * as TaskAction from './task.actions';
 
 export const taskFeatureKey = 'tasks';
@@ -20,6 +21,10 @@ export const initialTaskState: TaskState = {
 
 export const taskReducer = createReducer(
   initialTaskState,
+
+  on(newSessionSuccess, () => {
+    return { ...initialTaskState };
+  }),
   
   on(...[TaskAction.addTask, TaskAction.findTask, TaskAction.findTasks, TaskAction.editTask, TaskAction.deleteTask, TaskAction.runTask, TaskAction.findTaskResult, TaskAction.evaluateTaskResult], state => {
     return { ...state, processing: true };

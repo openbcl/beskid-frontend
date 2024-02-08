@@ -21,7 +21,7 @@ export class AuthEffects {
 
   newSessionSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.newSessionSuccess),
-    switchMap(action => of(ToastActions.toastInfo({
+    switchMap(() => of(ToastActions.toastInfo({
       summary: 'Welcome!'
     })))
   ));

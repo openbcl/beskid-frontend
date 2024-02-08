@@ -3,4 +3,11 @@
 <div class="be-content {{showTaskListSidebar && 'be-sidebar-visible'}}" >
   <router-outlet />
 </div>
+<p-confirmDialog>
+  <ng-template pTemplate="message" let-dialog>
+    <div class="flex flex-column align-items-center pl-4">
+      <p>{{ dialog.message }}</p>
+    </div>
+  </ng-template>
+</p-confirmDialog>
 <p-toast position="bottom-center"></p-toast>
