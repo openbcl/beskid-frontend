@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { findTasks } from '../store/task.actions';
 import { Store } from '@ngrx/store';
 import { tasks } from '../store/task.selector';
@@ -16,11 +16,21 @@ import { RippleModule } from 'primeng/ripple';
     imports: [AsyncPipe, TaskItemComponent, RouterLink, RouterLinkActive, ButtonModule, RippleModule]
 })
 export class TaskListComponent {
+  @Input(({ required: true })) showTaskListSidebar = false;
+  @Output() showTaskListSidebarChange = new EventEmitter<boolean>();
 
   tasks$ = this.store.select(tasks);
 
-  constructor(private store: Store) {
-    this.store.dispatch(findTasks())
+  constructor(private store: Store, private elementRef: ElementRef) {
+    this.store.dispatch(findTasks());
+  }
+
+  changeShowTaskListSidebar() {
+    const body = (this.elementRef.nativeElement as HTMLElement).parentElement;
+    if (body && body.offsetWidth <= 700) {
+      this.showTaskListSidebar = !this.showTaskListSidebar;
+      this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+    }
   }
 
 }

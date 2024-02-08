@@ -1,5 +1,5 @@
 <be-toolbar [(showTaskListSidebar)]="showTaskListSidebar"></be-toolbar>
-<be-task-list class="animation-duration-150 {{showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
+<be-task-list [(showTaskListSidebar)]="showTaskListSidebar" class="animation-duration-150 {{showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
 <div class="be-content {{showTaskListSidebar && 'be-sidebar-visible'}}" >
   <router-outlet />
 </div>

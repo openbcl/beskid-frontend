@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { MenuItem } from 'primeng/api';
@@ -22,8 +22,18 @@ export class ToolbarComponent {
     {icon: 'fas fa-house' }
   ]
 
+  constructor(private elementRef: ElementRef) { }
+
   changeShowTaskListSidebar() {
     this.showTaskListSidebar = !this.showTaskListSidebar;
     this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+  }
+
+  checkChangeShowTaskListSidebar() {
+    const body = (this.elementRef.nativeElement as HTMLElement).parentElement;
+    if (body && body.offsetWidth <= 700) {
+      this.showTaskListSidebar = false;
+      this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+    }
   }
 }

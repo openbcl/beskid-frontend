@@ -1,9 +1,16 @@
 <div class="be-bt-add-task flex justify-content-center">
-  <p-button label="Add task" icon="fas fa-plus" severity="info" routerLink="create"></p-button>
+  <p-button label="Add task" icon="fas fa-plus" severity="info" routerLink="create" (click)="changeShowTaskListSidebar()"></p-button>
 </div>
 <div class="flex flex-column be-scroll-list">
   @for (task of tasks$ | async; track task.id) {
-    <be-task-item pRipple [routerLink]="[ 'tasks', task?.id ]" routerLinkActive #link="routerLinkActive" [task]="task" [nr]="$index + 1" class="flex-shrink-0 {{$first ? 'mt-7' : 'mt-2'}} mr-1 ml-1 {{ link.isActive && 'be-task-item-selected' }}"></be-task-item>
+    <be-task-item pRipple
+      (click)="changeShowTaskListSidebar()"
+      [routerLink]="[ 'tasks', task?.id ]"
+      routerLinkActive #link="routerLinkActive"
+      [task]="task"
+      [nr]="$index + 1"
+      class="flex-shrink-0 {{$first ? 'mt-7' : 'mt-2'}} mr-1 ml-1 {{ link.isActive && 'be-task-item-selected' }}">
+    </be-task-item>
   } @empty {
     <div class="text-center justify-content-center pt-8">
       No tasks found!
