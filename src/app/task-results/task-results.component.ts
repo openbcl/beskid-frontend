@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { task } from '../store/task.selector';
-import { tap } from 'rxjs';
+import { Observable, filter, tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
+import { Task } from '../store/task';
 
 @Component({
   selector: 'be-task-results',
@@ -12,12 +13,14 @@ import { findTask } from '../store/task.actions';
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
-export class TaskResultsComponent {
+export class TaskResultsComponent implements OnInit {
   @Input() taskId?: string;
 
-  task$ = this.store.select(task(this.taskId)).pipe(
-    tap(task => !task?.values?.length && this.taskId && this.store.dispatch(findTask({ taskId: this.taskId })))
-  );
+  task$ = new Observable<Task | undefined>;
 
   constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.task$ = this.store.select(task(this.taskId)).pipe(filter(task => task?.id === this.taskId), tap(task => !task?.values?.length && this.taskId && this.store.dispatch(findTask({ taskId: this.taskId }))));
+  }
 }
