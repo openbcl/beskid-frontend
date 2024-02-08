@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { AuthService } from "../services/auth.service";
-import { catchError, filter, map, of, switchMap } from "rxjs";
+import { catchError, filter, map, of, switchMap, tap } from "rxjs";
 import * as AuthActions from './auth.actions';
 import * as ToastActions from './toast.actions';
+import { Router } from "@angular/router";
 
 
 @Injectable()
@@ -21,6 +22,7 @@ export class AuthEffects {
 
   newSessionSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(AuthActions.newSessionSuccess),
+    tap(() => this.router.navigate(['/'])),
     switchMap(() => of(ToastActions.toastInfo({
       summary: 'Welcome!'
     })))
@@ -74,6 +76,7 @@ export class AuthEffects {
 
   constructor(
     private actions$: Actions,
+    private router: Router,
     private authService: AuthService
   ) {}
 
