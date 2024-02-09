@@ -1,5 +1,16 @@
-<p-panel header="Create Task">
-  <form [formGroup]="form">
+<form [formGroup]="form">
+  <p-panel>
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
+          <span class="font-bold">Create Task</span>
+          <div class="flex column-gap-2 align-items-center">
+            <p-inputSwitch formControlName="training"></p-inputSwitch>
+            <span>Provide data for AI training</span>
+            <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm. "></i>
+          </div>
+          <p-button label="Submit" [disabled]="form.invalid" severity="success" (click)="addTask()"></p-button>
+      </div>
+    </ng-template>
     @if (!!form.controls.values.controls.length) {
       <be-task-chart [values]="form.controls.values.value"></be-task-chart>
     }
@@ -35,20 +46,6 @@
           </tr>
         </ng-container>
       </ng-template>
-      <ng-template pTemplate="footer">
-        <tr class="be-footer">
-          <td colspan="2">
-            <div class="flex flex-wrap column-gap-2 row-gap-2 align-items-center justify-content-between">
-              <div class="flex column-gap-2 align-items-center">
-                <p-inputSwitch formControlName="training"></p-inputSwitch>
-                <span>Provide data for AI training</span>
-                <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm. "></i>
-              </div>
-              <p-button label="Submit" [disabled]="form.invalid" severity="success" (click)="addTask()"></p-button>
-            </div>
-          </td>
-        </tr>
-    </ng-template>
     </p-table>
-  </form>
-</p-panel>
+  </p-panel>
+</form>
