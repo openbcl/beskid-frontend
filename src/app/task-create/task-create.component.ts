@@ -66,7 +66,10 @@ export class TaskCreateComponent {
   }
 
   addRandomValues() {
-    this.updateValues([ ...Array(100) ].map(() => (Math.random() * 100).toExponential(18)).join(','));
+    const values = [ ...Array(100) ].map(() => (Math.random() * 100 * [0.25, 1][Math.round(Math.random())])).sort((a, b) => a - b);
+    const valuesUp = values.filter((_, i) => i % 4);
+    const valuesDown = values.filter((_, i) => !(i % 4)).reverse();
+    this.updateValues(valuesUp.concat(valuesDown).map(value => value.toExponential(18)).join(','));
   }
 
   addTask() {
