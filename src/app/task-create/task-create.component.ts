@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { isDevMode } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -11,13 +11,14 @@ import { PanelModule } from 'primeng/panel';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
+import { TaskChartComponent } from "../task-chart/task-chart.component";
 
 @Component({
-  selector: 'be-task-create',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule, PanelModule],
-  templateUrl: './task-create.component.html',
-  styleUrl: './task-create.component.scss'
+    selector: 'be-task-create',
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
+    templateUrl: './task-create.component.html',
+    styleUrl: './task-create.component.scss'
 })
 export class TaskCreateComponent {
   isDevMode = isDevMode;
@@ -30,7 +31,7 @@ export class TaskCreateComponent {
   });
 
   constructor(
-    private fb: FormBuilder,
+    private fb: NonNullableFormBuilder,
     private store: Store
   ) { }
 
