@@ -65,7 +65,7 @@ export class TaskChartComponent implements OnInit, OnChanges {
   constructor() {
     this.data$.pipe(
       takeUntilDestroyed(),
-      distinctUntilChanged((previous, current) => previous === current || previous && current.find((value, i) => previous[i] !== value) === undefined)
+      distinctUntilChanged((previous, current) => previous === current || previous && current?.find((value, i) => previous[i] !== value) === undefined)
     ).subscribe(values => {
       this.data.datasets[0].data = values;
       this.data = { ...this.data };

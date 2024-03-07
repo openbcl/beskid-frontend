@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class NumbersToStringsPipe implements PipeTransform {
 
   transform(values: number[]): string[] {
-    return values.map(value => value.toExponential(18));
+    return values?.map(value => value.toExponential(18));
   }
 
 }

@@ -7,13 +7,14 @@ import { TaskItemComponent } from "../task-item/task-item.component";
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { SortTasksPipe } from "../shared/sort-tasks.pipe";
 
 @Component({
     selector: 'be-task-list',
     standalone: true,
     templateUrl: './task-list.component.html',
     styleUrl: './task-list.component.scss',
-    imports: [AsyncPipe, TaskItemComponent, RouterLink, RouterLinkActive, ButtonModule, RippleModule]
+    imports: [AsyncPipe, TaskItemComponent, RouterLink, RouterLinkActive, ButtonModule, RippleModule, SortTasksPipe]
 })
 export class TaskListComponent {
   @Input(({ required: true })) showTaskListSidebar = false;

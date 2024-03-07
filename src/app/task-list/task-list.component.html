@@ -2,7 +2,7 @@
   <p-button label="Add task" icon="fas fa-plus" severity="info" routerLink="create" (click)="changeShowTaskListSidebar()"></p-button>
 </div>
 <div class="flex flex-column be-scroll-list">
-  @for (task of tasks$ | async; track task.id) {
+  @for (task of tasks$ | async | sortTasks:'asc'; track task.id) {
     <be-task-item pRipple
       (click)="changeShowTaskListSidebar()"
       [routerLink]="[ 'tasks', task?.id ]"
