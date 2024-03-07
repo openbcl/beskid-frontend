@@ -1,5 +1,11 @@
-<p-panel header="Input vales">
 @if (task$ | async; as task) {
+<p-panel>
+    <ng-template pTemplate="header">
+        <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
+            <span class="font-bold">Task data</span>
+            <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
+        </div>
+    </ng-template>
     <be-task-chart [values]="task.values | numbersToStrings"></be-task-chart>
-}
 </p-panel>
+}

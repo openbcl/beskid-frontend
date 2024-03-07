@@ -9,13 +9,17 @@ import { Task } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { NumbersToStringsPipe } from "../shared/numbers-to-strings.pipe";
 import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
+import { deleteTask } from '../store/task.actions';
+
 
 @Component({
     selector: 'be-task',
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, TaskChartComponent, PanelModule, NumbersToStringsPipe]
+    imports: [AsyncPipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe]
 })
 export class TaskComponent implements OnInit {
   
@@ -23,7 +27,10 @@ export class TaskComponent implements OnInit {
 
   task$ = new Observable<Task | undefined>;
 
-  constructor(private store: Store) { }
+  constructor(
+    private confirmationService: ConfirmationService,
+    private store: Store
+  ) { }
 
   ngOnInit(): void {
     this.task$ = this.activatedRoute.params.pipe(
@@ -33,5 +40,19 @@ export class TaskComponent implements OnInit {
         tap(task => !task?.values?.length && taskId && this.store.dispatch(findTask({ taskId })))
       ))
     );
+  }
+
+  deleteTask(task: Task) {
+    const dialog = {
+      header: 'Delete task',
+      icon: 'fas fa-trash-can',
+      acceptButtonStyleClass: 'p-button-danger',
+      message: 'Are you sure you that want to delete this task? Analysed training data is retained.',
+      accept: () => this.store.dispatch(deleteTask({ taskId: task.id }))
+    };
+    if (task.training && !!task.results?.length) {
+      dialog.message += ' Previously analysed training data is retained.'
+    }
+    this.confirmationService.confirm(dialog);
   }
 }

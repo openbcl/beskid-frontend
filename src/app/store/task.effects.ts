@@ -79,6 +79,7 @@ export class TaskEffects {
 
   deleteTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTaskSuccess),
+    tap(action => this.router.navigate(['/'])),
     switchMap(action => of(ToastActions.toastInfo({
       summary: 'Task successfully deleted!',
       detail: `Training ${action.taskId}`
