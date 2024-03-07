@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmationService } from 'primeng/api';
 import { deleteTask } from '../store/task.actions';
 import { TooltipModule } from 'primeng/tooltip';
+import { TaskRunComponent } from "../task-run/task-run.component";
 
 
 @Component({
@@ -20,7 +21,7 @@ import { TooltipModule } from 'primeng/tooltip';
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, TaskChartComponent, PanelModule, ButtonModule, TooltipModule, NumbersToStringsPipe]
+    imports: [AsyncPipe, TaskChartComponent, PanelModule, ButtonModule, TooltipModule, NumbersToStringsPipe, TaskRunComponent]
 })
 export class TaskComponent implements OnInit {
   

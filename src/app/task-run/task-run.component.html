@@ -1,1 +1,7 @@
-<p>task-run works!</p>
+<p-panel header="Run Task">
+  <form [formGroup]="form">
+   @if(models$ | async; as models) {
+      <p-dropdown formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model"></p-dropdown>
+    }
+  </form>
+</p-panel>
