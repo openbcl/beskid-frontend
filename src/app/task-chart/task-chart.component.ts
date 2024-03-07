@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChartModule } from 'primeng/chart';
-import { Subject, distinctUntilChanged } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'be-task-chart',
@@ -63,10 +63,7 @@ export class TaskChartComponent implements OnInit, OnChanges {
   };
 
   constructor() {
-    this.data$.pipe(
-      takeUntilDestroyed(),
-      distinctUntilChanged((previous, current) => previous === current || previous && current?.find((value, i) => previous[i] !== value) === undefined)
-    ).subscribe(values => {
+    this.data$.pipe(takeUntilDestroyed()).subscribe(values => {
       this.data.datasets[0].data = values;
       this.data = { ...this.data };
     });

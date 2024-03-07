@@ -33,7 +33,7 @@ export const taskReducer = createReducer(
   on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.runTaskSuccess, TaskAction.evaluateTaskResultSuccess], (state, action) => {
     const updatedTask = {
       ...action.task,
-      values: !!action.task.values.length ? action.task.values : state.tasks.find(stateTask => stateTask.id === action.task.id)?.values || []
+      values: !!action.task.values?.length ? action.task.values : state.tasks.find(stateTask => stateTask.id === action.task.id)?.values || [],
     }
     let merged = false;
     const mergedTasks = [ ...state.tasks ].map(stateTask => {
