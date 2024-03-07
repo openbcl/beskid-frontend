@@ -6,13 +6,16 @@ import { task } from '../store/task.selector';
 import { Observable, filter, map, switchMap, tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
 import { Task } from '../store/task';
+import { TaskChartComponent } from "../task-chart/task-chart.component";
+import { NumbersToStringsPipe } from "../shared/numbers-to-strings.pipe";
+import { PanelModule } from 'primeng/panel';
 
 @Component({
-  selector: 'be-task',
-  standalone: true,
-  imports: [AsyncPipe],
-  templateUrl: './task.component.html',
-  styleUrl: './task.component.scss'
+    selector: 'be-task',
+    standalone: true,
+    templateUrl: './task.component.html',
+    styleUrl: './task.component.scss',
+    imports: [AsyncPipe, TaskChartComponent, PanelModule, NumbersToStringsPipe]
 })
 export class TaskComponent implements OnInit {
   

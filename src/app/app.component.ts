@@ -20,7 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 export class AppComponent {
   title = 'beskid-frontend';
 
-  showTaskListSidebar = false;
+  showTaskListSidebar = localStorage.getItem('showTaskListSidebar') === 'true' ? true : false;
 
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;

@@ -1,7 +1,5 @@
-<ul>
-  @if (task$ | async; as task) {
-    @for (value of task.values; track value) {
-      <li>{{ value }}</li>
-    }
-  }
-</ul>
+<p-panel header="Input vales">
+@if (task$ | async; as task) {
+    <be-task-chart [values]="task.values | numbersToStrings"></be-task-chart>
+}
+</p-panel>

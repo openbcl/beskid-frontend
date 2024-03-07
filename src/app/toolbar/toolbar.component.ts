@@ -41,6 +41,7 @@ export class ToolbarComponent {
 
   changeShowTaskListSidebar() {
     this.showTaskListSidebar = !this.showTaskListSidebar;
+    localStorage.setItem('showTaskListSidebar', this.showTaskListSidebar ? 'true' : 'false');
     this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
   }
 
