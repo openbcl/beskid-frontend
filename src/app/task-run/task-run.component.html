@@ -1,7 +1,23 @@
-<p-panel header="Run Task">
-  <form [formGroup]="form">
-   @if(models$ | async; as models) {
-      <p-dropdown formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model"></p-dropdown>
+<form [formGroup]="form">
+  <p-panel header="Run Task">
+    @if(models$ | async; as models) {
+      <div class="grid">
+        <div class="md:col-6 col-12 flex flex-column">
+          <label class="mb-1 pl-2">Select an AI-model</label>
+          <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
+        </div>
+        @if(resolutions$ | async; as resolutions) {
+          <div class="md:col-6 col-12 flex flex-column">
+            <label class="mb-1  pl-2">Select a resolution</label>
+            <p-dropdown class="w-100" formControlName="selectedResolution" [options]="resolutions" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
+          </div>
+        }
+      </div>
     }
-  </form>
-</p-panel>
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-end align-items-center">
+        <p-button label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
+      </div>
+    </ng-template>
+  </p-panel>
+</form>

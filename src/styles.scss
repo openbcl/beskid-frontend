@@ -109,6 +109,13 @@ be-toolbar {
   }
 }
 
+p-dropdown.w-100 {
+  .p-dropdown.p-component.p-inputwrapper {
+    width: 100% !important;
+  }
+}
+
+
 be-task-list {
   position: fixed;
   top: calc(env(safe-area-inset-top) + 5rem);
