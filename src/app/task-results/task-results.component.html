@@ -1,1 +1,36 @@
-<p>task-results works!</p>
+@if (data$ | async; as data) {
+  @if (data.show) {
+    <p-panel header="Task Results">
+      <p-table [columns]="data.columns" [value]="data.rows" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+              @for(column of columns; track column.header) {
+                <th>{{ column.header }}</th>
+              }
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+              <td>{{ rowData.model.name }}</td>
+              <td>{{ rowData.model.resolutions[0] }}</td>
+              <td>{{ rowData.date | date:'medium' }}</td>
+              @if(columns.length === 5) {
+                <td>
+                  <form [formGroup]="rowData.form">
+                    <p-selectButton [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon">
+                      <ng-template let-item pTemplate>
+                        <i [class]="item.icon"></i>
+                      </ng-template>
+                    </p-selectButton>
+                  </form>
+                </td>
+              }
+              <td class="flex justify-content-end">
+                <p-button [disabled]="true" severity="danger" icon="fas fa-trash"></p-button>
+              </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+  }
+}

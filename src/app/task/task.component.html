@@ -1,5 +1,5 @@
 <div class="flex flex-column row-gap-3">
-    @if (task$ | async; as task) {
+@if (task$ | async; as task) {
     <p-panel>
         <ng-template pTemplate="header">
             <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
@@ -17,5 +17,6 @@
         <be-task-chart [values]="task.values | numbersToStrings"></be-task-chart>
     </p-panel>
     <be-task-run [task]="task"></be-task-run>
-    }
+    <be-task-results [task]="task"></be-task-results>
+}
 </div>
