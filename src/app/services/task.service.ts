@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CreateTaskDto, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { CreateTaskDto, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { Observable, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,13 @@ export class TaskService {
     return this.http.post<Task>(`${environment.api}/v1/tasks/${taskId}/model/${modelId}/resolution/${resolution}`, undefined);
   }
 
-  findTaskResult(taskId: string, fileId: string) {
-    return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`);
+  findTaskResult(taskId: string, fileId: string): Observable<ResultValue> {
+    if (fileId.toLowerCase().endsWith('.json')) {
+      return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`, { observe: 'response', responseType: 'blob' }).pipe(map(response => ({
+        file: (response?.body ? new Blob([response.body], { type:  'application/json' }) : undefined)
+      })));
+    }
+    return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`).pipe(map(data => ({ data })));
   }
 
   evaluateTaskResult(taskId: string, fileId: string, evaluation: TaskResultEvaluation) {

@@ -22,13 +22,13 @@ export const tasks = createSelector(
 export const resultFile = (taskId: string, fileId: string) => createSelector(
   getTaskState,
   taskState => (
-    taskState.task?.id === taskId ? taskState.task  : taskState.tasks.find(task => task.id === task.id)
+    taskState.task?.id === taskId ? taskState.task : taskState.tasks.find(task => task.id === task.id)
   )?.results.find(result => result.filename.includes(fileId))?.file || null
 );
 
 export const resultData = (taskId: string, fileId: string) => createSelector(
   getTaskState,
   taskState => (
-    taskState.task?.id === taskId ? taskState.task  : taskState.tasks.find(task => task.id === task.id)
+    taskState.task?.id === taskId ? taskState.task : taskState.tasks.find(task => task.id === task.id)
   )?.results.find(result => result.filename.includes(fileId))?.data || null
 );

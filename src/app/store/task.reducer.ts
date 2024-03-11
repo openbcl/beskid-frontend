@@ -65,14 +65,16 @@ export const taskReducer = createReducer(
   on(TaskAction.findTaskResultSuccess, (state, action) => {
     const updatedTask = state.task?.id === action.taskId ? state.task : state.tasks.find(task => task.id === action.taskId)
     if (!updatedTask) return state;
-    updatedTask.results = updatedTask.results.map(result => !result.filename.includes(action.fileId) ? result : {
+    const isBlob = action.fileId.toLowerCase().endsWith('.json');
+    const results = updatedTask.results.map(result => !result.filename.includes(action.fileId) ? result : {
       ...result,
-      ...action.resultValue
+      data:  !isBlob ? action.resultValue.data : result.data,
+      file:  isBlob ? action.resultValue.file : result.file
     });
     return {
       ...state,
-      task: state.task?.id === action.taskId ? updatedTask : state.task,
-      tasks: state.tasks.map(task => task.id === action.taskId ? updatedTask : task),
+      task: state.task?.id === action.taskId ? { ...updatedTask, results } : state.task,
+      tasks: state.tasks.map(task => task.id === action.taskId ? { ...updatedTask, results } : task),
       processing: false
     };
   }),

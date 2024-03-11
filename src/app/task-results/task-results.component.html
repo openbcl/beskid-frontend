@@ -25,7 +25,8 @@
                   </form>
                 </td>
               }
-              <td class="flex justify-content-end">
+              <td class="flex gap-2 justify-content-end">
+                <p-button severity="info" icon="fas fa-file-arrow-down" (click)="downloadFile(rowData)"></p-button>
                 <p-button [disabled]="true" severity="danger" icon="fas fa-trash"></p-button>
               </td>
           </tr>

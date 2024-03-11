@@ -1,14 +1,15 @@
 import { Component, Input, OnChanges, SimpleChanges  } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { Subject, map } from 'rxjs';
-import { Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { Subject, filter, map, take } from 'rxjs';
+import { Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { evaluateTaskResult } from '../store/task.actions';
+import { evaluateTaskResult, findTaskResult } from '../store/task.actions';
+import { resultFile } from '../store/task.selector';
 
 @Component({
   selector: 'be-task-results',
@@ -67,6 +68,26 @@ export class TaskResultsComponent implements OnChanges {
       fileId,
       evaluation: event.value!.evaluation
     }));
+  }
+
+  downloadFile(result: TaskResult) {
+    const download = (blob: Blob) => {
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob!);
+      link.download = result.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    if (result.file) {
+      download(result.file);
+    } else {
+      this.store.select(resultFile(this.task.id, result.filename)).pipe(filter(blob => !!blob), take(1)).subscribe(blob => download(blob!));
+      this.store.dispatch(findTaskResult({
+        taskId: this.task.id,
+        fileId: result.filename
+      }));
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
