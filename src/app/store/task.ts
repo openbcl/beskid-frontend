@@ -31,6 +31,6 @@ export interface TaskResult extends ResultValue{
 }
 
 export interface ResultValue {
-  data?: any;
+  data?: { name: string, value: number }[];
   file?: Blob;
 }

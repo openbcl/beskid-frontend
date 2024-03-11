@@ -7,6 +7,8 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { evaluateTaskResult, findTaskResult } from '../store/task.actions';
 import { resultFile } from '../store/task.selector';
@@ -14,7 +16,7 @@ import { resultFile } from '../store/task.selector';
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -25,8 +27,9 @@ export class TaskResultsComponent implements OnChanges {
     { icon: 'far fa-face-frown', evaluation: TaskResultEvaluation.NEGATIVE },
     { icon: 'far fa-face-meh', evaluation: TaskResultEvaluation.NEUTRAL },
     { icon: 'far fa-face-smile-beam', evaluation: TaskResultEvaluation.POSITIVE },
-];
+  ];
 
+  selectedResult: any = null;
   task$ = new Subject<Task>();
   data$ = this.task$.pipe(map(task => {
     if (!task.results.length) {
@@ -37,14 +40,14 @@ export class TaskResultsComponent implements OnChanges {
       }
     }
     const columns = [
-      { header: 'AI-model' },
-      { header: 'Resolution' },
-      { header: 'Date' }
+      { header: 'AI-model', width: 'auto' },
+      { header: 'Resolution', width: 'auto' },
+      { header: 'Date', width: 'auto' }
     ];
     if (task!.training === TaskTraining.ENABLED) {
-      columns.push({ header: 'Evaluation (Training)' });
+      columns.push({ header: 'Evaluation (Training)', width: '14rem' });
     }
-    columns.push({ header: '' });
+    columns.push({ header: '', width: '10rem' });
     return {
       show: true,
       columns,
@@ -56,6 +59,7 @@ export class TaskResultsComponent implements OnChanges {
       })) || []
     };
   }));
+  taskResult$ = this.task$.pipe(map(task => task.results.find(result => result.filename === (this.selectedResult as TaskResult)?.filename)?.data));
 
   constructor(
     private store: Store,
@@ -87,6 +91,17 @@ export class TaskResultsComponent implements OnChanges {
         taskId: this.task.id,
         fileId: result.filename
       }));
+    }
+  }
+
+  onSelectResult(event: { data?: TaskResult }) {
+    if (event.data && !event.data.data) {
+      this.store.dispatch(findTaskResult({
+        taskId: this.task.id,
+        fileId: event.data.filename.split('.json')[0]
+      }));
+    } else {
+      this.task$.next(this.task);
     }
   }
 
