@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { evaluateTaskResult } from '../store/task.actions';
 
 @Component({
   selector: 'be-task-results',
@@ -59,6 +60,14 @@ export class TaskResultsComponent implements OnChanges {
     private store: Store,
     private fb: FormBuilder
   ) {}
+
+  evaluateTaskResult(event: { value?: { evaluation: TaskResultEvaluation } }, fileId: string) {
+    this.store.dispatch(evaluateTaskResult({
+      taskId: this.task.id,
+      fileId,
+      evaluation: event.value!.evaluation
+    }));
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['task'] && !!this.task) {

@@ -17,7 +17,7 @@
               @if(columns.length === 5) {
                 <td>
                   <form [formGroup]="rowData.form">
-                    <p-selectButton [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon">
+                    <p-selectButton [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon" (onChange)="evaluateTaskResult($event, rowData.filename)">
                       <ng-template let-item pTemplate>
                         <i [class]="item.icon"></i>
                       </ng-template>
