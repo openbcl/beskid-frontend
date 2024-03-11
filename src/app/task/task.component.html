@@ -4,13 +4,6 @@
         <ng-template pTemplate="header">
             <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
                 <span class="font-bold">Task Data</span>
-                <div class="flex flex-column column-gap-2 align-items-center">
-                    <div class="flex column-gap-2 align-items-center">
-                        <span>Provide data for AI training: <span [class]="task.training === 'ENABLED' ? 'text-green-500' : 'text-red-500'">{{ task.training }}</span></span>
-                        <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm."></i>
-                    </div>
-                    <p-button class="mt-2" [label]="task.training === 'ENABLED' ? 'Disable Training' : 'Enable Training'" size="small" severity="info" [rounded]="true" (click)="changeTraining(task)"></p-button>
-                </div>
                 <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
             </div>
         </ng-template>

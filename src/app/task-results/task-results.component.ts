@@ -10,13 +10,15 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { evaluateTaskResult, findTaskResult } from '../store/task.actions';
+import { editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
 import { resultFile } from '../store/task.selector';
+import { ConfirmationService } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -63,8 +65,23 @@ export class TaskResultsComponent implements OnChanges {
 
   constructor(
     private store: Store,
+    private confirmationService: ConfirmationService,
     private fb: FormBuilder
   ) {}
+
+  changeTraining(task: Task) {
+    if (task.training === TaskTraining.ENABLED && !!task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
+      this.confirmationService.confirm({
+        header: 'Disable task training',
+        icon: 'fas fa-robot',
+        acceptButtonStyleClass: 'p-button-danger',
+        message: 'Are you sure you that want to disable training for this task? All existing training data for this task will be deleted in this case.',
+        accept: () => this.store.dispatch(editTask({ taskId: task.id, training: TaskTraining.DISABLED }))
+      });
+    } else {
+      this.store.dispatch(editTask({ taskId: task.id, training: task.training === TaskTraining.ENABLED ? TaskTraining.DISABLED : TaskTraining.ENABLED }))
+    }
+  }
 
   evaluateTaskResult(event: { value?: { evaluation: TaskResultEvaluation } }, fileId: string) {
     this.store.dispatch(evaluateTaskResult({
