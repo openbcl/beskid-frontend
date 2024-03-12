@@ -59,7 +59,7 @@ export const taskReducer = createReducer(
   }),
 
   on(TaskAction.deleteTaskSuccess, (state, action) => {
-    return { ...state, tasks: state.tasks.filter(task => task.id !== action.taskId), processing: false };
+    return { ...state, tasks: state.tasks.filter(task => task.id !== action.taskId), task: undefined, processing: false };
   }),
 
   on(TaskAction.findTaskResultSuccess, (state, action) => {

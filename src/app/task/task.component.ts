@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { task } from '../store/task.selector';
-import { Observable, filter, map, switchMap, tap } from 'rxjs';
+import { filter, map, switchMap, take, tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
 import { Task, TaskResultEvaluation } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
@@ -27,7 +27,17 @@ export class TaskComponent implements OnInit {
   
   private activatedRoute = inject(ActivatedRoute);
 
-  task$ = new Observable<Task | undefined>;
+  task$ = this.activatedRoute.params.pipe(
+    map((p) => p['taskId'] as string),
+    switchMap(taskId => this.store.select(task(taskId)).pipe(
+      filter(task => task?.id === taskId),
+      tap(task => {
+        if (!task?.values?.length) {
+          taskId && this.store.dispatch(findTask({ taskId }))
+        }
+      })
+    ))
+  );
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -35,13 +45,7 @@ export class TaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.task$ = this.activatedRoute.params.pipe(
-      map((p) => p['taskId'] as string),
-      switchMap(taskId => this.store.select(task(taskId)).pipe(
-        filter(task => task?.id === taskId),
-        tap(task => !task?.values?.length && taskId && this.store.dispatch(findTask({ taskId })))
-      ))
-    );
+    this.activatedRoute.params.pipe(take(1), map((p) => p['taskId'] as string)).subscribe(taskId => this.store.dispatch(findTask({ taskId })));
   }
 
   deleteTask(task: Task) {
