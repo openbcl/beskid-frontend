@@ -1,7 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
-import { Subject, filter, map } from 'rxjs';
 
 @Component({
   selector: 'be-task-chart',
@@ -11,17 +10,15 @@ import { Subject, filter, map } from 'rxjs';
   styleUrl: './task-chart.component.scss'
 })
 export class TaskChartComponent implements OnInit, OnChanges {
-
   @Input({ required: true }) values: string[] = [];
-  values$ = new Subject<string[]>();
 
-  data$ = this.values$.pipe(filter(values => !!values), map(values => ({
-    labels: values.map((_, key) => `${key + 1}`),
+  data = {
+    labels: this.values.map((_, key) => `${key + 1}`),
     datasets: [{
       label: 'Input values',
-      data: values,
+      data: this.values,
     }]
-  })));
+  }
 
   options: any;
 
@@ -65,8 +62,14 @@ export class TaskChartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['values']) {
-      this.values$.next(this.values);
+    if (changes['values'] && this.values) {
+      this.data = {
+        labels: this.values.map((_, key) => `${key + 1}`),
+        datasets: [{
+          label: 'Input values',
+          data: this.values,
+        }]
+      }
     }
   }
 }

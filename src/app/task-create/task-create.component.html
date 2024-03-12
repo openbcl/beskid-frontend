@@ -11,7 +11,11 @@
           <p-button label="Submit" [disabled]="form.invalid" severity="success" (click)="addTask()"></p-button>
       </div>
     </ng-template>
-    <be-task-chart [values]="form.controls.values.value"></be-task-chart>
+    @if(values$ | async; as values) {
+      @if(!!values?.length) {
+        <be-task-chart [values]="values"></be-task-chart>
+      }
+    }
     <p-table [value]="form.controls.values.controls" styleClass="p-datatable-striped">
       <ng-template pTemplate="caption">
         <div class="flex flex-wrap column-gap-2 row-gap-2 align-items-center justify-content-between">

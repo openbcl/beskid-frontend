@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { isDevMode } from '@angular/core';
-import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -12,11 +12,12 @@ import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'be-task-create',
     standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
+    imports: [AsyncPipe, FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
     templateUrl: './task-create.component.html',
     styleUrl: './task-create.component.scss'
 })
@@ -26,9 +27,11 @@ export class TaskCreateComponent {
   help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 
   form = this.fb.group({
-    values: this.fb.array<string>([], { validators: [Validators.required]}),
+    values: this.fb.array<FormControl<string>>([], { validators: [Validators.required]}),
     training: false
   });
+
+  values$ = this.form.controls.values.valueChanges;
 
   constructor(
     private fb: NonNullableFormBuilder,
