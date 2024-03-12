@@ -1,3 +1,4 @@
 <p-card class="select-none cursor-pointer" header="Task {{ nr }}">
-  <p >{{ task?.date | date:'medium' }}</p>
+  <p>{{ task?.date | date }}</p>
+  <p class="mb-0">{{ task?.date | date:'shortTime' }}</p>
 </p-card>

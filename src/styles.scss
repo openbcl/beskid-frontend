@@ -150,6 +150,12 @@ be-task-list {
     }
   }
 
+  be-task-item {
+    .p-card-content {
+      padding: 0;
+    }
+  }
+
   be-task-item.be-task-item-selected, be-task-item:hover, be-task-item:active {
     .p-card {
       color: var(--primary-color-text);

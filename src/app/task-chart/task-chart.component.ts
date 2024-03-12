@@ -1,29 +1,29 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChartModule } from 'primeng/chart';
-import { Subject } from 'rxjs';
+import { Subject, filter, map } from 'rxjs';
 
 @Component({
   selector: 'be-task-chart',
   standalone: true,
-  imports: [ChartModule],
+  imports: [AsyncPipe, ChartModule],
   templateUrl: './task-chart.component.html',
   styleUrl: './task-chart.component.scss'
 })
 export class TaskChartComponent implements OnInit, OnChanges {
 
   @Input({ required: true }) values: string[] = [];
-  data$ = new Subject<string[]>();
-  data = {
-    labels: [ ...Array(100) ].map((_val, key) => `${key + 1}`),
+  values$ = new Subject<string[]>();
+
+  data$ = this.values$.pipe(filter(values => !!values), map(values => ({
+    labels: values.map((_, key) => `${key + 1}`),
     datasets: [{
       label: 'Input values',
-      data: [] as string[],
+      data: values,
     }]
-  };
+  })));
 
   options: any;
-  counter = 0;
 
   ngOnInit() {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -62,18 +62,11 @@ export class TaskChartComponent implements OnInit, OnChanges {
     }
   };
 
-  constructor() {
-    this.data$.pipe(takeUntilDestroyed()).subscribe(values => {
-      this.data.datasets[0].data = values;
-      this.data = { ...this.data };
-    });
-  }
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['values']) {
-      this.data$.next(this.values);
+      this.values$.next(this.values);
     }
   }
-
-
 }

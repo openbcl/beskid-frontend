@@ -1,1 +1,3 @@
-<p-chart type="line" [data]="data" [options]="options"></p-chart>
+@if (data$ | async; as data) {
+  <p-chart type="line" [data]="data" [options]="options" [hidden]="!data.datasets[0].data.length"></p-chart>
+}

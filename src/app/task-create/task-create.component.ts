@@ -45,24 +45,23 @@ export class TaskCreateComponent {
   }
 
   updateValues(input: string) {
-    const values = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value && value.match(this.numberPattern)).map(value => 
-      this.fb.control(value, { validators: [Validators.pattern(this.numberPattern)] })
-    );
+    const errors = [];
+    const splittedInput = input.replace(/\r\n|\s|;/g, ',').split(',');
+    const rightValues = splittedInput.filter(value => !!value && value.match(this.numberPattern));
     this.form.controls.values.clear();
-    if (values.length == 100) {
-      values.forEach(value => this.form.controls.values.push(value));
+    if (rightValues.length == 100) {
+      rightValues.forEach(value => this.form.controls.values.push(this.fb.control(value, { validators: [Validators.pattern(this.numberPattern)] })));
     } else if (!!input?.length) {
-      const wrongValues = input.replace(/\r\n|\s|;/g, ',').split(',').filter(value => !!value?.length && !value.match(this.numberPattern));
-      const errors = [];
-      if (values.length + wrongValues.length < 100) {
+      const wrongValues = splittedInput.filter(value => !!value?.length && !value.match(this.numberPattern));
+      if (rightValues.length + wrongValues.length < 100) {
         errors.push(this.help);
       }
       if (!!wrongValues.length) {
-        errors.push(`You have submitted ${values.length} correct and ${wrongValues.length} incorrect values.`);
+        errors.push(`You have submitted ${rightValues.length} correct and ${wrongValues.length} incorrect values.`);
         errors.push(`The following values do not appear to represent numbers: ${wrongValues.join(', ')}`);
       }
-      errors.forEach(detail => this.store.dispatch(toastError({ summary: 'Format Error', detail })));
     }
+    errors.forEach(detail => this.store.dispatch(toastError({ summary: 'Format Error', detail })));
   }
 
   addRandomValues() {
