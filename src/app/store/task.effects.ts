@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { TaskService } from "../services/task.service";
-import { catchError, map, of, switchMap, tap } from "rxjs";
+import { catchError, concatMap, map, of, switchMap, tap } from "rxjs";
 import * as TaskActions from './task.actions';
 import * as ToastActions from './toast.actions';
 
@@ -12,7 +12,7 @@ export class TaskEffects {
 
   addTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.addTask),
-    switchMap(action =>
+    concatMap(action =>
       this.taskService.addTask(action.createTask).pipe(
         map(task => TaskActions.addTaskSuccess({ task })),
         catchError(error => of(TaskActions.addTaskFailure({ error })))
@@ -69,7 +69,7 @@ export class TaskEffects {
 
   deleteTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTask),
-    switchMap(action =>
+    concatMap(action =>
       this.taskService.deleteTask(action.taskId).pipe(
         map(() => TaskActions.deleteTaskSuccess({ taskId: action.taskId })),
         catchError(error => of(TaskActions.deleteTaskFailure({ error })))
@@ -88,7 +88,7 @@ export class TaskEffects {
 
   runTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTask),
-    switchMap(action =>
+    concatMap(action =>
       this.taskService.runTask(action.taskId, action.modelId, action.resolution).pipe(
         map(task => TaskActions.runTaskSuccess({ task })),
         catchError(error => of(TaskActions.runTaskFailure({ error, taskId: action.taskId })))

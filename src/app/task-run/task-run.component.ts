@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
@@ -28,7 +28,7 @@ interface ResolutionItem {
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
-export class TaskRunComponent implements OnInit, AfterViewInit {
+export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   @Input({ required: true }) task: Task | undefined;
 
   taskId$ = new Subject<string>();
@@ -51,6 +51,12 @@ export class TaskRunComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.store.dispatch(findModels());
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['task']?.previousValue && changes['task'].previousValue.id !== this.task?.id) {
+      this.taskId$.next(this.task!.id);
+    }
   }
 
   ngAfterViewInit(): void {
