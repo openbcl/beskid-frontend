@@ -14,16 +14,20 @@ import { editTask, evaluateTaskResult, findTaskResult } from '../store/task.acti
 import { resultFile } from '../store/task.selector';
 import { ConfirmationService } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
+import { uiState } from '../store/ui.selector';
+import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
 export class TaskResultsComponent implements OnChanges {
   @Input({ required: true }) task!: Task;
+
+  breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
 
   evaluationOptions = [
     { icon: 'far fa-face-frown', evaluation: TaskResultEvaluation.NEGATIVE },
