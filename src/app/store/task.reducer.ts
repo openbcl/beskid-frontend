@@ -9,6 +9,7 @@ export interface TaskState {
   task?: Task;
   tasks: Task[],
   processing: boolean;
+  running: string[],
   error: any;
 }
 
@@ -16,8 +17,28 @@ export const initialTaskState: TaskState = {
   task: undefined,
   tasks: [],
   processing: false,
+  running: [],
   error: null
 };
+
+const mergeTasksState = (task: Task, tasks: Task[]) => {
+  const updatedTask = {
+    ...task,
+    values: !!task.values?.length ? task.values : tasks.find(stateTask => stateTask.id === task.id)?.values || [],
+  }
+  let merged = false;
+  const mergedTasks = [ ...tasks ].map(stateTask => {
+    if (stateTask.id === updatedTask.id) {
+      merged = true;
+      return updatedTask;
+    }
+    return stateTask
+  });
+  if (!merged) {
+    mergedTasks.push(updatedTask)
+  }
+  return { task: updatedTask, tasks: mergedTasks }
+}
 
 export const taskReducer = createReducer(
   initialTaskState,
@@ -26,27 +47,20 @@ export const taskReducer = createReducer(
     return { ...initialTaskState };
   }),
   
-  on(...[TaskAction.addTask, TaskAction.findTask, TaskAction.findTasks, TaskAction.editTask, TaskAction.deleteTask, TaskAction.runTask, TaskAction.findTaskResult, TaskAction.evaluateTaskResult], state => {
+  on(...[TaskAction.addTask, TaskAction.findTask, TaskAction.findTasks, TaskAction.editTask, TaskAction.deleteTask, TaskAction.findTaskResult, TaskAction.evaluateTaskResult], state => {
     return { ...state, processing: true };
   }),
 
-  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.runTaskSuccess, TaskAction.evaluateTaskResultSuccess], (state, action) => {
-    const updatedTask = {
-      ...action.task,
-      values: !!action.task.values?.length ? action.task.values : state.tasks.find(stateTask => stateTask.id === action.task.id)?.values || [],
-    }
-    let merged = false;
-    const mergedTasks = [ ...state.tasks ].map(stateTask => {
-      if (stateTask.id === updatedTask.id) {
-        merged = true;
-        return updatedTask;
-      }
-      return stateTask
-    });
-    if (!merged) {
-      mergedTasks.push(updatedTask)
-    }
-    return { ...state, task: updatedTask, tasks: mergedTasks, processing: false };
+  on(TaskAction.runTask, (state, action) => {
+    return { ...state, processing: true, running: [ ...state.running, action.taskId ] };
+  }),
+
+  on(TaskAction.runTaskSuccess, (state, action) => {
+    return { ...state, ...mergeTasksState(action.task, state.tasks), processing: false, running: state.running.filter(taskId => taskId !== action.task.id ) };
+  }),
+
+  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.evaluateTaskResultSuccess], (state, action) => {
+    return { ...state, ...mergeTasksState(action.task, state.tasks), processing: false };
   }),
 
   on(TaskAction.findTasksSuccess, (state, action) => {
@@ -79,7 +93,11 @@ export const taskReducer = createReducer(
     };
   }),
 
-  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.runTaskFailure, TaskAction.findTaskResultFailure, TaskAction.evaluateTaskResultFailure], (state, action) => {
+  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.evaluateTaskResultFailure], (state, action) => {
     return { ...state, error: action.error, processing: false };
+  }),
+
+  on(TaskAction.runTaskFailure, (state, action) => {
+    return { ...state, error: action.error, processing: false, running: state.running.filter(taskId => taskId !== action.taskId ) };
   }),
 )

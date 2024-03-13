@@ -91,7 +91,7 @@ export class TaskEffects {
     switchMap(action =>
       this.taskService.runTask(action.taskId, action.modelId, action.resolution).pipe(
         map(task => TaskActions.runTaskSuccess({ task })),
-        catchError(error => of(TaskActions.runTaskFailure({ error })))
+        catchError(error => of(TaskActions.runTaskFailure({ error, taskId: action.taskId })))
       )
     )
   ));

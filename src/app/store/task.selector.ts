@@ -19,6 +19,11 @@ export const tasks = createSelector(
   taskState => taskState.tasks
 );
 
+export const isRunning = (taskId: string) => createSelector(
+  getTaskState,
+  taskState => !!taskState.running.find(runningTaskId => runningTaskId === taskId)
+);
+
 export const resultFile = (taskId: string, fileId: string) => createSelector(
   getTaskState,
   taskState => (

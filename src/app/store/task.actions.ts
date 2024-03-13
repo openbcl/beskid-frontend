@@ -87,7 +87,7 @@ export const runTaskSuccess = createAction(
 
 export const runTaskFailure = createAction(
   '[Task] Run Task Failure',
-  props<{ error: any }>()
+  props<{ taskId: string, error: any }>()
 );
 
 export const findTaskResult = createAction(

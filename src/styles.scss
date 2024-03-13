@@ -151,8 +151,17 @@ be-task-list {
   }
 
   be-task-item {
+    .p-card {
+      box-shadow: unset;
+      .be-task-item-header {
+        background-color: var(--surface-ground);
+      }
+    }
     .p-card-content {
       padding: 0;
+    }
+    .p-card.p-component {
+      border-radius: 0.5rem;
     }
   }
 
@@ -160,6 +169,9 @@ be-task-list {
     .p-card {
       color: var(--primary-color-text);
       transition: background-color 0.3s;
+      .be-task-item-header {
+        background-color: rgba(255,255,255,0.4);
+      }
     }
   }
 

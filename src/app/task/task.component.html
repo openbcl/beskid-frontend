@@ -7,7 +7,7 @@
                 <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
             </div>
         </ng-template>
-        @if(!!task.values?.length) {
+        @if(!!task?.values?.length) {
             <be-task-chart [values]="(task.values) | numbersToStrings"></be-task-chart>
         }
     </p-panel>

@@ -1,17 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Task } from '../store/task';
 import { DropdownModule } from 'primeng/dropdown';
 import { models } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, filter } from 'rxjs';
+import { Subject, filter, switchMap } from 'rxjs';
 import { Model } from '../store/model';
 import { runTask } from '../store/task.actions';
+import { isRunning } from '../store/task.selector';
 
 interface ResolutionItem {
   name: string;
@@ -21,15 +24,18 @@ interface ResolutionItem {
 @Component({
   selector: 'be-task-run',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, DropdownModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, DropdownModule, BlockUIModule, ProgressSpinnerModule],
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
-export class TaskRunComponent implements OnInit {
+export class TaskRunComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) task: Task | undefined;
 
+  taskId$ = new Subject<string>();
+  running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isRunning(taskId))));
+
   models$ = this.store.select(models);
-  resolutions$ = new Subject<any[]>()
+  resolutions$ = new Subject<ResolutionItem[]>()
 
   form = this.fb.group({
     selectedModel: this.fb.control({}, { validators: [Validators.required]}),
@@ -45,6 +51,10 @@ export class TaskRunComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(findModels());
+  }
+
+  ngAfterViewInit(): void {
+    this.taskId$.next(this.task!.id);
   }
 
   updateSelectedModel(model: Model) {
