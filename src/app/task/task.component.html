@@ -2,9 +2,15 @@
 @if (task$ | async; as task) {
     <p-panel>
         <ng-template pTemplate="header">
-            <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
+            <div class="flex justify-content-between align-items-center flex-wrap gap-2 w-full">
                 <span class="font-bold">Task Data</span>
-                <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
+                <div class="flex justify-content-center gap-2 align-items-center">
+                    <p class="m-0">{{ task.date | date }}</p>
+                    <p class="m-0">{{ task.date | date:'shortTime' }}</p>
+                </div>
+                <div class="flex justify-content-end w-full sm:w-auto">
+                    <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
+                </div>
             </div>
         </ng-template>
         @if(!!task?.values?.length) {

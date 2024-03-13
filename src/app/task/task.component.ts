@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { task } from '../store/task.selector';
 import { filter, map, switchMap, take, tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
@@ -21,7 +21,7 @@ import { TaskResultsComponent } from "../task-results/task-results.component";
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent]
+    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent]
 })
 export class TaskComponent implements OnInit {
   

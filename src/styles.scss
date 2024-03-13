@@ -60,6 +60,12 @@ body {
   margin: 0.5rem
 }
 
+p-button.w-full {
+  button {
+    width: 100%;
+  }
+}
+
 be-toolbar {
   p-toolbar {
     position: fixed;
