@@ -1,8 +1,10 @@
-<be-toolbar [(showTaskListSidebar)]="showTaskListSidebar"></be-toolbar>
-<be-task-list [(showTaskListSidebar)]="showTaskListSidebar" class="animation-duration-150 {{showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
-<div class="be-content {{showTaskListSidebar && 'be-sidebar-visible'}}" >
-  <router-outlet />
-</div>
+@if (uiState$ | async ; as uiState) {
+  <be-toolbar [showTaskListSidebar]="uiState.showTaskListSidebar"></be-toolbar>
+  <be-task-list class="animation-duration-150 {{uiState.showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
+  <div class="be-content {{uiState.showTaskListSidebar && 'be-sidebar-visible'}}" >
+    <router-outlet />
+  </div>
+}
 <p-confirmDialog>
   <ng-template pTemplate="message" let-dialog>
     <div class="flex flex-column align-items-center pl-4">

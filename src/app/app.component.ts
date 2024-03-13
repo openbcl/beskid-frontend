@@ -8,6 +8,8 @@ import { ToastModule } from 'primeng/toast';
 import { TaskListComponent } from "./task-list/task-list.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { uiState } from './store/ui.selector';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
@@ -15,12 +17,12 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, TaskCreateComponent, ConfirmDialogModule, ToastModule, TaskListComponent, ToolbarComponent]
+    imports: [AsyncPipe, RouterOutlet, TaskCreateComponent, ConfirmDialogModule, ToastModule, TaskListComponent, ToolbarComponent]
 })
 export class AppComponent {
   title = 'beskid-frontend';
 
-  showTaskListSidebar = localStorage.getItem('showTaskListSidebar') === 'true' ? true : false;
+  uiState$ = this.store.select(uiState);
 
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;

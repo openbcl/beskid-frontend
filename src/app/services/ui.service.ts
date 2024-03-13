@@ -8,6 +8,10 @@ export class UiService {
 
   constructor() { }
 
+  isTaskListSidebarVisible() {
+    return of(localStorage.getItem('showTaskListSidebar') === 'true');
+  }
+
   changeTaskListSidebarVisibility() {
     const showTaskListSidebar = localStorage.getItem('showTaskListSidebar') === 'true'
     localStorage.setItem('showTaskListSidebar', showTaskListSidebar ? 'false' : 'true');

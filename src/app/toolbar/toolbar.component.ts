@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, Input } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -6,17 +6,18 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { deleteSession } from '../store/auth.actions';
+import { changeTaskListSidebarVisibility } from '../store/ui.actions';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'be-toolbar',
   standalone: true,
-  imports: [ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink],
+  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
 export class ToolbarComponent {
   @Input(({ required: true })) showTaskListSidebar = false;
-  @Output() showTaskListSidebarChange = new EventEmitter<boolean>();
 
   avatarItems: MenuItem[] = [
     {
@@ -40,16 +41,13 @@ export class ToolbarComponent {
   ) { }
 
   changeShowTaskListSidebar() {
-    this.showTaskListSidebar = !this.showTaskListSidebar;
-    localStorage.setItem('showTaskListSidebar', this.showTaskListSidebar ? 'true' : 'false');
-    this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+    this.store.dispatch(changeTaskListSidebarVisibility())
   }
 
   checkChangeShowTaskListSidebar() {
     const body = (this.elementRef.nativeElement as HTMLElement).parentElement;
     if (body && body.offsetWidth <= 700) {
-      this.showTaskListSidebar = false;
-      this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+      this.changeShowTaskListSidebar();
     }
   }
 }

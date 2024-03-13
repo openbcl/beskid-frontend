@@ -18,6 +18,8 @@ import { modelFeatureKey, modelReducer } from './store/model.reducer';
 import { taskFeatureKey, taskReducer } from './store/task.reducer';
 import { TaskEffects } from './store/task.effects';
 import { ToastEffects } from './store/toast.effects';
+import { UiEffects } from './store/ui.effects';
+import { uiFeatureKey, uiReducer } from './store/ui.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,7 +39,8 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: authFeatureKey, reducer: authReducer }),
     provideState({ name: modelFeatureKey, reducer: modelReducer }),
     provideState({ name: taskFeatureKey, reducer: taskReducer }),
-    provideEffects(AuthEffects, ModelEffects, TaskEffects, ToastEffects),
+    provideState({ name: uiFeatureKey, reducer: uiReducer }),
+    provideEffects(AuthEffects, ModelEffects, TaskEffects, ToastEffects, UiEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideServiceWorker('ngsw-worker.js', {
         enabled: !isDevMode(),

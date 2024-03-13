@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { findTasks } from '../store/task.actions';
 import { Store } from '@ngrx/store';
 import { tasks } from '../store/task.selector';
@@ -8,6 +8,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { SortTasksPipe } from "../shared/sort-tasks.pipe";
+import { changeTaskListSidebarVisibility } from '../store/ui.actions';
 
 @Component({
     selector: 'be-task-list',
@@ -17,9 +18,6 @@ import { SortTasksPipe } from "../shared/sort-tasks.pipe";
     imports: [AsyncPipe, TaskItemComponent, RouterLink, RouterLinkActive, ButtonModule, RippleModule, SortTasksPipe]
 })
 export class TaskListComponent {
-  @Input(({ required: true })) showTaskListSidebar = false;
-  @Output() showTaskListSidebarChange = new EventEmitter<boolean>();
-
   tasks$ = this.store.select(tasks);
 
   constructor(private store: Store, private elementRef: ElementRef) {
@@ -29,8 +27,7 @@ export class TaskListComponent {
   changeShowTaskListSidebar() {
     const body = (this.elementRef.nativeElement as HTMLElement).parentElement;
     if (body && body.offsetWidth <= 700) {
-      this.showTaskListSidebar = !this.showTaskListSidebar;
-      this.showTaskListSidebarChange.emit(this.showTaskListSidebar);
+      this.store.dispatch(changeTaskListSidebarVisibility())
     }
   }
 
