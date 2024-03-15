@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CreateTaskDto, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
+import { CreateTaskDto, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
 
 export const addTask = createAction(
   '[Task] Add Task',
@@ -117,5 +117,20 @@ export const evaluateTaskResultSuccess = createAction(
 
 export const evaluateTaskResultFailure = createAction(
   '[Task] Evaluate Task Result Failure',
+  props<{ error: any }>()
+);
+
+export const deleteTaskResult = createAction(
+  '[Task] Delete Task Result',
+  props<{ taskId: string, fileId: string, keepTrainingData: KeepTrainingData }>()
+);
+
+export const deleteTaskResultSuccess = createAction(
+  '[Task] Delete Task Result Success',
+  props<{ task: Task }>()
+);
+
+export const deleteTaskResultFailure = createAction(
+  '[Task] Delete Task Result Failure',
   props<{ error: any }>()
 );

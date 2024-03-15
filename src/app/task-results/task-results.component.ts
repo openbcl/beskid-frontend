@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges  } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Subject, filter, map, take } from 'rxjs';
-import { Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { KeepTrainingData, Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -10,7 +10,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
+import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
 import { resultFile } from '../store/task.selector';
 import { ConfirmationService } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
@@ -73,17 +73,17 @@ export class TaskResultsComponent implements OnChanges {
     private fb: FormBuilder
   ) {}
 
-  changeTraining(task: Task) {
-    if (task.training === TaskTraining.ENABLED && !!task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
+  changeTraining() {
+    if (this.task.training === TaskTraining.ENABLED && !!this.task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
       this.confirmationService.confirm({
         header: 'Disable task training',
         icon: 'fas fa-robot',
         acceptButtonStyleClass: 'p-button-danger',
-        message: 'Are you sure you that want to disable training for this task? All existing training data for this task will be deleted in this case.',
-        accept: () => this.store.dispatch(editTask({ taskId: task.id, training: TaskTraining.DISABLED }))
+        message: 'Are you sure that you want to disable training for this task? All existing training data for this task will be deleted in this case.',
+        accept: () => this.store.dispatch(editTask({ taskId: this.task.id, training: TaskTraining.DISABLED }))
       });
     } else {
-      this.store.dispatch(editTask({ taskId: task.id, training: task.training === TaskTraining.ENABLED ? TaskTraining.DISABLED : TaskTraining.ENABLED }))
+      this.store.dispatch(editTask({ taskId: this.task.id, training: this.task.training === TaskTraining.ENABLED ? TaskTraining.DISABLED : TaskTraining.ENABLED }))
     }
   }
 
@@ -93,6 +93,36 @@ export class TaskResultsComponent implements OnChanges {
       fileId,
       evaluation: event.value!.evaluation
     }));
+  }
+
+  deleteTaskResult(result: TaskResult) {
+    const dispatchDeleteTaskResult = (keepTrainingData = true) => {
+      this.store.dispatch(deleteTaskResult({
+        taskId: this.task.id,
+        fileId: result.filename,
+        keepTrainingData: keepTrainingData ? KeepTrainingData.TRUE : KeepTrainingData.FALSE
+      }));
+    };
+    this.confirmationService.confirm({
+      header: 'Delete task result',
+      icon: 'fas fa-trash-can',
+      acceptButtonStyleClass: 'p-button-danger',
+      message: 'Are you sure that you want to delete this result?',
+      accept: () => setTimeout(() => {
+        if (result.evaluation === TaskResultEvaluation.NEUTRAL) {
+          dispatchDeleteTaskResult();
+        } else {
+          this.confirmationService.confirm({
+            header: 'Delete evaluated training data',
+            icon: 'fas fa-robot',
+            acceptButtonStyleClass: 'p-button-danger',
+            message: 'Would you also like to delete the corresponding evaluated training data for this result?',
+            accept: () => dispatchDeleteTaskResult(false),
+            reject: () => dispatchDeleteTaskResult()
+          });
+        }
+      }, 500)
+    });
   }
 
   downloadFile(result: TaskResult) {

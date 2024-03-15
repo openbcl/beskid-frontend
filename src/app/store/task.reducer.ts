@@ -47,7 +47,7 @@ export const taskReducer = createReducer(
     return { ...initialTaskState };
   }),
   
-  on(...[TaskAction.addTask, TaskAction.findTask, TaskAction.findTasks, TaskAction.editTask, TaskAction.deleteTask, TaskAction.findTaskResult, TaskAction.evaluateTaskResult], state => {
+  on(...[TaskAction.addTask, TaskAction.findTask, TaskAction.findTasks, TaskAction.editTask, TaskAction.deleteTask, TaskAction.findTaskResult, TaskAction.evaluateTaskResult, TaskAction.deleteTaskResult], state => {
     return { ...state, processing: true };
   }),
 
@@ -59,7 +59,7 @@ export const taskReducer = createReducer(
     return { ...state, ...mergeTasksState(action.task, state.tasks), processing: false, running: state.running.filter(taskId => taskId !== action.task.id ) };
   }),
 
-  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.evaluateTaskResultSuccess], (state, action) => {
+  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.evaluateTaskResultSuccess, TaskAction.deleteTaskResultSuccess], (state, action) => {
     return { ...state, ...mergeTasksState(action.task, state.tasks), processing: false };
   }),
 
@@ -93,7 +93,7 @@ export const taskReducer = createReducer(
     };
   }),
 
-  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.evaluateTaskResultFailure], (state, action) => {
+  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
     return { ...state, error: action.error, processing: false };
   }),
 

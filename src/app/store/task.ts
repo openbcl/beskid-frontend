@@ -21,6 +21,11 @@ export enum TaskResultEvaluation {
   NEGATIVE = 'NEGATIVE',
 }
 
+export enum KeepTrainingData {
+  TRUE = 'TRUE',
+  FALSE = 'FALSE',
+}
+
 export interface TaskResult extends ResultValue{
   filename: string;
   uriFile: string;

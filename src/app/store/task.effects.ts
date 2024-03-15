@@ -133,6 +133,23 @@ export class TaskEffects {
     })))
   ));
 
+  deleteTaskResult$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.deleteTaskResult),
+    switchMap(action =>
+      this.taskService.deleteTaskResult(action.taskId, action.fileId, action.keepTrainingData).pipe(
+        map(task => TaskActions.deleteTaskResultSuccess({ task })),
+        catchError(error => of(TaskActions.deleteTaskResultFailure({ error })))
+      )
+    )
+  ));
+
+  deleteTaskResultSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.deleteTaskResultSuccess),
+    switchMap(() => of(ToastActions.toastSuccess({
+      summary: 'Task result successfully deleted!'
+    })))
+  ));
+
   constructor(
     private actions$: Actions,
     private router: Router,

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CreateTaskDto, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { CreateTaskDto, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -46,5 +46,9 @@ export class TaskService {
 
   evaluateTaskResult(taskId: string, fileId: string, evaluation: TaskResultEvaluation) {
     return this.http.put<Task>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`, undefined, { params: { evaluation } });
+  }
+
+  deleteTaskResult(taskId: string, fileId: string, keepTrainingData: KeepTrainingData ) {
+    return this.http.delete<Task>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`, { params: { keepTrainingData } });
   }
 }

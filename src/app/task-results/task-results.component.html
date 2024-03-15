@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="flex justify-content-end w-full sm:w-auto">
-            <p-button class="mt-2" [label]="task.training === 'ENABLED' ? 'Disable Training' : 'Enable Training'" icon="fas fa-robot" [severity]="task.training === 'ENABLED' ? 'warning' : 'info'" (click)="changeTraining(task)"></p-button>
+            <p-button class="mt-2" [label]="task.training === 'ENABLED' ? 'Disable Training' : 'Enable Training'" icon="fas fa-robot" [severity]="task.training === 'ENABLED' ? 'warning' : 'info'" (click)="changeTraining()"></p-button>
           </div>
         </div>
     </ng-template>
@@ -43,7 +43,7 @@
                 }
                 <td class="flex gap-2 justify-content-end">
                   <p-button severity="info" icon="fas fa-file-arrow-down" (click)="downloadFile(rowData)"></p-button>
-                  <p-button [disabled]="true" severity="danger" icon="fas fa-trash"></p-button>
+                  <p-button severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData)"></p-button>
                 </td>
             </tr>
           </ng-template>

@@ -26,7 +26,7 @@ export class ToolbarComponent {
         header: 'Delete current session and tasks',
         icon: 'fas fa-trash-can',
         acceptButtonStyleClass: 'p-button-danger',
-        message: 'Are you sure you that want to delete your session and all corresponding tasks? Analysed training data is retained.',
+        message: 'Are you sure that you want to delete your session and all corresponding tasks? Analysed training data is retained.',
         accept: () => this.store.dispatch(deleteSession())
       })
     },

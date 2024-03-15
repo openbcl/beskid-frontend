@@ -53,7 +53,7 @@ export class TaskComponent implements OnInit {
       header: 'Delete task',
       icon: 'fas fa-trash-can',
       acceptButtonStyleClass: 'p-button-danger',
-      message: 'Are you sure you that want to delete this task? Analysed training data is retained.',
+      message: 'Are you sure that you want to delete this task? Analysed training data is retained.',
       accept: () => this.store.dispatch(deleteTask({ taskId: task.id }))
     };
     if (task.training && !!task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
