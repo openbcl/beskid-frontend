@@ -60,6 +60,10 @@ body {
   margin: 0.5rem
 }
 
+.p-blockui.p-component-overlay.p-component-overlay-enter {
+  z-index: 89;
+}
+
 p-button.w-full {
   button {
     width: 100%;
