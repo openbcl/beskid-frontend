@@ -1,0 +1,3 @@
+@if (uiState$ | async; as uiState) {
+  <p-progressBar [hidden]="!uiState.processing" class="be-processing" mode="indeterminate"></p-progressBar>
+}

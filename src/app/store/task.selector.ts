@@ -3,11 +3,6 @@ import { TaskState, taskFeatureKey } from "./task.reducer";
 
 export const getTaskState = createFeatureSelector<TaskState>(taskFeatureKey);
 
-export const taskProcessing = createSelector(
-  getTaskState,
-  taskState => taskState.processing
-);
-
 export const task = (taskId?: string) => createSelector(
   getTaskState,
   taskState => !!taskId?.length ?

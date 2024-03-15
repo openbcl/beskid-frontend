@@ -5,5 +5,8 @@ export const getUiState = createFeatureSelector<UiState>(uiFeatureKey);
 
 export const uiState = createSelector(
   getUiState,
-  uiState => uiState
+  uiState => ({
+    showTaskListSidebar: uiState.showTaskListSidebar,
+    processing: uiState.processing
+  })
 );

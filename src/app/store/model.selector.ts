@@ -3,11 +3,6 @@ import { ModelState, modelFeatureKey } from "./model.reducer";
 
 export const getModelState = createFeatureSelector<ModelState>(modelFeatureKey);
 
-export const modelProcessing = createSelector(
-  getModelState,
-  modelState => modelState.processing
-);
-
 export const model = createSelector(
   getModelState,
   modelState => modelState.model

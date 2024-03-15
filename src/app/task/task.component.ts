@@ -1,9 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { task } from '../store/task.selector';
-import { filter, map, switchMap, take, tap } from 'rxjs';
+import { filter, map, switchMap,  tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
 import { Task, TaskResultEvaluation } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
@@ -23,7 +23,7 @@ import { TaskResultsComponent } from "../task-results/task-results.component";
     styleUrl: './task.component.scss',
     imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent]
 })
-export class TaskComponent implements OnInit {
+export class TaskComponent {
   
   private activatedRoute = inject(ActivatedRoute);
 
@@ -43,10 +43,6 @@ export class TaskComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private store: Store
   ) { }
-
-  ngOnInit(): void {
-    this.activatedRoute.params.pipe(take(1), map((p) => p['taskId'] as string)).subscribe(taskId => this.store.dispatch(findTask({ taskId })));
-  }
 
   deleteTask(task: Task) {
     const dialog = {

@@ -8,7 +8,6 @@ export interface AuthState {
   auth?: Auth;
   isValid: boolean,
   ageInDays: number,
-  processing: boolean;
   error: any;
 }
 
@@ -16,23 +15,18 @@ export const initialAuthState: AuthState = {
   auth: undefined,
   isValid: false,
   ageInDays: 0,
-  processing: false,
   error: null
 };
 
 export const authReducer = createReducer(
   initialAuthState,
-  
-  on(...[AuthAction.newSession, AuthAction.renewSession, AuthAction.checkSession, AuthAction.deleteSession], state => {
-    return { ...state, processing: true };
-  }),
 
   on(...[AuthAction.newSessionSuccess, AuthAction.renewSessionSuccess], (state, action) => {
-    return { ...state, auth: action.auth, processing: false };
+    return { ...state, auth: action.auth };
   }),
 
   on(AuthAction.checkSessionSuccess, (state, action) => {
-    return { ...state, auth: action.auth, isValid: action.isValid, ageInDays: action.ageInDays, processing: false };
+    return { ...state, auth: action.auth, isValid: action.isValid, ageInDays: action.ageInDays };
   }),
 
   on(AuthAction.deleteSessionSuccess, () => {
@@ -40,6 +34,6 @@ export const authReducer = createReducer(
   }),
 
   on(...[AuthAction.newSessionFailure, AuthAction.renewSessionFailure, AuthAction.checkSessionFailure, AuthAction.deleteSessionFailure], (state, action) => {
-    return { ...state, error: action.error, processing: false };
+    return { ...state, error: action.error };
   }),
 )

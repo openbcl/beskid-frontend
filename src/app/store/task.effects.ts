@@ -3,6 +3,8 @@ import { Router } from "@angular/router";
 import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { TaskService } from "../services/task.service";
 import { catchError, concatMap, map, of, switchMap, tap } from "rxjs";
+import { Store } from "@ngrx/store";
+import { finishProcessing, startProcessing } from "./ui.actions";
 import * as TaskActions from './task.actions';
 import * as ToastActions from './toast.actions';
 
@@ -12,10 +14,11 @@ export class TaskEffects {
 
   addTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.addTask),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     concatMap(action =>
       this.taskService.addTask(action.createTask).pipe(
-        map(task => TaskActions.addTaskSuccess({ task })),
-        catchError(error => of(TaskActions.addTaskFailure({ error })))
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.addTaskSuccess({ task }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.addTaskFailure({ error })))
       )
     )
   ));
@@ -31,30 +34,33 @@ export class TaskEffects {
 
   findTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.findTask),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.findTask(action.taskId).pipe(
-        map(task => TaskActions.findTaskSuccess({ task })),
-        catchError(error => of(TaskActions.findTaskFailure({ error })))
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.findTaskSuccess({ task }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskFailure({ error })))
       )
     )
   ));
 
   findTasks$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.findTasks),
-    switchMap(() =>
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
+    switchMap(action =>
       this.taskService.findTasks().pipe(
-        map(tasks => TaskActions.findTasksSuccess({ tasks })),
-        catchError(error => of(TaskActions.findTasksFailure({ error })))
+        switchMap(tasks => of(finishProcessing({id: action.type}), TaskActions.findTasksSuccess({ tasks }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTasksFailure({ error })))
       )
     )
   ));
 
   editTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.editTask),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.editTask(action.taskId, action.training).pipe(
-        map(task => TaskActions.editTaskSuccess({ task })),
-        catchError(error => of(TaskActions.editTaskFailure({ error })))
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.editTaskSuccess({ task }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.editTaskFailure({ error })))
       )
     )
   ));
@@ -69,10 +75,11 @@ export class TaskEffects {
 
   deleteTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTask),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     concatMap(action =>
       this.taskService.deleteTask(action.taskId).pipe(
-        map(() => TaskActions.deleteTaskSuccess({ taskId: action.taskId })),
-        catchError(error => of(TaskActions.deleteTaskFailure({ error })))
+        switchMap(() => of(finishProcessing({id: action.type}), TaskActions.deleteTaskSuccess({ taskId: action.taskId }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.deleteTaskFailure({ error })))
       )
     )
   ));
@@ -107,20 +114,22 @@ export class TaskEffects {
 
   findTaskResult$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.findTaskResult),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.findTaskResult(action.taskId, action.fileId).pipe(
-        map(resultValue => TaskActions.findTaskResultSuccess({ taskId: action.taskId, fileId: action.fileId, resultValue })),
-        catchError(error => of(TaskActions.findTaskResultFailure({ error })))
+        switchMap(resultValue => of(finishProcessing({id: action.type}), TaskActions.findTaskResultSuccess({ taskId: action.taskId, fileId: action.fileId, resultValue }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskResultFailure({ error })))
       )
     )
   ));
 
   evaluateTaskResult$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.evaluateTaskResult),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.evaluateTaskResult(action.taskId, action.fileId, action.evaluation).pipe(
-        map(task => TaskActions.evaluateTaskResultSuccess({ task, evaluation: action.evaluation })),
-        catchError(error => of(TaskActions.evaluateTaskResultFailure({ error })))
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.evaluateTaskResultSuccess({ task, evaluation: action.evaluation }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.evaluateTaskResultFailure({ error })))
       )
     )
   ));
@@ -135,10 +144,11 @@ export class TaskEffects {
 
   deleteTaskResult$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTaskResult),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.deleteTaskResult(action.taskId, action.fileId, action.keepTrainingData).pipe(
-        map(task => TaskActions.deleteTaskResultSuccess({ task })),
-        catchError(error => of(TaskActions.deleteTaskResultFailure({ error })))
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.deleteTaskResultSuccess({ task }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.deleteTaskResultFailure({ error })))
       )
     )
   ));
@@ -153,6 +163,7 @@ export class TaskEffects {
   constructor(
     private actions$: Actions,
     private router: Router,
+    private store: Store,
     private taskService: TaskService
   ) {}
 
