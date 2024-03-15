@@ -3,7 +3,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ToggleButtonModule } from 'primeng/togglebutton';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { deleteSession } from '../store/auth.actions';
 import { changeTaskListSidebarVisibility } from '../store/ui.actions';
@@ -12,7 +12,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'be-toolbar',
   standalone: true,
-  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink],
+  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink, RouterLinkActive],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })

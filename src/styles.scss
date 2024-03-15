@@ -99,6 +99,17 @@ be-toolbar {
       width: 5rem;
     }
   }
+
+  .be-toolbar-hide-logo {
+    visibility: collapse;
+    transition: visibility 0.14s;
+  }
+
+  .be-toolbar-show-logo {
+    visibility: visible;
+    transition: visibility 0.10s;
+  }
+
   p-speeddial {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -213,6 +224,11 @@ be-task-list {
   be-task-item:active .p-card {
     background-color: var(--primary-300);
   }
+}
+
+.be-welcome-project-logo {
+  width: 35rem;
+  max-width: 55vw;
 }
 
 .be-content {

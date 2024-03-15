@@ -7,7 +7,13 @@
       <div class="be-hamburger-line-3"></div>
     </label>
   </div>
-  <div class="p-toolbar-group-center cursor-pointer" routerLink="/" (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
+  <div 
+  routerLink="/"
+  routerLinkActive
+  #welcomeLink="routerLinkActive"
+  [routerLinkActiveOptions]="{ exact: true }"
+  class="p-toolbar-group-center cursor-pointer {{( welcomeLink.isActive ? 'be-toolbar-hide-logo fadeoutdown' : 'be-toolbar-show-logo fadeindown' )}}"
+  (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
     <img alt="BESKID" draggable="false" class="be-header-tiny select-none" src="assets/icons/header_tiny_light_monochrome.png">
     <img alt="BESKID" draggable="false" class="be-header select-none" src="assets/icons/header_light_monochrome.png">
   </div>
