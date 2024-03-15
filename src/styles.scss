@@ -228,7 +228,13 @@ be-task-list {
 
 .be-welcome-project-logo {
   width: 55vw;
-  max-width: 560px;
+  max-width: 35rem;
+  @media (-webkit-device-pixel-ratio: 1.25) {
+    max-width: 448px;
+  }
+  @media (-webkit-min-device-pixel-ratio: 1.26) {
+    max-width: 300px;
+  }
 }
 
 .be-content {
