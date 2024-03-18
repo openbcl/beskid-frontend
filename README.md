@@ -1,6 +1,6 @@
 > [!CAUTION]
 > *At the moment this web application and corresponding api are only intended for test purposes. Results of calculated tasks will only provide random data!*
-> *This site will be available for productive use as soon as the <a href="https://www.beskid-projekt.de/en/projekt/modellierung">modeling project phase has been successfully completed.*
+> *This site will be available for productive use as soon as the <a href="https://www.beskid-projekt.de/en/projekt/modellierung">modeling project phase</a> has been successfully completed.*
 
 <img src="https://www.beskid-projekt.de/@@project-logo/Logo_text_500px.png" width="35%" alt="BESKID Logo"/><br>
 
@@ -23,10 +23,14 @@ git clone https://github.com/openbcl/beskid-frontend.git
 
 Make sure that *Node.js* is installed.
 
+## Configuration
+You will find two files under the path "src/environments" in which the address to the backend can be stored for the development and production mode respectively.
+
 ## Running the app
 
 ```bash
-# development watch mode (the application will automatically reload if you change any of the source files)
+# development watch mode
+# (The application will automatically reload if you change any of the source files.)
 $ npm run start:dev
 
 # dev-production mode
