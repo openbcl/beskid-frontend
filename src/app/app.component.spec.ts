@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { StoreMock } from './testing/mocks';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 describe('AppComponent', () => {
@@ -12,10 +13,14 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideMockActions(() => actions$), {
-        provide: Store,
-        useValue: StoreMock
-      }]
+      providers: [
+        provideMockActions(() => actions$), {
+          provide: Store,
+          useValue: StoreMock
+        },
+        { provide: ConfirmationService },
+        { provide: MessageService },
+      ]
     }).compileComponents();
   });
 
