@@ -22,6 +22,21 @@
   background: var(--primary-600); 
 }
 
+a:-webkit-any-link {
+  .p-tag {
+    font-size: unset;
+    font-weight: unset;
+    padding: 0 0.25rem;
+    &:hover {
+      background: var(--highlight-text-color);
+    }
+    &:active {
+      background: var(--highlight-bg);
+      color: var(--primary-color);
+    }
+  }
+}
+
 html {
   min-height: calc(100% + env(safe-area-inset-top));
   overflow: hidden;
@@ -154,6 +169,19 @@ p-dropdown.w-100 {
 }
 
 
+.be-bt-add-task {
+  height: 0;
+  button {
+    border-radius: 0;
+    border: unset;
+    z-index: 1;
+    box-shadow: 0 0rem 1rem var(--primary-800);
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    margin-bottom: 0.5rem;
+  }
+}
+
 be-task-list {
   position: fixed;
   top: calc(env(safe-area-inset-top) + 5rem);
@@ -166,18 +194,6 @@ be-task-list {
     width: 100vw;
   }
 
-  .be-bt-add-task {
-    height: 0;
-    button {
-      border-radius: 0;
-      border: unset;
-      z-index: 1;
-      box-shadow: 0 0rem 1rem var(--primary-800);
-      border-bottom-left-radius: 25px;
-      border-bottom-right-radius: 25px;
-      margin-bottom: 0.5rem;
-    }
-  }
   
   .be-scroll-list {
     overflow-y: scroll;
@@ -252,5 +268,27 @@ be-task-list {
     margin-left: 100vw;
     visibility: collapse;
     transition: visibility 0.15s;
+  }
+}
+
+be-welcome {
+  fieldset {
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 0.25rem 5px var(--primary-800);
+  }
+  .p-fieldset {
+    background: color-mix(in srgb, var(--primary-color) 50%, transparent);
+    border-color: transparent; //var(--primary-color-text);
+    color: var(--primary-color-text);
+    .p-fieldset-content {
+      padding: 0.5rem;
+    }
+  }
+  .p-fieldset-legend {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    border-color: transparent; //var(--primary-color-text);
+    padding: 0.75rem;
   }
 }

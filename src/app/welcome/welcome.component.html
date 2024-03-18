@@ -1,3 +1,28 @@
-<div class="flex flex-row justify-content-center gap-2">
-  <img alt="BESKID" draggable="false" class="be-welcome-project-logo select-none fadeinup" src="assets/icons/header_light_monochrome.png">
+
+<div class="grid justify-content-center gap-2 mb-4">
+  <img alt="BESKID" draggable="false" class="col-12 be-welcome-project-logo select-none fadeinup" src="assets/icons/header_light_monochrome.png">
+  <span class="col-12 p-0 text-center text-white zoomin animation-duration-250"><b>BE</b>messungsbrandsimulationen in <b>S</b>chienenfahrzeugen mittels <b>KI</b>-basierter <b>D</b>aten</span>
+  <i class="col-12 p-0 text-center text-white zoomin animation-duration-250">Design fire simulation in railway vehicles using AI-based data</i>
 </div>
+<p-fieldset  legend="About">
+  <p-messages [value]="[{
+      severity: 'info',
+      detail: 'At the moment this web application and corresponding api are only intended for test purposes. Results of calculated tasks will only provide random data! This site will be available for productive use as soon as the modeling project phase has been successfully completed.'
+    }]" [enableService]="false" [closable]="false">
+  </p-messages>
+  <p class="mt-4 text-justify" >
+    The goal of the <a href="https://www.beskid-projekt.de/en" target="_blank"><p-tag value="BESKID project"></p-tag></a> , funded by the Federal Ministry of Education and Research (BMBF), is to develop and experimentally validate AI-based methods for calculating design fires. The project started in 2022.
+    The overall goal of the BESKID project is to develop two AI systems that allow for fire propagation simulations in railway vehicles based on less experimental data.
+  </p>
+  <p class="text-justify">
+    Previous approaches to detailed modeling of fire spread in rail vehicles have required a large number of experiments, extensive optimization, and extensive variant calculations. In this project, two complementary AI approaches, KIM (Material AI System) and KIB (Fire AI System), are being researched and implemented. KIM aims to completely reduce the optimization calculations required for determining material parameters, allowing for the determination of necessary material parameters solely from data obtained from a few tests, such as the Cone Calorimeter. This test is already used for the fire protection assessment of all relevant components of rail vehicles, as required by the European standard (EN 45545-2), so the proposed AI approach (KIM) will eliminate the need for additional effort in design fire simulations in the future. KIB aims to significantly shorten the high computational cost for variation calculations of the entire vehicle and focuses on fast calculation of fire spread variations. The goal is to replace the cost-intensive traditional models used for variant calculations of design fires with the KIB AI system.
+  </p>
+  <p class="mb-0 text-center">This website allows you to use the AI system "KIM" and determine material parameters by creating tasks and uploading your input data.</p>
+</p-fieldset>
+@if (tasks$ | async; as tasks) {
+  @if (!tasks?.length) {
+    <div class="be-bt-add-task flex justify-content-center pb-7 fadein animation-duration-200">
+      <p-button label="Create your first task" icon="fas fa-plus" severity="info" routerLink="create"></p-button>
+    </div>
+  }
+}
