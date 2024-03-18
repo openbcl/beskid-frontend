@@ -7,3 +7,8 @@ export const auth = createSelector(
   getAuthState,
   authState => authState.auth
 );
+
+export const isValid = createSelector(
+  getAuthState,
+  authState => authState.isValid
+);

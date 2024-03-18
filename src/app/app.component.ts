@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import { Store } from '@ngrx/store';
+import { filter } from 'rxjs';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -11,6 +13,8 @@ import { TaskListComponent } from "./task-list/task-list.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { uiState } from './store/ui.selector';
 import { ProcessingComponent } from "./processing/processing.component";
+import { isValid } from './store/auth.selector';
+import { findTasks } from './store/task.actions';
 
 
 @Component({
@@ -26,5 +30,6 @@ export class AppComponent {
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
     this.store.dispatch(checkSession());
+    this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => this.store.dispatch(findTasks()));
   }
 }

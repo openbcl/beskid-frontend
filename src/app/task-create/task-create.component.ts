@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { isDevMode } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TableModule } from 'primeng/table';
@@ -23,7 +22,7 @@ import { AsyncPipe } from '@angular/common';
     styleUrl: './task-create.component.scss'
 })
 export class TaskCreateComponent {
-  isDevMode = isDevMode || !environment.production
+  isDevMode = () => isDevMode() || !environment.production
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
   help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 

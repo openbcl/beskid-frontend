@@ -1,5 +1,4 @@
 import { Component, ElementRef } from '@angular/core';
-import { findTasks } from '../store/task.actions';
 import { Store } from '@ngrx/store';
 import { tasks } from '../store/task.selector';
 import { AsyncPipe } from '@angular/common';
@@ -20,9 +19,7 @@ import { changeTaskListSidebarVisibility } from '../store/ui.actions';
 export class TaskListComponent {
   tasks$ = this.store.select(tasks);
 
-  constructor(private store: Store, private elementRef: ElementRef) {
-    this.store.dispatch(findTasks());
-  }
+  constructor(private store: Store, private elementRef: ElementRef) { }
 
   changeShowTaskListSidebar() {
     const body = (this.elementRef.nativeElement as HTMLElement).parentElement?.parentElement;
