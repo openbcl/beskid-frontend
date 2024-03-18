@@ -279,7 +279,7 @@ be-welcome {
   }
   .p-fieldset {
     background: color-mix(in srgb, var(--primary-color) 50%, transparent);
-    border-color: transparent; //var(--primary-color-text);
+    border-color: transparent;
     color: var(--primary-color-text);
     .p-fieldset-content {
       padding: 0.5rem;
@@ -288,7 +288,7 @@ be-welcome {
   .p-fieldset-legend {
     background: var(--primary-color);
     color: var(--primary-color-text);
-    border-color: transparent; //var(--primary-color-text);
+    border-color: transparent;
     padding: 0.75rem;
   }
 }

@@ -19,10 +19,6 @@
   </p>
   <p class="mb-0 text-center">This website allows you to use the AI system "KIM" and determine material parameters by creating tasks and uploading your input data.</p>
 </p-fieldset>
-@if (tasks$ | async; as tasks) {
-  @if (!tasks?.length) {
-    <div class="be-bt-add-task flex justify-content-center pb-7 fadein animation-duration-200">
-      <p-button label="Create your first task" icon="fas fa-plus" severity="info" routerLink="create"></p-button>
-    </div>
-  }
-}
+<div class="be-bt-add-task flex justify-content-center pb-7 fadein animation-duration-200">
+  <p-button label="Create a task" icon="fas fa-plus" severity="info" routerLink="create"></p-button>
+</div>
