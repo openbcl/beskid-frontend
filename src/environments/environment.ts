@@ -11,7 +11,7 @@ const processBackendDomainAndPort = () => {
 }
 
 export const environment = {
-  production: true,
+  production: false,
   domain: backendDomain,
   backend: processBackendDomainAndPort(),
   api: `${useTLS ? 'https' : 'http'}://${processBackendDomainAndPort()}`,

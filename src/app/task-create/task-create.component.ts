@@ -12,6 +12,7 @@ import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
+import { environment } from '../../environments/environment';
 import { AsyncPipe } from '@angular/common';
 
 @Component({
@@ -22,7 +23,7 @@ import { AsyncPipe } from '@angular/common';
     styleUrl: './task-create.component.scss'
 })
 export class TaskCreateComponent {
-  isDevMode = isDevMode;
+  isDevMode = isDevMode || !environment.production
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
   help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 
