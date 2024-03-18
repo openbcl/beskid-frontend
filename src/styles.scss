@@ -23,6 +23,9 @@
 }
 
 a:-webkit-any-link {
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: none;
   .p-tag {
     font-size: unset;
     font-weight: unset;
@@ -40,6 +43,28 @@ a:-webkit-any-link {
 html {
   min-height: calc(100% + env(safe-area-inset-top));
   overflow: hidden;
+}
+
+p-dialog.be-dialog-tabView {
+  .p-dialog-resizable {
+    width: 100vw;
+    height: min(85vh, 625px) ;
+  }
+  p-tabView {
+    max-width: calc(100vw);
+    .p-tabview-nav-container {
+      max-width: calc(100vw - 3rem);
+    }
+    .p-tabview-panels {
+      padding-bottom: 0;
+    }
+  }
+}
+
+@media screen and (min-width: 725px) {
+  p-dialog.be-dialog-tabView .p-dialog-resizable {
+    width: 700px;
+  }
 }
 
 .be-header, .be-header-tiny {

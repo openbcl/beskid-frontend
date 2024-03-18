@@ -3,6 +3,8 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { DialogModule } from 'primeng/dialog';
+import { TabViewModule } from 'primeng/tabview';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { deleteSession } from '../store/auth.actions';
@@ -12,7 +14,7 @@ import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'be-toolbar',
   standalone: true,
-  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, ToggleButtonModule, RouterLink, RouterLinkActive],
+  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, DialogModule, ToggleButtonModule, TabViewModule, RouterLink, RouterLinkActive],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
@@ -30,9 +32,11 @@ export class ToolbarComponent {
         accept: () => this.store.dispatch(deleteSession())
       })
     },
-    { icon: 'fas fa-info' },
+    { icon: 'fas fa-info', command: () => this.showInfoDialog = true },
     { icon: 'fas fa-house', url: 'https://www.beskid-projekt.de/en', target: '_blank' }
   ]
+
+  showInfoDialog = false;
 
   constructor(
     private elementRef: ElementRef,
