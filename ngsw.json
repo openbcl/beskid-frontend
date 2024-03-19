@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1710831235816,
+  "timestamp": 1710839521635,
   "index": "/beskid-frontend/index.html",
   "assetGroups": [
     {
@@ -13,10 +13,10 @@
       "urls": [
         "/beskid-frontend/favicon.ico",
         "/beskid-frontend/index.html",
-        "/beskid-frontend/main-VLIHGACW.js",
+        "/beskid-frontend/main-M2LKT6CH.js",
         "/beskid-frontend/manifest.webmanifest",
         "/beskid-frontend/polyfills-RX4V3J3S.js",
-        "/beskid-frontend/styles-5FLJWH3K.css"
+        "/beskid-frontend/styles-65IMEV7C.css"
       ],
       "patterns": []
     },
@@ -121,9 +121,9 @@
     "/beskid-frontend/assets/splashscreens/portrait_768x1024.png": "85ffa76e787037eaad8ea648f3d67605c612ebb8",
     "/beskid-frontend/assets/splashscreens/portrait_828x1792.png": "0f2669e4cacc00ab52f1d3bc783f78eb9311fe93",
     "/beskid-frontend/favicon.ico": "ccb7c60badb35d6eae59f76e240ae0484cbb77f2",
-    "/beskid-frontend/index.html": "c15298e1ee06e96e2ec6e58edb4478df43e44ab6",
-    "/beskid-frontend/main-VLIHGACW.js": "2f1d1339322cab399aacc6f12dc1fcc2229ac246",
-    "/beskid-frontend/manifest.webmanifest": "881e63233306294219595789149f1c5605474c4f",
+    "/beskid-frontend/index.html": "76bf88e8c92969c6920efe852a858d8a44582d3e",
+    "/beskid-frontend/main-M2LKT6CH.js": "31574cd6524a9fc6c7a3a53b08c834115d7a4434",
+    "/beskid-frontend/manifest.webmanifest": "7185b5793b2d19192c2b46cb9294218a100f7b41",
     "/beskid-frontend/media/Inter-italic.var-SWFAXF2C.woff2": "6f20a046917bf86d4b6cc29c4e2515bd64d2cb9b",
     "/beskid-frontend/media/Inter-roman.var-WIJJYAE4.woff2": "7a2602d2ebb08ce895e33addb6fe595f1029431e",
     "/beskid-frontend/media/color-3LUHUBGQ.png": "ff4c4bcb2207891b292f544edb4da9d2df5d45cf",
@@ -137,7 +137,7 @@
     "/beskid-frontend/media/fa-v4compatibility-7DCIFHD7.ttf": "e47d5bf853d39ec86e62f4897cbcac7dd5c3b5b9",
     "/beskid-frontend/media/hue-RMMBQOAC.png": "f81ae627637a684614aa726e206c73ce099a01fd",
     "/beskid-frontend/polyfills-RX4V3J3S.js": "6b4c4ea33aa92bce0b91df442a680ed73e4303db",
-    "/beskid-frontend/styles-5FLJWH3K.css": "50b74baa824394e4e5e26411fa1d40776317dd2c"
+    "/beskid-frontend/styles-65IMEV7C.css": "986cc62d15d1ce5fdc51250818a7f0ed6bf7ad09"
   },
   "navigationUrls": [
     {

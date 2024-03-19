@@ -1,7 +1,7 @@
 {
   "name": "BESKID",
   "short_name": "BESKID",
-  "theme_color": "#14b8a6",
+  "theme_color": "#f59e0b",
   "background_color": "#4b5563",
   "display": "standalone",
   "scope": "./",
