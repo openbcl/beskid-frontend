@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1710839521635,
+  "timestamp": 1710840271325,
   "index": "/beskid-frontend/index.html",
   "assetGroups": [
     {
@@ -121,7 +121,7 @@
     "/beskid-frontend/assets/splashscreens/portrait_768x1024.png": "85ffa76e787037eaad8ea648f3d67605c612ebb8",
     "/beskid-frontend/assets/splashscreens/portrait_828x1792.png": "0f2669e4cacc00ab52f1d3bc783f78eb9311fe93",
     "/beskid-frontend/favicon.ico": "ccb7c60badb35d6eae59f76e240ae0484cbb77f2",
-    "/beskid-frontend/index.html": "76bf88e8c92969c6920efe852a858d8a44582d3e",
+    "/beskid-frontend/index.html": "de65f3b80accb30d9a8b5345b583e2cb4f1988c9",
     "/beskid-frontend/main-M2LKT6CH.js": "31574cd6524a9fc6c7a3a53b08c834115d7a4434",
     "/beskid-frontend/manifest.webmanifest": "7185b5793b2d19192c2b46cb9294218a100f7b41",
     "/beskid-frontend/media/Inter-italic.var-SWFAXF2C.woff2": "6f20a046917bf86d4b6cc29c4e2515bd64d2cb9b",
