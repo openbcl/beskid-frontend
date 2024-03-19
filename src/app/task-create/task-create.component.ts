@@ -88,6 +88,7 @@ export class TaskCreateComponent {
       const buffer = await event.files[0].arrayBuffer();
       const textDecoder = new TextDecoder();
       this.updateValues(textDecoder.decode(buffer));
+      this.fileUpload.clear();
       this.showUploadDialog = false;
     }
   }
