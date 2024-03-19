@@ -9,20 +9,20 @@ export const routes: Routes = [
   {
     path: '',
     component: WelcomeComponent
-  },
-  {
+  }, {
     path: 'create',
     component: TaskCreateComponent
-  },
-  {
+  }, {
     path: 'tasks/:taskId',
     component: TaskComponent
-  },
-  {
+  }, {
     path: 'tasks/:taskId/run',
     component: TaskRunComponent
   }, {
     path: 'tasks/:taskId/results',
     component: TaskResultsComponent
+  }, {
+    path: '**',
+    redirectTo: '/'
   }
 ];

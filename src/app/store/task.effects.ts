@@ -67,7 +67,7 @@ export class TaskEffects {
 
   editTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.editTaskSuccess),
-    switchMap(action => of(ToastActions.toastSuccess({
+    switchMap(action => of(ToastActions.toastInfo({
       summary: 'Task successfully edited!',
       detail: `Training ${action.task.training}`
     })))
@@ -87,7 +87,7 @@ export class TaskEffects {
   deleteTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTaskSuccess),
     tap(() => this.router.navigate(['/'])),
-    switchMap(action => of(ToastActions.toastInfo({
+    switchMap(action => of(ToastActions.toastSuccess({
       summary: 'Task successfully deleted!',
       detail: `Training ${action.taskId}`
     })))
@@ -136,7 +136,7 @@ export class TaskEffects {
 
   evaluateTaskResultSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.evaluateTaskResultSuccess),
-    switchMap(action => of(ToastActions.toastSuccess({
+    switchMap(action => of(ToastActions.toastInfo({
       summary: 'Task result successfully evaluated!',
       detail: `Result is ${action.evaluation}`
     })))
