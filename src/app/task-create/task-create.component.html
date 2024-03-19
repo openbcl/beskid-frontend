@@ -25,13 +25,13 @@
             <span>Input values</span>
             <i class="fas fa-question-circle" [pTooltip]="help"></i>
           </div>
-          <div class="flex justify-content-end flex-column sm:flex-row gap-2 w-full sm:w-auto">
-            <p-button class="w-full sm:w-auto" label="Clear values" [disabled]="!form.controls.values.controls.length" icon="fas fa-xmark" severity="danger" (click)="form.controls.values.clear()"></p-button>
+          <div class="flex justify-content-end flex-column md:flex-row gap-2 w-full md:w-auto">
+            <p-button class="w-full md:w-auto" label="Clear values" [disabled]="!form.controls.values.controls.length" icon="fas fa-xmark" severity="danger" (click)="form.controls.values.clear()"></p-button>
             @if (isDevMode()) {
-              <p-button class="w-full sm:w-auto" label="Add random values" icon="fas fa-wand-sparkles" severity="warning" (click)="addRandomValues()"></p-button>
+              <p-button class="w-full md:w-auto" label="Add random values" icon="fas fa-wand-sparkles" severity="warning" (click)="addRandomValues()"></p-button>
             }
-            <p-button class="w-full sm:w-auto" label="Paste from clipboard" icon="far fa-paste" severity="success" (click)="pasteFromClipboard()"></p-button>
-            <p-button class="w-full sm:w-auto" label="Upload file" icon="fas fa-upload" severity="success" (click)="showUploadDialog = true"></p-button>
+            <p-button class="w-full md:w-auto" label="Paste from clipboard" icon="far fa-paste" severity="success" (click)="pasteFromClipboard()"></p-button>
+            <p-button class="w-full md:w-auto" label="Upload file" icon="fas fa-upload" severity="success" (click)="showUploadDialog = true"></p-button>
           </div>
         </div>
     </ng-template>
@@ -63,7 +63,7 @@
     </p-table>
   </p-panel>
 </form>
-<p-dialog header="Upload input file" class="be-dialog-tabView" [modal]="true" [(visible)]="showUploadDialog" [maximizable]="true">
+<p-dialog header="Upload input file" [modal]="true" [(visible)]="showUploadDialog" [maximizable]="true">
   <p-fileUpload
     #fileUpload
     [customUpload]="true"
@@ -72,9 +72,12 @@
     [showCancelButton]="false"
     (uploadHandler)="uploadFile($event)">
     <ng-template pTemplate="content">
-      <!--
-        <i class="fas fa-file-import"></i>
-      -->
+      @if (!fileUpload.files.length) {
+        <div class="grid justify-content-center">
+          <i class="col-12 mt-3 text-4xl text-center fas fa-file-import"></i>
+          <p class="col-12 mt-0 text-center">Drop Zone</p>
+        </div>
+      }
     </ng-template>
     <ng-template let-file pTemplate="file">
         <div class="col grid align-items-center">
