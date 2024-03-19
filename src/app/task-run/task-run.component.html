@@ -21,7 +21,7 @@
     }
     <ng-template pTemplate="footer">
       <div class="flex justify-content-end align-items-center">
-        <p-button label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
+        <p-button [class.be-highlighted]="!task?.results?.length" label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
       </div>
     </ng-template>
   </p-panel>

@@ -99,6 +99,21 @@ body {
   }
 }
 
+.be-highlighted {
+  border: 0.25em solid var(--primary-color);
+  border-radius: 10px;
+  margin: -0.25em;
+  animation-name: be-highlighted-blinking;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite
+}
+
+@keyframes be-highlighted-blinking {
+  50% {
+    border-color: transparent;
+  }
+}
+
 .p-dialog {
   margin: 0.5rem
 }
