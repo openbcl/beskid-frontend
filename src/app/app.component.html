@@ -2,7 +2,7 @@
   <be-processing></be-processing>
   <be-toolbar [showTaskListSidebar]="uiState.showTaskListSidebar"></be-toolbar>
   <be-task-list class="animation-duration-150 {{uiState.showTaskListSidebar ? 'fadeinleft' : 'fadeoutleft'}}"></be-task-list>
-  <div class="be-content {{uiState.showTaskListSidebar && 'be-sidebar-visible'}}" >
+  <div [class.be-sidebar-visible]="uiState.showTaskListSidebar" class="be-content" >
     <router-outlet />
   </div>
 }
