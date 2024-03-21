@@ -23,7 +23,7 @@ export class ToolbarComponent {
 
   avatarItems: MenuItem[] = [
     {
-      icon: 'fas fa-trash',
+      icon: 'fa-solid fa-arrow-right-from-bracket',
       command: () => this.confirmationService.confirm({
         header: 'Delete current session and tasks',
         icon: 'fas fa-trash-can',

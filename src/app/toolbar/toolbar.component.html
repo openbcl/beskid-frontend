@@ -18,43 +18,11 @@
     <img alt="BESKID" draggable="false" class="be-header select-none" src="assets/icons/header_light_monochrome.png">
   </div>
   <div class="p-toolbar-group-end flex-row-reverse">
-    <p-speedDial [model]="avatarItems" [radius]=90 showIcon="far fa-user" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+    <p-speedDial [model]="avatarItems" [radius]=90 showIcon="far fa-question" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
   </div>
 </p-toolbar>
 <p-dialog header="About this application" class="be-dialog-tabView" [modal]="true" [(visible)]="showInfoDialog" [maximizable]="true">
   <p-tabView [scrollable]="true">
-    <p-tabPanel leftIcon="fab fa-github" header="Source Code">
-       <h4>Frontend</h4>
-       <div class="grid align-items-center">
-        <i class="col-fixed fa-brands fa-github"></i>
-        <a href="https://github.com/openbcl/beskid-frontend" target="_blank">https://github.com/openbcl/beskid-frontend</a>
-       </div>
-       <h4>Backend</h4>
-       <div class="grid">
-        <i class="col-fixed fa-brands fa-github"></i>
-        <a href="https://github.com/openbcl/beskid-backend" target="_blank">https://github.com/openbcl/beskid-backend</a>
-       </div>
-    </p-tabPanel>
-    <p-tabPanel leftIcon="fas fa-envelope" header="Contact">
-      <h4>Consortium Coordinator</h4>
-      <div class="flex flex-wrap flex-column mb-4">
-        <a href="http://www.fz-juelich.de/profile/arnold_l" target="_blank">Prof. Dr. Lukas Arnold</a>
-        <span>Forschungszentrum Jülich GmbH</span>
-        <span>Institute for Advanced Simulation (IAS)</span>
-        <span>IAS-7: Zivile Sicherheitsforschung</span>
-        <span>Wilhelm-Johnen Straße</span>
-        <span>52425 Jülich</span>
-      </div>
-      <h4>Consortium Partners</h4>
-      A list of all consortium partners can be found <a href="https://www.beskid-projekt.de/en/partner" target="_blank">here</a>.
-      <h4>Web-Developer</h4>
-      <div class="flex flex-wrap flex-column mb-4">
-        <a href= "mailto:info@bcl-leipzig.de">Robert Weiße</a>
-        <span>Brandschutz Consult Ingenieurgesellschaft mbH Leipzig</span>
-        <span>Torgauer Platz 3</span>
-        <span>04315 Leipzig</span>
-      </div>
-    </p-tabPanel>
     <p-tabPanel leftIcon="fas fa-section" header="Legal Notice">
       <p>
         The BESKID project is funded by the Federal Ministry of Education and Research (BMBF) within the program "Research for Civil Security".
@@ -62,10 +30,11 @@
 
       <h4>Contact</h4>
       <div class="flex flex-wrap flex-column mb-4">
-        <a href= "mailto:info@bcl-leipzig.de">Robert Weiße</a>
         <span>Brandschutz Consult Ingenieurgesellschaft mbH Leipzig</span>
+        <a href= "mailto:info@bcl-leipzig.de">Manuel Osburg</a>
         <span>Torgauer Platz 3</span>
         <span>04315 Leipzig</span>
+        <p class="mb-0">Tel: +49 341 269330</p>
       </div>
 
       <h4>Disclaimer</h4>
@@ -113,6 +82,38 @@
         However, these can no longer be accessed by the user after the session has expired,
         as previous session data cannot be linked to the new generated session.
       </p>
-  </p-tabPanel>
+    </p-tabPanel>
+    <p-tabPanel leftIcon="fas fa-envelope" header="Contact">
+      <h4>Consortium Coordinator</h4>
+      <div class="flex flex-wrap flex-column mb-4">
+        <a href="http://www.fz-juelich.de/profile/arnold_l" target="_blank">Prof. Dr. Lukas Arnold</a>
+        <span>Forschungszentrum Jülich GmbH</span>
+        <span>Institute for Advanced Simulation (IAS)</span>
+        <span>IAS-7: Zivile Sicherheitsforschung</span>
+        <span>Wilhelm-Johnen Straße</span>
+        <span>52425 Jülich</span>
+      </div>
+      <h4>Consortium Partners</h4>
+      A list of all consortium partners can be found <a href="https://www.beskid-projekt.de/en/partner" target="_blank">here</a>.
+      <h4>Web-Developer</h4>
+      <div class="flex flex-wrap flex-column mb-4">
+        <a href= "mailto:info@bcl-leipzig.de">Robert Weiße</a>
+        <span>Brandschutz Consult Ingenieurgesellschaft mbH Leipzig</span>
+        <span>Torgauer Platz 3</span>
+        <span>04315 Leipzig</span>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel leftIcon="fab fa-github" header="Source Code">
+      <h4>Frontend</h4>
+      <div class="grid align-items-center">
+       <i class="col-fixed fa-brands fa-github"></i>
+       <a href="https://github.com/openbcl/beskid-frontend" target="_blank">https://github.com/openbcl/beskid-frontend</a>
+      </div>
+      <h4>Backend</h4>
+      <div class="grid">
+       <i class="col-fixed fa-brands fa-github"></i>
+       <a href="https://github.com/openbcl/beskid-backend" target="_blank">https://github.com/openbcl/beskid-backend</a>
+      </div>
+   </p-tabPanel>
   </p-tabView>
 </p-dialog>
