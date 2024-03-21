@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1711008022313,
+  "timestamp": 1711013244666,
   "index": "/beskid-frontend/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/beskid-frontend/favicon.ico",
         "/beskid-frontend/index.html",
-        "/beskid-frontend/main-XTLZSVAY.js",
+        "/beskid-frontend/main-N5G4ZA2O.js",
         "/beskid-frontend/manifest.webmanifest",
         "/beskid-frontend/polyfills-RX4V3J3S.js",
         "/beskid-frontend/styles-UPYGAPJC.css"
@@ -121,8 +121,8 @@
     "/beskid-frontend/assets/splashscreens/portrait_768x1024.png": "85ffa76e787037eaad8ea648f3d67605c612ebb8",
     "/beskid-frontend/assets/splashscreens/portrait_828x1792.png": "0f2669e4cacc00ab52f1d3bc783f78eb9311fe93",
     "/beskid-frontend/favicon.ico": "ccb7c60badb35d6eae59f76e240ae0484cbb77f2",
-    "/beskid-frontend/index.html": "2a054a63d1dd6fd7aded28694a7b802888a25366",
-    "/beskid-frontend/main-XTLZSVAY.js": "5d013df0db0f0853dcd1cecec21a05e3952743d6",
+    "/beskid-frontend/index.html": "540b58d3e94feb05028c88e0a1e09d60691c0a32",
+    "/beskid-frontend/main-N5G4ZA2O.js": "befd2433779c43b7f56323f724a87a424248e4fb",
     "/beskid-frontend/manifest.webmanifest": "7185b5793b2d19192c2b46cb9294218a100f7b41",
     "/beskid-frontend/media/Inter-italic.var-SWFAXF2C.woff2": "6f20a046917bf86d4b6cc29c4e2515bd64d2cb9b",
     "/beskid-frontend/media/Inter-roman.var-WIJJYAE4.woff2": "7a2602d2ebb08ce895e33addb6fe595f1029431e",
