@@ -12,3 +12,13 @@ export const models = createSelector(
   getModelState,
   modelState => modelState.models
 );
+
+export const fdsVersions = createSelector(
+  getModelState,
+  modelState => [...new Set(modelState.models.map(model => model.fds).flat())].filter((fdsValue, i, arr) => arr.findIndex(value => value.version === fdsValue.version) === i)
+);
+
+export const experiments = createSelector(
+  getModelState,
+  modelState => [...new Set(modelState.models.map(model => model.experiments).flat())]
+);

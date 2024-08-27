@@ -7,13 +7,25 @@
   <p-panel #pnl header="Run Task">
     @if(models$ | async; as models) {
       <div class="grid">
-        <div class="md:col-6 col-12 flex flex-column">
-          <label class="mb-1 pl-2">Select an AI-model</label>
+        @if(fdsVersions$ | async; as fdsVersions) {
+          <div class="md:col-3 col-12 flex flex-column">
+            <label class="mb-1 pl-2">FDS versions</label>
+            <p-dropdown class="w-100" formControlName="selectedVersion" [options]="fdsVersions" optionLabel="version" placeholder="Select a FDS version" (onChange)="changeFilter($event)" ></p-dropdown>
+          </div>
+        }
+        @if(experiments$ | async; as experiments) {
+          <div class="md:col-3 col-12 flex flex-column">
+            <label class="mb-1 pl-2">Experiments</label>
+            <p-dropdown class="w-100" formControlName="selectedExperiment" [options]="experiments" optionLabel="name" placeholder="Select an experiment" (onChange)="changeFilter($event)" ></p-dropdown>
+          </div>
+        }
+        <div class="md:col-3 col-12 flex flex-column">
+          <label class="mb-1 pl-2">AI-models</label>
           <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
         </div>
         @if(resolutions$ | async; as resolutions) {
-          <div class="md:col-6 col-12 flex flex-column">
-            <label class="mb-1  pl-2">Select a resolution</label>
+          <div class="md:col-3 col-12 flex flex-column">
+            <label class="mb-1 pl-2">Resolutions</label>
             <p-dropdown class="w-100" formControlName="selectedResolution" [options]="resolutions" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
           </div>
         }

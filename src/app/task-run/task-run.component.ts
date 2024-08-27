@@ -7,12 +7,12 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Task } from '../store/task';
 import { DropdownModule } from 'primeng/dropdown';
-import { models } from '../store/model.selector';
+import { fdsVersions, experiments, models } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, filter, switchMap } from 'rxjs';
-import { Model } from '../store/model';
+import { Subject, filter, first, switchMap } from 'rxjs';
+import { Experiment, FDS, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
 import { isRunning } from '../store/task.selector';
 
@@ -35,9 +35,13 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isRunning(taskId))));
 
   models$ = this.store.select(models);
+  fdsVersions$ = this.store.select(fdsVersions).pipe(first(fdsVersion => !!fdsVersion?.length));
+  experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
   resolutions$ = new Subject<ResolutionItem[]>()
 
   form = this.fb.group({
+    selectedVersion: this.fb.control({}),
+    selectedExperiment: this.fb.control({}),
     selectedModel: this.fb.control({}, { validators: [Validators.required]}),
     selectedResolution: this.fb.control({}, { validators: [Validators.required]}),
   });
@@ -50,7 +54,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(findModels());
+    this.store.dispatch(findModels({}));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +82,14 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   changeModel(event: { value: Model }) {
     this.updateResolutions(event.value.resolutions);
+  }
+
+  changeFilter(event: { value: any }) {
+    this.store.dispatch(findModels({
+      fdsVersion: (this.form.value.selectedVersion as FDS)?.version,
+      experimentID: (this.form.value.selectedExperiment as Experiment)?.id,
+    }));
+    console.log(event.value)
   }
 
   runTask() {
