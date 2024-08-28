@@ -7,28 +7,50 @@
   <p-panel #pnl header="Run Task">
     @if(models$ | async; as models) {
       <div class="grid">
-        @if(fdsVersions$ | async; as fdsVersions) {
-          <div class="md:col-3 col-12 flex flex-column">
-            <label class="mb-1 pl-2">FDS versions</label>
-            <p-dropdown class="w-100" formControlName="selectedVersion" [options]="fdsVersions" optionLabel="version" placeholder="Select a FDS version" (onChange)="changeFilter($event)" ></p-dropdown>
+        <p-fieldset class="md:col-6 col-12 flex flex-column">
+          <ng-template pTemplate="header">
+            <div class="flex gap-2 flex-wrap">
+              <span class="py-1">Filter AI-models</span>
+              <p-button 
+                [disabled]="isEmptyOrNull(form.value.selectedVersion) && isEmptyOrNull(form.value.selectedExperiment)"
+                class="be-bt-tiny m-auto" severity="secondary" size="small"
+                icon="fas fa-xmark" [rounded]="true" [outlined]="true" pTooltip="Reset filters"
+                tooltipPosition="top" (click)="resetFilters()" >
+              </p-button>
+            </div>
+          </ng-template>
+          <div class="grid">
+            @if(fdsVersions$ | async; as fdsVersions) {
+              <div class="md:col-6 col-12 flex flex-column">
+                <label class="mb-1 pl-2">FDS versions</label>
+                <p-dropdown class="w-100" formControlName="selectedVersion" [options]="fdsVersions" optionLabel="version" placeholder="Filter by FDS version" (onChange)="changeFilter()" ></p-dropdown>
+              </div>
+            }
+            @if(experiments$ | async; as experiments) {
+              <div class="md:col-6 col-12 flex flex-column">
+                <label class="mb-1 pl-2">Experiments</label>
+                <p-dropdown class="w-100" formControlName="selectedExperiment" [options]="experiments" optionLabel="name" placeholder="Filter by experiment" (onChange)="changeFilter()" ></p-dropdown>
+              </div>
+            }
           </div>
-        }
-        @if(experiments$ | async; as experiments) {
-          <div class="md:col-3 col-12 flex flex-column">
-            <label class="mb-1 pl-2">Experiments</label>
-            <p-dropdown class="w-100" formControlName="selectedExperiment" [options]="experiments" optionLabel="name" placeholder="Select an experiment" (onChange)="changeFilter($event)" ></p-dropdown>
+        </p-fieldset>
+        <p-fieldset class="md:col-6 col-12 flex flex-column">
+          <ng-template pTemplate="header">
+            <span class="py-1">Pick AI-model</span>
+          </ng-template>
+          <div class="grid">
+            <div class="md:col-6 col-12 flex flex-column">
+              <label class="mb-1 pl-2">AI-models</label>
+              <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
+            </div>
+            @if(resolutions$ | async; as resolutions) {
+              <div class="md:col-6 col-12 flex flex-column">
+                <label class="mb-1 pl-2">Resolutions</label>
+                <p-dropdown class="w-100" formControlName="selectedResolution" [options]="resolutions" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
+              </div>
+            }
           </div>
-        }
-        <div class="md:col-3 col-12 flex flex-column">
-          <label class="mb-1 pl-2">AI-models</label>
-          <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
-        </div>
-        @if(resolutions$ | async; as resolutions) {
-          <div class="md:col-3 col-12 flex flex-column">
-            <label class="mb-1 pl-2">Resolutions</label>
-            <p-dropdown class="w-100" formControlName="selectedResolution" [options]="resolutions" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
-          </div>
-        }
+        </p-fieldset>
       </div>
     }
     <ng-template pTemplate="footer">

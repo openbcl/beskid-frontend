@@ -15,6 +15,8 @@ import { Subject, filter, first, switchMap } from 'rxjs';
 import { Experiment, FDS, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
 import { isRunning } from '../store/task.selector';
+import { FieldsetModule } from 'primeng/fieldset';
+import { TooltipModule } from 'primeng/tooltip';
 
 interface ResolutionItem {
   name: string;
@@ -24,7 +26,7 @@ interface ResolutionItem {
 @Component({
   selector: 'be-task-run',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, DropdownModule, BlockUIModule, ProgressSpinnerModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, FieldsetModule, TooltipModule, DropdownModule, BlockUIModule, ProgressSpinnerModule],
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
@@ -84,12 +86,17 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     this.updateResolutions(event.value.resolutions);
   }
 
-  changeFilter(event: { value: any }) {
+  changeFilter() {
     this.store.dispatch(findModels({
       fdsVersion: (this.form.value.selectedVersion as FDS)?.version,
       experimentID: (this.form.value.selectedExperiment as Experiment)?.id,
     }));
-    console.log(event.value)
+  }
+
+  resetFilters() {
+    this.form.controls.selectedVersion.setValue({});
+    this.form.controls.selectedExperiment.setValue({});
+    this.changeFilter();
   }
 
   runTask() {
@@ -98,5 +105,9 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
       modelId: (this.form.value.selectedModel as Model).id,
       resolution: (this.form.value.selectedResolution as ResolutionItem).value
     }));
+  }
+
+  isEmptyOrNull(object: any) {
+    return !object || !Object.keys(object).length;
   }
 }

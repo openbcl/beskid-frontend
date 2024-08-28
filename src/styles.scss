@@ -211,6 +211,15 @@ p-dropdown.w-100 {
   }
 }
 
+.p-fieldset-legend {
+  padding: 0.5rem !important;
+}
+
+.be-bt-tiny > button {
+  height: 1.25rem;
+  width: 1.25rem;
+  padding: unset;
+}
 
 .be-bt-add-task {
   height: 0;
