@@ -1,4 +1,4 @@
-const backendDomain: string = 'beskid-api-jpznrvho2a-ey.a.run.app';
+const backendDomain: string = 'beskid.bcl-leipzig.net';
 const backendPort: number = 443;
 const useTLS: boolean = true;
 

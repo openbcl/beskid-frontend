@@ -25,7 +25,7 @@ export class ModelEffects {
     ofType(ModelActions.findModels),
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
-      this.modelService.findModels().pipe(
+      this.modelService.findModels(action.fdsVersion, action.experimentID).pipe(
         switchMap(models => of(finishProcessing({id: action.type}), ModelActions.findModelsSuccess({ models }))),
         catchError(error => of(finishProcessing({id: action.type}), ModelActions.findModelsFailure({ error })))
       )
