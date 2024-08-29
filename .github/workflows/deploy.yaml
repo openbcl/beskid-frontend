@@ -20,7 +20,7 @@ jobs:
       - name: Install npm packages 
         run: npm install
       - name: Build PWA
-      - run: npm run build:prod
+        run: npm run build:prod
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
