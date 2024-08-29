@@ -7,7 +7,6 @@ import { filter } from 'rxjs';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { checkSession } from './store/auth.actions';
 import { TaskCreateComponent } from "./task-create/task-create.component";
 import { TaskListComponent } from "./task-list/task-list.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
@@ -29,7 +28,6 @@ export class AppComponent {
 
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
-    this.store.dispatch(checkSession());
     this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => this.store.dispatch(findTasks()));
   }
 }

@@ -29,9 +29,14 @@ export class AuthService {
 
   checkSession() {
     const auth = this.getAuth();
+    const rand = Math.random();
+    console.log(rand);
+    console.log(auth);
     if (!auth) {
       return throwError(() => new Error('No session found!'));
     }
+    console.log(rand);
+
     return of({
       auth,
       ...!this.jwtHelperService.isTokenExpired(auth.token) ? {
