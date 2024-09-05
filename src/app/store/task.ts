@@ -1,3 +1,4 @@
+import { Job } from "./job";
 import { Model } from "./model";
 
 export enum TaskTraining {
@@ -11,9 +12,10 @@ export interface Task {
   training: TaskTraining;
   date: Date;
   results: TaskResult[];
+  jobs?: Job[];
 }
 
-export interface CreateTaskDto extends Pick<Task, 'values' | 'training'>{};
+export interface CreateTask extends Pick<Task, 'values' | 'training'>{};
 
 export enum TaskResultEvaluation {
   NEUTRAL = 'NEUTRAL',

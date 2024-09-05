@@ -1,9 +1,9 @@
 import { createAction, props } from '@ngrx/store';
-import { CreateTaskDto, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
+import { CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
 
 export const addTask = createAction(
   '[Task] Add Task',
-  props<{ createTask: CreateTaskDto }>()
+  props<{ createTask: CreateTask }>()
 );
 
 export const addTaskSuccess = createAction(

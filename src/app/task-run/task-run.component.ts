@@ -11,7 +11,7 @@ import { fdsVersions, experiments, models } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, filter, first, map, switchMap, tap } from 'rxjs';
+import { Subject, filter, first, map, switchMap } from 'rxjs';
 import { Experiment, FDS, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
 import { isRunning } from '../store/task.selector';
@@ -68,10 +68,10 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   })) : {
     ...model,
     app: { version: "-" }
-  }).flat().map(model => model.experiments.map(experiment => ({
+  }).flat().map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
     ...model,
     experiment
-  }))).flat().map(model => model.resolutions.map(resolution => ({
+  })) : model).flat().map(model => model.resolutions.map(resolution => ({
     ...model,
     resolution
   }))).flat()

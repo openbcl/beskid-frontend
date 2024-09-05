@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CreateTaskDto, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class TaskService {
 
   constructor(private http: HttpClient) { }
 
-  addTask(createTask: CreateTaskDto) {
+  addTask(createTask: CreateTask) {
     return this.http.post<Task>(`${environment.api}/v1/tasks`, createTask);
   }
 
