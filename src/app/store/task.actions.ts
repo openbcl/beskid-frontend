@@ -18,12 +18,12 @@ export const addTaskFailure = createAction(
 
 export const findTask = createAction(
   '[Task] Find Task',
-  props<{ taskId: string }>()
+  props<{ taskId: string, showSuccessMessage?: boolean }>()
 );
 
 export const findTaskSuccess = createAction(
   '[Task] Find Task Success',
-  props<{ task: Task }>()
+  props<{ task: Task, showSuccessMessage?: boolean }>()
 );
 
 export const findTaskFailure = createAction(

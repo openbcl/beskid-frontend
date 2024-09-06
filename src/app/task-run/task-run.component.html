@@ -94,11 +94,11 @@
                           }
                         </div>
                       </td>
-                      <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment.name }}</td>
+                      <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment?.name }}</td>
                       <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>
                         <div>
-                          {{ rowData.experiment.scale.name }}
-                          <i class="ml-2 fa-solid fa-circle-info" [pTooltip]="rowData.experiment.scale.desc" tooltipPosition="top"></i>
+                          {{ rowData.experiment?.scale.name }}
+                          <i class="ml-2 fa-solid fa-circle-info" [pTooltip]="rowData.experiment?.scale.desc" tooltipPosition="top"></i>
                         </div>
                       </td>
                     </tr>
