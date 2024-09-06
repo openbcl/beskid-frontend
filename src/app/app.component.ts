@@ -14,6 +14,7 @@ import { uiState } from './store/ui.selector';
 import { ProcessingComponent } from "./processing/processing.component";
 import { isValid } from './store/auth.selector';
 import { findTasks } from './store/task.actions';
+import { findJobs } from './store/job.actions';
 
 
 @Component({
@@ -28,6 +29,9 @@ export class AppComponent {
 
   constructor(private store: Store, private primengConfig: PrimeNGConfig) {
     this.primengConfig.ripple = true;
-    this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => this.store.dispatch(findTasks()));
+    this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => {
+      this.store.dispatch(findTasks());
+      this.store.dispatch(findJobs({ types: ['failed', 'active', 'waiting', 'repeat', 'wait'] }))
+    });
   }
 }

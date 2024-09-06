@@ -7,6 +7,10 @@ td.table-nr-column {
   text-align: right;
 }
 
+td.table-input-column input{
+  width: 100%;
+}
+
 tr.be-footer > td  {
   span {
     font-weight: 400 !important;

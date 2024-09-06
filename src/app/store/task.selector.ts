@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { TaskState, taskFeatureKey } from "./task.reducer";
+import { activeOrWaitingJobsOfTask } from "./job.selector";
 
 export const getTaskState = createFeatureSelector<TaskState>(taskFeatureKey);
 
@@ -14,9 +15,15 @@ export const tasks = createSelector(
   taskState => taskState.tasks
 );
 
-export const isRunning = (taskId: string) => createSelector(
+export const isTaskRunning = (taskId: string) => createSelector(
   getTaskState,
   taskState => !!taskState.running.find(runningTaskId => runningTaskId === taskId)
+);
+
+export const areTaskJobsRunning = (taskId: string) => createSelector(
+  isTaskRunning(taskId),
+  activeOrWaitingJobsOfTask(taskId),
+  (taskRunning, jobs) => taskRunning || !!jobs?.length
 );
 
 export const resultFile = (taskId: string, fileId: string) => createSelector(
