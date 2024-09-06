@@ -14,6 +14,7 @@ import { ConfirmationService } from 'primeng/api';
 import { deleteTask } from '../store/task.actions';
 import { TaskRunComponent } from "../task-run/task-run.component";
 import { TaskResultsComponent } from "../task-results/task-results.component";
+import { TaskJobsComponent } from "../task-jobs/task-jobs.component";
 
 
 @Component({
@@ -21,7 +22,7 @@ import { TaskResultsComponent } from "../task-results/task-results.component";
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent]
+    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
 })
 export class TaskComponent implements OnInit {
   

@@ -4,7 +4,7 @@
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
   }
-  <p-panel #pnl header="Run Task">
+  <p-panel #pnl header="Run Task Job">
     @if(models$ | async; as models) {
       <div class="grid mb-3">
         <p-fieldset class="md:col-6 col-12 flex flex-column">
@@ -69,7 +69,7 @@
                       </th>
                       <th [style]="'width: ' + columns[2].width" pSortableColumn="app.version">
                         {{ columns[2].header }}
-                        <p-sortIcon field="appn.version" />
+                        <p-sortIcon field="app.version" />
                       </th>
                       <th [style]="'width: ' + columns[3].width" pSortableColumn="experiment.name">
                         {{ columns[3].header }}

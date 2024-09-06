@@ -188,6 +188,14 @@ be-toolbar {
   }
 }
 
+.be-panel-data .p-panel-content {
+  height: 425px;
+}
+
+.be-panel-jobs .p-panel-content {
+  height: 455px;
+}
+
 be-processing p-progressBar {
   position: sticky;
   top: 0;
