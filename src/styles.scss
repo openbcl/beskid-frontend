@@ -173,6 +173,9 @@ be-toolbar {
     padding-bottom: 0.5rem;
     .p-speeddial {
       position: relative;
+      .p-button-icon {
+        font-size: x-large !important;
+      }
     }
     .p-speeddial-mask {
       height: calc(100vh);
