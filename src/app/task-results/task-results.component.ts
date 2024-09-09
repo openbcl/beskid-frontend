@@ -38,13 +38,6 @@ export class TaskResultsComponent implements OnChanges {
   selectedResult: any = null;
   task$ = new Subject<Task>();
   data$ = this.task$.pipe(map(task => {
-    if (!task.results.length) {
-      return {
-        show: false,
-        columns: [],
-        rows: []
-      }
-    }
     const columns = [
       { header: 'AI-model', width: 'auto' },
       { header: 'Resolution', width: 'auto' },
@@ -55,9 +48,8 @@ export class TaskResultsComponent implements OnChanges {
     }
     columns.push({ header: '', width: '10rem' });
     return {
-      show: true,
       columns,
-      rows: task.results.map(result => ({
+      rows: task.results?.map(result => ({
         form: this.fb.group({
           evaluation: this.fb.control(this.evaluationOptions.find(option => option.evaluation === result.evaluation), { validators: [Validators.required]})
         }),
