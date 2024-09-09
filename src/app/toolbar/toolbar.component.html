@@ -8,17 +8,42 @@
     </label>
   </div>
   <div 
-  routerLink="/"
-  routerLinkActive
-  #welcomeLink="routerLinkActive"
-  [routerLinkActiveOptions]="{ exact: true }"
-  class="p-toolbar-group-center cursor-pointer {{( welcomeLink.isActive ? 'be-toolbar-hide-logo fadeoutdown' : 'be-toolbar-show-logo fadeindown' )}}"
-  (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
+    routerLink="/"
+    routerLinkActive
+    #welcomeLink="routerLinkActive"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="p-toolbar-group-center cursor-pointer {{( welcomeLink.isActive ? 'be-toolbar-hide-logo fadeoutdown' : 'be-toolbar-show-logo fadeindown' )}}"
+    (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
     <img alt="BESKID" draggable="false" class="be-header-tiny select-none" src="assets/icons/header_tiny_light_monochrome.png">
     <img alt="BESKID" draggable="false" class="be-header select-none" src="assets/icons/header_light_monochrome.png">
   </div>
   <div class="p-toolbar-group-end flex-row-reverse">
-    <p-speedDial [model]="avatarItems" [radius]=90 showIcon="fas fa-user-gear" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+    <div class="flex align-items-center">
+      <p-overlayPanel #op>
+        <div class="table">
+          @if(jobs$ | async; as jobs){
+            @for (job of jobs; track $index) {
+              <div class="col flex align-items-center cursor-pointer justify-content-between" [routerLink]="[ 'tasks', job.taskId ]">
+                <span>Task #{{ job.taskId.split('-')[0] }}</span>
+                <span>Job #{{ job.jobId.split('-')[0] }}</span>
+                <p-chip styleClass="ml-3 pr-0 pl-3">
+                  <span class="mr-2 font-medium">
+                      {{ job.state }}
+                  </span>
+                  <span class="bg-primary border-circle w-2rem h-2rem flex ">
+                    @if(['active', 'waiting'].includes(job.state)) {
+                      <p-progressSpinner strokeWidth="4"  styleClass="w-2rem h-2rem"></p-progressSpinner>
+                    }
+                  </span>
+              </p-chip>
+              </div>
+            }
+          }
+        </div>
+      </p-overlayPanel>
+      <p-button class="mr-3" size="large" (onClick)="op.toggle($event)" icon="fab fa-stack-overflow" />
+      <p-speedDial [model]="avatarItems" [radius]=90 showIcon="fas fa-user-gear" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+    </div>
   </div>
 </p-toolbar>
 <p-dialog header="About this application" class="be-dialog-tabView" [modal]="true" [(visible)]="showInfoDialog" [maximizable]="true">

@@ -3,6 +3,11 @@ import { JobState, jobFeatureKey } from "./job.reducer";
 
 export const getJobState = createFeatureSelector<JobState>(jobFeatureKey);
 
+export const jobs = createSelector(
+  getJobState,
+  jobState => jobState.jobs
+);
+
 export const activeOrWaitingJobsOfTask = (taskId: string) => createSelector(
   getJobState,
   jobState => jobState.jobs.filter(job => job.taskId === taskId && ['active', 'waiting', 'repeat', 'wait'].find(state => state === job.state))

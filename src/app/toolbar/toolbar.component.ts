@@ -2,7 +2,10 @@ import { Component, ElementRef, Input } from '@angular/core';
 import { ToolbarModule } from 'primeng/toolbar';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { ConfirmationService, MenuItem } from 'primeng/api';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ChipModule } from 'primeng/chip';
 import { DialogModule } from 'primeng/dialog';
 import { TabViewModule } from 'primeng/tabview';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -10,11 +13,14 @@ import { Store } from '@ngrx/store';
 import { deleteSession } from '../store/auth.actions';
 import { changeTaskListSidebarVisibility } from '../store/ui.actions';
 import { AsyncPipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Job } from '../store/job';
+import { jobs } from '../store/job.selector';
 
 @Component({
   selector: 'be-toolbar',
   standalone: true,
-  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, DialogModule, ToggleButtonModule, TabViewModule, RouterLink, RouterLinkActive],
+  imports: [AsyncPipe, ToolbarModule, SpeedDialModule, DialogModule, ToggleButtonModule, TabViewModule, RouterLink, RouterLinkActive, OverlayPanelModule, ChipModule, ProgressSpinnerModule],
   templateUrl: './toolbar.component.html',
   styleUrl: './toolbar.component.scss'
 })
@@ -35,6 +41,8 @@ export class ToolbarComponent {
     { icon: 'fas fa-info', command: () => this.showInfoDialog = true },
     { icon: 'fas fa-house', url: 'https://www.beskid-projekt.de/en', target: '_blank' }
   ]
+
+  jobs$: Observable<Job[]> =this.store.select(jobs);
 
   showInfoDialog = false;
 
