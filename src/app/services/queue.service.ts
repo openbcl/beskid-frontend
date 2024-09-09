@@ -53,7 +53,7 @@ export class QueueService {
   private async startPolling() {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     if (this.jobPollingEnabled) {
-      this.store.dispatch(findJobs({ types: ['failed', 'active', 'waiting', 'repeat', 'wait'] }));
+      this.store.dispatch(findJobs({ types: ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait'] }));
       this.startPolling();
     }
   }

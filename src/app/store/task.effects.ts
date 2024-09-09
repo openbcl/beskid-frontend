@@ -115,7 +115,7 @@ export class TaskEffects {
 
   runTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTaskSuccess),
-    tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs({ types: ['failed', 'active', 'waiting', 'repeat', 'wait'] }))),
+    tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs({ types: ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait'] }))),
     switchMap(action => of(
       !!action.task.jobs?.length ?
         ToastActions.toastSuccess({
@@ -173,6 +173,7 @@ export class TaskEffects {
 
   deleteTaskResultSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTaskResultSuccess),
+    tap(() => this.store.dispatch(JobActions.findJobs({ types: ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait'] }))),
     switchMap(() => of(ToastActions.toastSuccess({
       summary: 'Task result successfully deleted!'
     })))
