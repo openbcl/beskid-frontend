@@ -1,0 +1,15 @@
+.be-progress-circle {
+  background: var(--text-color-secondary);
+  &.active {
+    background: var(--warn-color);
+  }
+  &.waiting {
+    background: var(--info-color);
+  }
+  &.completed {
+    background: var(--success-color);
+  }
+  &.failed, &.repeat, &.wait {
+    background: var(--error-color);
+  }
+}

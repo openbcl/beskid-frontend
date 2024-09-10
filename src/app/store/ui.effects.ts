@@ -35,10 +35,15 @@ export class UiEffects {
     map(action => action.error?.status === 0 ? ToastActions.toastWarn({
       summary: 'Offline',
       detail: 'Unable to connect to the server.'
-    }) : ToastActions.toastError({
-      summary: `${action.error?.error?.message || action.error?.statusText || 'Unknown Error'} (${action.error?.status || action.error?.error?.statusCode})`,
-      detail: action.error?.message || ''
-    }))
+    }) : (
+      action.error?.error?.statusCode === 401 ?
+        AuthActions.newSession() :
+        ToastActions.toastError({
+          summary: `${action.error?.error?.message || action.error?.statusText || 'Unknown Error'} (${action.error?.status || action.error?.error?.statusCode})`,
+          detail: action.error?.message || ''
+        })
+      )
+    )
   ));
 
   constructor(

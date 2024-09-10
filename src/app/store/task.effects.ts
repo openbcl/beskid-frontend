@@ -2,10 +2,11 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, createEffect , ofType } from '@ngrx/effects';
 import { TaskService } from "../services/task.service";
-import { catchError, concatMap, map, of, switchMap, tap } from "rxjs";
+import { catchError, concatMap, filter, map, of, switchMap, tap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { finishProcessing, startProcessing } from "./ui.actions";
 import * as TaskActions from './task.actions';
+import * as JobActions from './job.actions';
 import * as ToastActions from './toast.actions';
 
 
@@ -37,10 +38,19 @@ export class TaskEffects {
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
       this.taskService.findTask(action.taskId).pipe(
-        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.findTaskSuccess({ task }))),
+        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.findTaskSuccess({ task, showSuccessMessage: action.showSuccessMessage }))),
         catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskFailure({ error })))
       )
     )
+  ));
+
+  findTaskSuccess$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.findTaskSuccess),
+    filter(action => !!action.showSuccessMessage),
+    switchMap(action => of(ToastActions.toastSuccess({
+      summary: 'Job successfully completed!',
+      detail: action.task.id
+    })))
   ));
 
   findTasks$ = createEffect(() => this.actions$.pipe(
@@ -105,10 +115,18 @@ export class TaskEffects {
 
   runTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTaskSuccess),
-    switchMap(action => of(ToastActions.toastSuccess({
-      summary: 'Task run successfully completed!',
-      detail: action.task.id
-    })))
+    tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs())),
+    switchMap(action => of(
+      !!action.task.jobs?.length ?
+        ToastActions.toastSuccess({
+          summary: 'New job added to queue!',
+          detail: action.task.id
+        }) :
+        ToastActions.toastSuccess({
+          summary: 'Task run successfully completed!',
+          detail: action.task.id
+        })
+    ))
   ));
 
 
@@ -155,6 +173,7 @@ export class TaskEffects {
 
   deleteTaskResultSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTaskResultSuccess),
+    tap(() => this.store.dispatch(JobActions.findJobs())),
     switchMap(() => of(ToastActions.toastSuccess({
       summary: 'Task result successfully deleted!'
     })))

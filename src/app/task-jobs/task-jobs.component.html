@@ -1,0 +1,37 @@
+<p-panel class="be-panel-jobs be-panel-no-padding" header="Task Jobs In Queue">
+  @if(jobs$ | async; as jobs) {
+    <p-table responsiveLayout="stack" styleClass="p-datatable-striped" [columns]="columns" [value]="jobs" sortMode="multiple" [scrollable]="true" scrollHeight="452px" >
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th [style]="'width: ' + columns[0].width" pSortableColumn="model.name">
+              {{ columns[0].header }}
+              <p-sortIcon field="model.name" />
+            </th>
+            <th [style]="'width: ' + columns[1].width" class="text-center" pSortableColumn="model.resolutions[0]">
+              {{ columns[1].header }}
+              <p-sortIcon field="model.resolutions[0]" />
+            </th>
+            <th [style]="'width: ' + columns[2].width" class="text-right" pSortableColumn="state">
+              {{ columns[2].header }}
+              <p-sortIcon field="state" />
+            </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+          <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
+          <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolutions[0] }}</td>
+          <td class="flex justify-content-end">
+            <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
+            <be-job-status [job]="rowData"></be-job-status>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3" class="text-center">No jobs are currently running.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</p-panel>
