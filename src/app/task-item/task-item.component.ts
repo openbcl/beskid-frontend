@@ -4,7 +4,7 @@ import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Task } from '../store/task';
 import { Store } from '@ngrx/store';
-import { isRunning } from '../store/task.selector';
+import { areTaskJobsRunning } from '../store/task.selector';
 import { Subject, switchMap } from 'rxjs';
 
 @Component({
@@ -19,7 +19,7 @@ export class TaskItemComponent implements AfterViewInit {
   @Input(({ required: true })) nr!: number;
 
   taskId$ = new Subject<string>();
-  running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isRunning(taskId))));
+  running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(areTaskJobsRunning(taskId))));
 
   constructor(private store: Store) { }
 

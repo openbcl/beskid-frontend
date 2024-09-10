@@ -5,6 +5,10 @@
 
 :root {
   --highlight-text-color: #af1b08;
+  --success-color: #22C55E;
+  --warn-color: #f59e0b;
+  --info-color: #0ea5e9;
+  --error-color: #EF4444;
 }
 ::-webkit-scrollbar {
   width: 0.75rem;
@@ -22,7 +26,11 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600); 
+  background: var(--primary-300); 
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--info-color); 
 }
 
 a:-webkit-any-link {
@@ -74,13 +82,13 @@ p-dialog.be-dialog-tabView {
  height: 4rem;
 }
 
-@media screen and (max-width: 475px) {
+@media screen and (max-width: 559px) {
   .be-header {
     display:none
    }
 }
 
-@media screen and (min-width: 476px) {
+@media screen and (min-width: 560px) {
   .be-header-tiny {
     display:none
    }
@@ -119,7 +127,7 @@ body {
 }
 
 .p-blockui.p-component-overlay.p-component-overlay-enter {
-  z-index: 89;
+  z-index: 89 !important;
 }
 
 p-button.w-full {
@@ -168,11 +176,18 @@ be-toolbar {
     transition: visibility 0.10s;
   }
 
+  .p-button.p-button-lg {
+    padding: 0.5em;
+  }
+
   p-speeddial {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     .p-speeddial {
       position: relative;
+      .p-button-icon {
+        font-size: x-large !important;
+      }
     }
     .p-speeddial-mask {
       height: calc(100vh);
@@ -186,6 +201,27 @@ be-toolbar {
       }
     }
   }
+}
+
+p-panel.be-panel-no-padding .p-panel-content {
+  padding: 0;
+  table {
+    th:first-of-type, td:first-of-type {
+      padding-left: 1.25em;
+    }
+    
+    th:last-of-type, td:last-of-type  {
+      padding-right: 1.25em;
+    }
+  }
+}
+
+.be-panel-data .p-panel-content {
+  height: 425px;
+}
+
+.be-panel-jobs .p-panel-content {
+  height: 455px;
 }
 
 be-processing p-progressBar {
@@ -217,6 +253,10 @@ p-dropdown.w-100 {
 
 .p-fieldset-legend {
   padding: 0.5rem !important;
+}
+
+.be-courier-font {
+  font-family:'Courier New', Arial;
 }
 
 .be-bt-tiny > button {

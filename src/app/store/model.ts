@@ -18,6 +18,6 @@ export interface Model {
   id: number;
   name: string;
   resolutions: number[];
-  experiments: Experiment[];
-  fds: FDS[];
+  experiments?: Experiment[];
+  fds?: FDS[];
 }

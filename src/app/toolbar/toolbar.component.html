@@ -8,17 +8,41 @@
     </label>
   </div>
   <div 
-  routerLink="/"
-  routerLinkActive
-  #welcomeLink="routerLinkActive"
-  [routerLinkActiveOptions]="{ exact: true }"
-  class="p-toolbar-group-center cursor-pointer {{( welcomeLink.isActive ? 'be-toolbar-hide-logo fadeoutdown' : 'be-toolbar-show-logo fadeindown' )}}"
-  (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
+    routerLink="/"
+    routerLinkActive
+    #welcomeLink="routerLinkActive"
+    [routerLinkActiveOptions]="{ exact: true }"
+    class="p-toolbar-group-center cursor-pointer {{( welcomeLink.isActive ? 'be-toolbar-hide-logo fadeoutdown' : 'be-toolbar-show-logo fadeindown' )}}"
+    (click)="showTaskListSidebar && checkChangeShowTaskListSidebar()">
     <img alt="BESKID" draggable="false" class="be-header-tiny select-none" src="assets/icons/header_tiny_light_monochrome.png">
     <img alt="BESKID" draggable="false" class="be-header select-none" src="assets/icons/header_light_monochrome.png">
   </div>
   <div class="p-toolbar-group-end flex-row-reverse">
-    <p-speedDial [model]="avatarItems" [radius]=90 showIcon="far fa-question" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+    <div class="flex align-items-center">
+      <p-overlayPanel #op>
+        <div class="table be-jobs-in-queue">
+          @if(jobs$ | async; as jobs){
+            @for (job of jobs; track $index) {
+              <div class="col flex align-items-center cursor-pointer justify-content-between be-job" [routerLink]="[ 'tasks', job.taskId ]" (click)="op.hide()">
+                <p>Job <span class="be-courier-font text-lg">#{{ job.jobId.split('-')[0] }}</span> |
+                  Task <span class="be-courier-font text-lg" [style.color]="'#'+ job.taskId.split('-')[0].substring(0,6)">#{{ job.taskId.split('-')[0] }}</span>
+                </p>
+                <be-job-status [job]="job"></be-job-status>
+              </div>
+            } @empty {
+              <p>No jobs in queue.</p>
+            }
+          }
+        </div>
+      </p-overlayPanel>
+      <div class="be-queue-button">
+        <p-button class="mr-3" size="large" (onClick)="op.toggle($event)" icon="fab fa-stack-overflow" />
+        @if(uncompletedJobs$ | async; as uncompletedJobs){
+          <p-badge value="{{ uncompletedJobs }} " severity="success"/>
+        }
+        </div>
+      <p-speedDial [model]="avatarItems" [radius]=90 showIcon="fas fa-user-gear" direction="down-left" type="quarter-circle" buttonClassName="p-button-info" [mask]="true"></p-speedDial>
+    </div>
   </div>
 </p-toolbar>
 <p-dialog header="About this application" class="be-dialog-tabView" [modal]="true" [(visible)]="showInfoDialog" [maximizable]="true">

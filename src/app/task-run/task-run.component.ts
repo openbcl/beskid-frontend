@@ -11,10 +11,10 @@ import { fdsVersions, experiments, models } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, filter, first, map, switchMap, tap } from 'rxjs';
+import { Subject, filter, first, map, switchMap } from 'rxjs';
 import { Experiment, FDS, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
-import { isRunning } from '../store/task.selector';
+import { isTaskRunning } from '../store/task.selector';
 import { FieldsetModule } from 'primeng/fieldset';
 import { AccordionModule } from 'primeng/accordion';
 import { TooltipModule } from 'primeng/tooltip';
@@ -38,7 +38,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   @Input({ required: true }) task: Task | undefined;
 
   taskId$ = new Subject<string>();
-  running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isRunning(taskId))));
+  running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isTaskRunning(taskId))));
 
   breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
 
@@ -68,10 +68,10 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   })) : {
     ...model,
     app: { version: "-" }
-  }).flat().map(model => model.experiments.map(experiment => ({
+  }).flat().map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
     ...model,
     experiment
-  }))).flat().map(model => model.resolutions.map(resolution => ({
+  })) : model).flat().map(model => model.resolutions.map(resolution => ({
     ...model,
     resolution
   }))).flat()

@@ -1,0 +1,10 @@
+<p-chip styleClass="ml-3 pr-0 pl-3">
+  <span class="mr-2 font-medium w-5rem text-center">
+    {{ job.state }}
+  </span>
+  <span class="be-progress-circle {{job.state}} border-circle w-2rem h-2rem flex ">
+    @if(['active', 'waiting'].includes(job.state)) {
+      <p-progressSpinner strokeWidth="4"  styleClass="w-2rem h-2rem"></p-progressSpinner>
+    }
+  </span>
+</p-chip>

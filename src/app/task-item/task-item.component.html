@@ -1,9 +1,9 @@
 <p-card class="select-none cursor-pointer border-round-3xl">
   <ng-template pTemplate="header">
     <div class="be-task-item-header flex justify-content-between align-items-center px-2 pt-2 pb-1 border-round-top-lg border-bottom-1 surface-border">
-      <span class="text-xl font-bold ml-2 py-2">Task {{ nr }}</span>
+      <span class="text-xl font-bold ml-2 py-2">Task {{ nr }}</span><span class="text-sm font-bold ml-2 py-2">#{{ task.id.split('-')[0] }}</span>
       @if (running$ | async; as running) {
-        <p-progressSpinner styleClass="w-2rem h-2rem"></p-progressSpinner>
+        <p-progressSpinner styleClass="ml-2 w-2rem h-2rem"></p-progressSpinner>
       }
   </div>
   </ng-template>
