@@ -16,6 +16,7 @@ import { map, Observable } from 'rxjs';
 import { Job } from '../store/job';
 import { jobs } from '../store/job.selector';
 import { JobStatusComponent } from '../job-status/job-status.component';
+import { validityPeriodInDays } from '../store/auth.selector';
 
 @Component({
   selector: 'be-toolbar',
@@ -44,6 +45,7 @@ export class ToolbarComponent {
 
   jobs$: Observable<Job[]> =this.store.select(jobs);
   uncompletedJobs$ = this.jobs$.pipe(map(jobs => jobs.filter(job => ['active', 'waiting'].includes(job.state)).length));
+  validityPeriodInDays$ = this.store.select(validityPeriodInDays);
 
   showInfoDialog = false;
 

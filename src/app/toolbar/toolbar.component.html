@@ -96,10 +96,12 @@
         This is necessary to differentiate between the sessions of different users.
       </p>
       <p>
-        A session is valid for 7 days. If the website is not reloaded within this time,
-        the session is not automatically extended for a further 7 days.
-        At the end of this period, the session and all data associated with it,
-        such as tasks and their results, will be irrevocably deleted.
+        @if(validityPeriodInDays$ | async; as validityPeriodInDays) {
+          A session is valid for {{ validityPeriodInDays }} days. If the website is not reloaded within this time,
+          the session is not automatically extended for a further {{ validityPeriodInDays }} days.
+          At the end of this period, the session and all data associated with it,
+          such as tasks and their results, will be irrevocably deleted.
+        }
       </p>
       <p>
         Results that were previously evaluated by the user for future AI training and released for scientific use will not be deleted.

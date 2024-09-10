@@ -36,7 +36,7 @@ export const checkSession = createAction(
 
 export const checkSessionSuccess = createAction(
   '[Auth] Check Session Token Success',
-  props<{ auth: Auth, isValid: boolean, ageInDays: number }>()
+  props<{ auth: Auth, isValid: boolean, ageInDays: number, validityPeriodInDays: number }>()
 )
 
 export const checkSessionFailure = createAction(

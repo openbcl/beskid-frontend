@@ -32,12 +32,14 @@ export class AuthService {
     if (!auth) {
       return throwError(() => new Error('No session found!'));
     }
+    const tokenData = this.jwtHelperService.decodeToken(auth.token);
     return of({
       auth,
       ...!this.jwtHelperService.isTokenExpired(auth.token) ? {
         isValid: true,
-        ageInDays: Math.floor(((+new Date()) - this.jwtHelperService.decodeToken(auth.token).iat * 1000) / 86400000)
-      } : { isValid: false, ageInDays: 0 }
+        ageInDays: Math.floor(((+new Date()) - tokenData.iat * 1000) / 86400000),
+        validityPeriodInDays: (tokenData.exp - tokenData.iat) / 86400,
+      } : { isValid: false, ageInDays: 0, validityPeriodInDays: -1 }
     })
   }
 

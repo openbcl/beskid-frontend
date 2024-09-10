@@ -8,6 +8,7 @@ export interface AuthState {
   auth?: Auth;
   isValid: boolean,
   ageInDays: number,
+  validityPeriodInDays: number,
   error: any;
 }
 
@@ -15,6 +16,7 @@ export const initialAuthState: AuthState = {
   auth: undefined,
   isValid: false,
   ageInDays: 0,
+  validityPeriodInDays: -1,
   error: null
 };
 
@@ -26,7 +28,7 @@ export const authReducer = createReducer(
   }),
 
   on(AuthAction.checkSessionSuccess, (state, action) => {
-    return { ...state, auth: action.auth, isValid: action.isValid, ageInDays: action.ageInDays };
+    return { ...state, auth: action.auth, isValid: action.isValid, ageInDays: action.ageInDays, validityPeriodInDays: action.validityPeriodInDays };
   }),
 
   on(AuthAction.deleteSessionSuccess, () => {
