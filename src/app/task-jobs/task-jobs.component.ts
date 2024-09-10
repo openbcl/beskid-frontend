@@ -1,22 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PanelModule } from 'primeng/panel';
 import { allJobsOfTask } from '../store/job.selector';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Job } from '../store/job';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { JobStatusComponent } from '../job-status/job-status.component';
 
 @Component({
   selector: 'be-task-jobs',
   standalone: true,
-  imports: [AsyncPipe, PanelModule, TableModule, ProgressBarModule, ProgressSpinnerModule],
+  imports: [AsyncPipe, PanelModule, TableModule, JobStatusComponent],
   templateUrl: './task-jobs.component.html',
   styleUrl: './task-jobs.component.scss'
 })
-export class TaskJobsComponent implements OnInit  {
+export class TaskJobsComponent implements OnChanges  {
 
   @Input({ required: true })
   taskId!: string;
@@ -31,7 +30,9 @@ export class TaskJobsComponent implements OnInit  {
 
   constructor(private store: Store) {}
 
-  ngOnInit(): void {
-    this.jobs$ = this.store.select(allJobsOfTask(this.taskId));
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['taskId'] && !!this.taskId) {
+      this.jobs$ = this.store.select(allJobsOfTask(this.taskId));
+    }
   }
 }

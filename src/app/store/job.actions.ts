@@ -3,7 +3,7 @@ import { Job } from './job';
 
 export const findJobs = createAction(
   '[Job] Find Jobs',
-  props<{ types?: string[] }>()
+  (types: string [] = ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait']) => ({ types })
 );
 
 export const findJobsSuccess = createAction(

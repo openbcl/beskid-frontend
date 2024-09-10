@@ -5,6 +5,10 @@
 
 :root {
   --highlight-text-color: #af1b08;
+  --success-color: #22C55E;
+  --warn-color: #f59e0b;
+  --info-color: #0ea5e9;
+  --error-color: #EF4444;
 }
 ::-webkit-scrollbar {
   width: 0.75rem;
@@ -22,7 +26,11 @@
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600); 
+  background: var(--primary-300); 
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--info-color); 
 }
 
 a:-webkit-any-link {
@@ -245,6 +253,10 @@ p-dropdown.w-100 {
 
 .p-fieldset-legend {
   padding: 0.5rem !important;
+}
+
+.be-courier-font {
+  font-family:'Courier New', Arial;
 }
 
 .be-bt-tiny > button {

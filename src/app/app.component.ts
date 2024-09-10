@@ -31,7 +31,7 @@ export class AppComponent {
     this.primengConfig.ripple = true;
     this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => {
       this.store.dispatch(findTasks());
-      this.store.dispatch(findJobs({ types: ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait'] }))
+      this.store.dispatch(findJobs())
     });
   }
 }

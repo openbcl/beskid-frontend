@@ -2,6 +2,33 @@ input[type=checkbox] {
   display: none;
 }
 
+.be-queue-button {
+  position: relative;
+  p-badge {
+    position: absolute;
+    top: -25%;
+    right: 0.25em;
+  }
+}
+
+.be-jobs-in-queue {
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+.be-job {
+  border-top: 1px solid var(--surface-border);
+  &:last-of-type {
+    border-bottom: 1px solid var(--surface-border);
+  }
+  &:hover {
+    background: var(--surface-hover);
+  }
+  &:active {
+    background: var(--surface-border);
+  }
+}
+
 .be-taskListSidebarToggleIcon {
   box-sizing: border-box;
   cursor: pointer;

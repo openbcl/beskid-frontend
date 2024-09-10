@@ -21,24 +21,9 @@
         <tr [pSelectableRow]="rowData">
           <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
           <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolutions[0] }}</td>
-          <td class="flex justify-content-end"><span class="p-column-title font-semibold">{{ columns[2].header }}</span>
-              @switch (rowData.state) {
-                @case ('waiting') {
-                  <div class="relative w-8rem">
-                    <span class="absolute z-1 w-full text-center p-1">{{ rowData.state }}</span>   
-                    <p-progressBar class="relative" mode="indeterminate" [style]="{ height: '1.75em' }" />
-                  </div>
-                }
-                @case ('active') {
-                  <div class="flex flex-wrap gap-3 align-items-center">
-                    <span>{{ rowData.state }}</span>   
-                    <p-progressSpinner strokeWidth="6"  styleClass="w-2rem h-2rem"></p-progressSpinner>
-                  </div>
-                }
-                @default () {
-                  <span>{{ rowData.state }}</span>   
-                }
-              }
+          <td class="flex justify-content-end">
+            <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
+            <be-job-status [job]="rowData"></be-job-status>
           </td>
         </tr>
       </ng-template>

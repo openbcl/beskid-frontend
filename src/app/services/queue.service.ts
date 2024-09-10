@@ -46,14 +46,14 @@ export class QueueService {
     return this.http.get<Job>(`${environment.api}/v1/queue/${jobId}`);
   }
 
-  findJobs(types?: string[]) {
+  findJobs(types: string[]) {
     return this.http.get<Job[]>(`${environment.api}/v1/queue`, types ? { params: { types } } : undefined);
   }
 
   private async startPolling() {
     await new Promise((resolve) => setTimeout(resolve, 5000));
     if (this.jobPollingEnabled) {
-      this.store.dispatch(findJobs({ types: ['completed', 'failed', 'active', 'waiting', 'repeat', 'wait'] }));
+      this.store.dispatch(findJobs());
       this.startPolling();
     }
   }
