@@ -12,12 +12,14 @@ export interface Experiment {
   id: string;
   name: string;
   scale: Scale;
+  conditions: number[];
+  conditionMU: string
 }
 
 export interface Model {
   id: number;
   name: string;
-  resolutions: number[];
+  resolution: number;
   experiments?: Experiment[];
-  fds?: FDS[];
+  fds?: FDS;
 }

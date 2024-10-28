@@ -7,9 +7,9 @@
               {{ columns[0].header }}
               <p-sortIcon field="model.name" />
             </th>
-            <th [style]="'width: ' + columns[1].width" class="text-center" pSortableColumn="model.resolutions[0]">
+            <th [style]="'width: ' + columns[1].width" class="text-center" pSortableColumn="model.resolution">
               {{ columns[1].header }}
-              <p-sortIcon field="model.resolutions[0]" />
+              <p-sortIcon field="model.resolution" />
             </th>
             <th [style]="'width: ' + columns[2].width" class="text-right" pSortableColumn="state">
               {{ columns[2].header }}
@@ -20,7 +20,7 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
           <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
-          <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolutions[0] }}</td>
+          <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolution }}</td>
           <td class="flex justify-content-end">
             <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
             <be-job-status [job]="rowData"></be-job-status>

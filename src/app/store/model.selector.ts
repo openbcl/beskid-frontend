@@ -15,7 +15,7 @@ export const models = createSelector(
 
 export const fdsVersions = createSelector(
   getModelState,
-  modelState => [...new Set(modelState.models.map(model => model.fds).flat())]
+  modelState => [...new Set(modelState.models.map(model => model.fds))]
     .filter(value => !!value)
     .filter((fdsValue, i, arr) => arr.findIndex(value => value && fdsValue && value.version === fdsValue.version) === i)
     .sort((a, b) => !!a && !!b && a.version < b.version ? -1 : 1)

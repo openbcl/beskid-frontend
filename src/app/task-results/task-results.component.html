@@ -26,7 +26,7 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData">
               <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
-              <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolutions[0] }}</td>
+              <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolution }}</td>
               <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>{{ rowData.date | date:'medium' }}</td>
               @if(columns.length === 5) {
                 <td>
@@ -54,7 +54,7 @@
       </p-table>
     }
   </p-panel>
-  <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': ' + selectedResult?.model?.resolutions[0] + ')'" [(visible)]="selectedResult" [modal]="true" [maximizable]="true">
+  <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': ' + selectedResult?.model?.resolution + ')'" [(visible)]="selectedResult" [modal]="true" [maximizable]="true">
     <label class="flex justify-content-center pt-2 pb-2 bg-primary border-noround-bottom border-round-2xl">{{ selectedResult?.date | date:'medium' }}</label>
     @if (taskResult$ | async; as taskResultData) {
       <p-table [value]="taskResultData" styleClass="p-datatable-striped">

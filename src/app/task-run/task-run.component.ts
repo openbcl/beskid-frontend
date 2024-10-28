@@ -62,19 +62,16 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     { header: 'Scale', width: 'auto' }
   ];
 
-  rows$ = this.models$.pipe(map(models => models.map(model => !!model.fds?.length ? model.fds.map(fds => ({
+  rows$ = this.models$.pipe(map(models => models.map(model => !!model.fds ? {
     ...model,
-    app: fds,
-  })) : {
+    app: model.fds,
+  } : {
     ...model,
     app: { version: "-" }
   }).flat().map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
     ...model,
     experiment
-  })) : model).flat().map(model => model.resolutions.map(resolution => ({
-    ...model,
-    resolution
-  }))).flat()
+  })) : model).flat()
   .filter(model => this.isEmptyOrNull(this.form.value.selectedVersion) || model.app.version === (this.form.value.selectedVersion as FDS)?.version!)));
 
   constructor(
@@ -100,19 +97,19 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   updateSelectedModel(model: Model) {
     this.form.controls.selectedModel.setValue(model);
-    this.updateResolutions(model.resolutions);
+    this.updateResolutions(model.resolution);
   }
 
-  updateResolutions(resolutions: number[]) {
+  updateResolutions(resolution: number) {
     const resolutionItem = (resolution: number): ResolutionItem => ({
       name: `${resolution}`, value: resolution
     });
-    this.resolutions$.next(resolutions.map(resolution => resolutionItem(resolution)));
-    this.form.controls.selectedResolution.setValue(resolutionItem(resolutions[0]));
+    this.resolutions$.next([resolutionItem(resolution)]);
+    this.form.controls.selectedResolution.setValue(resolutionItem(resolution));
   }
 
   changeModel(event: { value: Model }) {
-    this.updateResolutions(event.value.resolutions);
+    this.updateResolutions(event.value.resolution);
   }
 
   changeFilter() {

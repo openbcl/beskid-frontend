@@ -32,7 +32,7 @@ export class TaskService {
   }
 
   runTask(taskId: string, modelId: number, resolution: number) {
-    return this.http.post<Task>(`${environment.api}/v1/tasks/${taskId}/model/${modelId}/resolution/${resolution}`, undefined);
+    return this.http.post<Task>(`${environment.api}/v1/tasks/${taskId}/model/${modelId}`, undefined);
   }
 
   findTaskResult(taskId: string, fileId: string): Observable<ResultValue> {
