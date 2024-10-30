@@ -67,9 +67,9 @@
                         {{ columns[1].header }}
                         <p-sortIcon field="resolution" />
                       </th>
-                      <th [style]="'width: ' + columns[2].width" pSortableColumn="app.version">
+                      <th [style]="'width: ' + columns[2].width" pSortableColumn="fds.version">
                         {{ columns[2].header }}
-                        <p-sortIcon field="app.version" />
+                        <p-sortIcon field="fds.version" />
                       </th>
                       <th [style]="'width: ' + columns[3].width" pSortableColumn="experiment.name">
                         {{ columns[3].header }}
@@ -88,9 +88,9 @@
                       <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.resolution }}</td>
                       <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>
                         <div>
-                          {{ rowData.app.version }}
-                          @if(!!rowData.app.revision?.length) {
-                            <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.app.revision}}" tooltipPosition="top"></i>
+                          {{ rowData.fds.version }}
+                          @if(!!rowData.fds.revision?.length) {
+                            <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.fds.revision}}" tooltipPosition="top"></i>
                           }
                         </div>
                       </td>

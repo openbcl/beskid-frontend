@@ -62,17 +62,14 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     { header: 'Scale', width: 'auto' }
   ];
 
-  rows$ = this.models$.pipe(map(models => models.map(model => !!model.fds ? {
-    ...model,
-    app: model.fds,
-  } : {
-    ...model,
-    app: { version: "-" }
-  }).flat().map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
-    ...model,
-    experiment
-  })) : model).flat()
-  .filter(model => this.isEmptyOrNull(this.form.value.selectedVersion) || model.app.version === (this.form.value.selectedVersion as FDS)?.version!)));
+  rows$ = this.models$.pipe(
+    map(models =>
+      models.map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
+      ...model,
+      experiment
+    })) : model).flat()
+    .filter(model => this.isEmptyOrNull(this.form.value.selectedVersion) || model.fds?.version === (this.form.value.selectedVersion as FDS)?.version!)
+    ));
 
   constructor(
     private store: Store,
@@ -135,7 +132,6 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   onRowSelect(event: { data?: any }){
     const model = { ...event.data! };
-    delete model?.app;
     delete model?.experiment;
     delete model?.resolution;
     this.updateSelectedModel(model);
