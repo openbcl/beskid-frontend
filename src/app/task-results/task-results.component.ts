@@ -41,6 +41,7 @@ export class TaskResultsComponent implements OnChanges {
     const columns = [
       { header: 'AI-model', width: 'auto' },
       { header: 'Resolution', width: 'auto' },
+      { header: 'FDS', width: 'auto' },
       { header: 'Date', width: 'auto' }
     ];
     if (task!.training === TaskTraining.ENABLED) {

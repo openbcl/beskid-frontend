@@ -27,10 +27,11 @@
           <tr [pSelectableRow]="rowData">
               <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
               <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolution }}</td>
-              <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>{{ rowData.date | date:'medium' }}</td>
-              @if(columns.length === 5) {
+              <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>{{ rowData.model.fds.version }}</td>
+              <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.date | date:'medium' }}</td>
+              @if(columns.length === 6) {
                 <td>
-                  <span class="p-column-title font-semibold">{{ columns[3].header.split(' ')[0] }}</span>
+                  <span class="p-column-title font-semibold">{{ columns[4].header.split(' ')[0] }}</span>
                   <form [formGroup]="rowData.form">
                     <p-selectButton [pSelectableRow]="" [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon" (onChange)="evaluateTaskResult($event, rowData.filename)">
                       <ng-template let-item pTemplate>
@@ -48,7 +49,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="5" class="text-center">No results are currently available.</td>
+            <td colspan="6" class="text-center">No results are currently available.</td>
           </tr>
         </ng-template>
       </p-table>

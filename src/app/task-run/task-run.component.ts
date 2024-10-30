@@ -45,7 +45,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   models$ = this.store.select(models);
   fdsVersions$ = this.store.select(fdsVersions).pipe(first(fdsVersion => !!fdsVersion?.length));
   experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
-  resolutions$ = new Subject<ResolutionItem[]>()
+  resolution$ = new Subject<ResolutionItem>()
 
   form = this.fb.group({
     selectedVersion: this.fb.control({}),
@@ -59,17 +59,34 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     { header: 'Resolution', width: 'auto' },
     { header: 'FDS', width: 'auto' },
     { header: 'Experiment', width: 'auto' },
+    { header: 'Condition', width: 'auto' },
     { header: 'Scale', width: 'auto' }
   ];
 
   rows$ = this.models$.pipe(
+    filter(models => !!models.length),
     map(models =>
-      models.map(model => !!model.experiments?.length ? model.experiments.map(experiment => ({
-      ...model,
-      experiment
-    })) : model).flat()
-    .filter(model => this.isEmptyOrNull(this.form.value.selectedVersion) || model.fds?.version === (this.form.value.selectedVersion as FDS)?.version!)
-    ));
+      models.map(model => model.experiments
+        .filter(experiment => !(this.form.value.selectedExperiment as Experiment)?.id?.length || experiment.id === (this.form.value.selectedExperiment as Experiment)?.id)
+        .map(exp => exp.conditions
+          .map(condition => {
+            const experiment: Experiment & { condition: number } = {
+              ...exp,
+              condition
+            }
+            const row: Model & { experiment: Experiment & { condition: number } } = {
+              ...model,
+              experiment
+            }
+            return row;
+          }).flat()
+        ).flat()
+      ).flat().filter(
+        model => this.isEmptyOrNull(this.form.value.selectedVersion) ||
+        model.fds.version === (this.form.value.selectedVersion as FDS)?.version!
+      )
+    )
+  );
 
   constructor(
     private store: Store,
@@ -101,7 +118,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     const resolutionItem = (resolution: number): ResolutionItem => ({
       name: `${resolution}`, value: resolution
     });
-    this.resolutions$.next([resolutionItem(resolution)]);
+    this.resolution$.next(resolutionItem(resolution));
     this.form.controls.selectedResolution.setValue(resolutionItem(resolution));
   }
 
@@ -130,10 +147,9 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     }));
   }
 
-  onRowSelect(event: { data?: any }){
+  onRowSelect(event: { data?: Model & { experiment?: Experiment & { condition: number } } }){
     const model = { ...event.data! };
-    delete model?.experiment;
-    delete model?.resolution;
+    delete model.experiment;
     this.updateSelectedModel(model);
   }
 

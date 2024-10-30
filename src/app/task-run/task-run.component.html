@@ -43,10 +43,10 @@
               <label class="mb-1 pl-2">AI-models</label>
               <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
             </div>
-            @if(resolutions$ | async; as resolutions) {
+            @if(resolution$ | async; as resolution) {
               <div class="md:col-6 col-12 flex flex-column">
                 <label class="mb-1 pl-2">Resolutions</label>
-                <p-dropdown class="w-100" formControlName="selectedResolution" [options]="resolutions" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
+                <p-dropdown class="w-100" formControlName="selectedResolution" [options]="[resolution]" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
               </div>
             }
           </div>
@@ -75,8 +75,12 @@
                         {{ columns[3].header }}
                         <p-sortIcon field="experiment.name" />
                       </th>
-                      <th [style]="'width: ' + columns[4].width" pSortableColumn="experiment.scale.name">
+                      <th [style]="'width: ' + columns[4].width" pSortableColumn="experiment.condition">
                         {{ columns[4].header }}
+                        <p-sortIcon field="experiment.condition" />
+                      </th>
+                      <th [style]="'width: ' + columns[5].width" pSortableColumn="experiment.scale.name">
+                        {{ columns[5].header }}
                         <p-sortIcon field="experiment.scale.name" />
                       </th>
     
@@ -94,8 +98,9 @@
                           }
                         </div>
                       </td>
-                      <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment?.name }}</td>
-                      <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>
+                      <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment.name }}</td>
+                      <td><span class="p-column-title font-semibold">{{ columns[4].header }}</span>{{ rowData.experiment.condition }} {{ rowData.experiment.conditionMU }}</td>
+                      <td><span class="p-column-title font-semibold">{{ columns[5].header }}</span>
                         <div>
                           {{ rowData.experiment?.scale.name }}
                           <i class="ml-2 fa-solid fa-circle-info" [pTooltip]="rowData.experiment?.scale.desc" tooltipPosition="top"></i>
