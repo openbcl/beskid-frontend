@@ -24,7 +24,7 @@ export class TaskJobsComponent implements OnChanges  {
 
   columns = [
     { header: 'AI-model', width: 'auto' },
-    { header: 'Resolution', width: 'auto' },
+    { header: 'FDS', width: 'auto' },
     { header: 'State', width: 'auto' }
   ];
 

@@ -40,7 +40,6 @@ export class TaskResultsComponent implements OnChanges {
   data$ = this.task$.pipe(map(task => {
     const columns = [
       { header: 'AI-model', width: 'auto' },
-      { header: 'Resolution', width: 'auto' },
       { header: 'FDS', width: 'auto' },
       { header: 'Date', width: 'auto' }
     ];

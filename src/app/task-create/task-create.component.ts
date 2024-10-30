@@ -1,4 +1,4 @@
-import { Component, ViewChild, isDevMode } from '@angular/core';
+import { Component, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { AsyncPipe, DecimalPipe } from '@angular/common';
 import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -10,22 +10,27 @@ import { TooltipModule } from 'primeng/tooltip';
 import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { PanelModule } from 'primeng/panel';
+import { DropdownModule } from 'primeng/dropdown';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { environment } from '../../environments/environment';
 import { FileSizePipe } from '../shared/file-size.pipe';
+import { experiments } from '../store/model.selector';
+import { first } from 'rxjs';
+import { Experiment } from '../store/model';
+import { findModels } from '../store/model.actions';
 
 @Component({
     selector: 'be-task-create',
     standalone: true,
-    imports: [AsyncPipe, FileSizePipe, FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, FileUploadModule, DialogModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
+    imports: [AsyncPipe, FileSizePipe, FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, DropdownModule, FileUploadModule, DialogModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
     providers: [DecimalPipe],
     templateUrl: './task-create.component.html',
     styleUrl: './task-create.component.scss'
 })
-export class TaskCreateComponent {
+export class TaskCreateComponent implements OnInit {
   isDevMode = () => isDevMode() || !environment.production
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
   help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
@@ -35,8 +40,13 @@ export class TaskCreateComponent {
 
   form = this.fb.group({
     values: this.fb.array<FormControl<string>>([], { validators: [Validators.required]}),
+    selectedExperiment: this.fb.control({}, { validators: [Validators.required]}),
+    experimentCondition: this.fb.control({}, { validators: [Validators.required]}),
+    resolution: this.fb.control({}, { validators: [Validators.required]}),
     training: false
   });
+
+  experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
 
   values$ = this.form.controls.values.valueChanges;
 
@@ -46,6 +56,10 @@ export class TaskCreateComponent {
     private fb: NonNullableFormBuilder,
     private store: Store
   ) { }
+
+  ngOnInit(): void {
+    this.store.dispatch(findModels({}));
+  }
 
   async pasteFromClipboard() {
     const clipboard = await navigator.clipboard.readText();
@@ -100,6 +114,11 @@ export class TaskCreateComponent {
   addTask() {
     const createTask = {
       values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
+      condition: {
+        id: (this.form.value.selectedExperiment as Experiment).id,
+        resolution: this.form.value.resolution as number,
+        value: this.form.value.experimentCondition as number
+      },
       training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
     };
     this.store.dispatch(addTask({ createTask }));

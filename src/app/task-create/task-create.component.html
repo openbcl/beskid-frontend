@@ -13,6 +13,14 @@
         </div>
       </div>
     </ng-template>
+    <div class="grid">
+      @if(experiments$ | async; as experiments) {
+        <div class="md:col-6 col-12 flex flex-column">
+          <label class="mb-1 pl-2">Experiments</label>
+          <p-dropdown class="w-100" formControlName="selectedExperiment" [options]="experiments" optionLabel="name" placeholder="Filter by experiment"></p-dropdown>
+        </div>
+      }
+    </div>
     @if(values$ | async; as values) {
       @if(!!values?.length) {
         <be-task-chart [values]="values"></be-task-chart>

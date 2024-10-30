@@ -41,14 +41,8 @@
           <div class="grid">
             <div class="md:col-6 col-12 flex flex-column">
               <label class="mb-1 pl-2">AI-models</label>
-              <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" (onChange)="changeModel($event)" ></p-dropdown>
+              <p-dropdown class="w-100" formControlName="selectedModel" [options]="models" optionLabel="name" placeholder="Select an AI-model" ></p-dropdown>
             </div>
-            @if(resolution$ | async; as resolution) {
-              <div class="md:col-6 col-12 flex flex-column">
-                <label class="mb-1 pl-2">Resolutions</label>
-                <p-dropdown class="w-100" formControlName="selectedResolution" [options]="[resolution]" optionLabel="name" placeholder="Select a resolution"></p-dropdown>
-              </div>
-            }
           </div>
         </p-fieldset>
       </div>

@@ -22,11 +22,6 @@ import { TableModule } from 'primeng/table';
 import { uiState } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
-interface ResolutionItem {
-  name: string;
-  value: number;
-}
-
 @Component({
   selector: 'be-task-run',
   standalone: true,
@@ -45,13 +40,11 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   models$ = this.store.select(models);
   fdsVersions$ = this.store.select(fdsVersions).pipe(first(fdsVersion => !!fdsVersion?.length));
   experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
-  resolution$ = new Subject<ResolutionItem>()
 
   form = this.fb.group({
     selectedVersion: this.fb.control({}),
     selectedExperiment: this.fb.control({}),
     selectedModel: this.fb.control({}, { validators: [Validators.required]}),
-    selectedResolution: this.fb.control({}, { validators: [Validators.required]}),
   });
 
   columns = [
@@ -111,19 +104,6 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   updateSelectedModel(model: Model) {
     this.form.controls.selectedModel.setValue(model);
-    this.updateResolutions(model.resolution);
-  }
-
-  updateResolutions(resolution: number) {
-    const resolutionItem = (resolution: number): ResolutionItem => ({
-      name: `${resolution}`, value: resolution
-    });
-    this.resolution$.next(resolutionItem(resolution));
-    this.form.controls.selectedResolution.setValue(resolutionItem(resolution));
-  }
-
-  changeModel(event: { value: Model }) {
-    this.updateResolutions(event.value.resolution);
   }
 
   changeFilter() {
@@ -142,8 +122,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
   runTask() {
     this.store.dispatch(runTask({
       taskId: this.task?.id!,
-      modelId: (this.form.value.selectedModel as Model).id,
-      resolution: (this.form.value.selectedResolution as ResolutionItem).value
+      modelId: (this.form.value.selectedModel as Model).id
     }));
   }
 

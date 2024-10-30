@@ -20,7 +20,7 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
           <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
-          <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.resolution }}</td>
+          <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.fds.version }}</td>
           <td class="flex justify-content-end">
             <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
             <be-job-status [job]="rowData"></be-job-status>

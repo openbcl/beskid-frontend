@@ -1,21 +1,28 @@
 import { Job } from "./job";
-import { Model } from "./model";
+import { ModelPartial } from "./model";
 
 export enum TaskTraining {
   DISABLED = 'DISABLED',
   ENABLED = 'ENABLED',
 }
 
+export interface TaskCondition {
+  id: string;
+  resolution: number;
+  value: number;
+}
+
 export interface Task {
   id: string;
   values: number[];
+  condition: TaskCondition;
   training: TaskTraining;
   date: Date;
   results: TaskResult[];
   jobs?: Job[];
 }
 
-export interface CreateTask extends Pick<Task, 'values' | 'training'>{};
+export interface CreateTask extends Pick<Task, 'values' | 'condition' | 'training'>{};
 
 export enum TaskResultEvaluation {
   NEUTRAL = 'NEUTRAL',
@@ -33,7 +40,7 @@ export interface TaskResult extends ResultValue{
   uriFile: string;
   uriData: string;
   date: Date;
-  model: Model;
+  model: ModelPartial;
   evaluation: TaskResultEvaluation;
 }
 

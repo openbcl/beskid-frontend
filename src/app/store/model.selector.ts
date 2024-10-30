@@ -23,5 +23,16 @@ export const fdsVersions = createSelector(
 
 export const experiments = createSelector(
   getModelState,
-  modelState => [...new Set(modelState.models.map(model => model.experiments).flat().filter(value => !!value))]
+  modelState => {
+    const experiments = !!modelState.models?.length ? modelState.models[0].experiments.map(experiment => ({
+      id: experiment.id,
+      name: experiment.name,
+      conditions: experiment.conditions,
+      resolution: modelState.models[0].resolution,
+    })) : [];
+    if (modelState.models?.length > 1) {
+      //TODO
+    }
+    return experiments;
+  }
 );

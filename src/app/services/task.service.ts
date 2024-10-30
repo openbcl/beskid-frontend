@@ -31,7 +31,7 @@ export class TaskService {
     return this.http.delete<void>(`${environment.api}/v1/tasks/${taskId}`);
   }
 
-  runTask(taskId: string, modelId: number, resolution: number) {
+  runTask(taskId: string, modelId: number) {
     return this.http.post<Task>(`${environment.api}/v1/tasks/${taskId}/model/${modelId}`, undefined);
   }
 

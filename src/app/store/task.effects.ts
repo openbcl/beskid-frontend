@@ -106,7 +106,7 @@ export class TaskEffects {
   runTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTask),
     concatMap(action =>
-      this.taskService.runTask(action.taskId, action.modelId, action.resolution).pipe(
+      this.taskService.runTask(action.taskId, action.modelId).pipe(
         map(task => TaskActions.runTaskSuccess({ task })),
         catchError(error => of(TaskActions.runTaskFailure({ error, taskId: action.taskId })))
       )

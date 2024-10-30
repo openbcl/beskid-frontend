@@ -23,3 +23,5 @@ export interface Model {
   experiments: Experiment[];
   fds: FDS;
 }
+
+export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds'> {}
