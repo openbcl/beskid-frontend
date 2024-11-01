@@ -92,7 +92,7 @@ export class TaskCreateComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.store.dispatch(findModels({}));
+    this.store.dispatch(findModels());
   }
 
   onChanges(fc: FormControl, event?: { value: ExperimentConditionOption }) {

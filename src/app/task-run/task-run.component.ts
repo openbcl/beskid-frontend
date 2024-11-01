@@ -7,16 +7,15 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Task } from '../store/task';
 import { DropdownModule } from 'primeng/dropdown';
-import { fdsVersions, experimentOptions, models } from '../store/model.selector';
+import { compatibleModels } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Subject, filter, first, map, switchMap } from 'rxjs';
-import { Experiment, FDS, Model } from '../store/model';
+import { Subject, filter, map, switchMap, tap } from 'rxjs';
+import { Experiment, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
 import { isTaskRunning } from '../store/task.selector';
 import { FieldsetModule } from 'primeng/fieldset';
-import { AccordionModule } from 'primeng/accordion';
 import { TooltipModule } from 'primeng/tooltip';
 import { TableModule } from 'primeng/table';
 import { uiState } from '../store/ui.selector';
@@ -25,7 +24,7 @@ import { RecreateViewDirective } from '../shared/recreate-view.directive';
 @Component({
   selector: 'be-task-run',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, FieldsetModule, TableModule, TooltipModule, DropdownModule, BlockUIModule, ProgressSpinnerModule, RecreateViewDirective, AccordionModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, FieldsetModule, TableModule, TooltipModule, DropdownModule, BlockUIModule, ProgressSpinnerModule, RecreateViewDirective],
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
@@ -34,65 +33,31 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   taskId$ = new Subject<string>();
   running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(isTaskRunning(taskId))));
-
+  models$ = this.taskId$.pipe(tap(foo => console.log(foo)), switchMap(() => this.store.select(compatibleModels(this.task!))));
   breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
 
-  models$ = this.store.select(models);
-  fdsVersions$ = this.store.select(fdsVersions).pipe(first(fdsVersion => !!fdsVersion?.length));
-  experiments$ = this.store.select(experimentOptions).pipe(first(experiments => !!experiments?.length));
-
   form = this.fb.group({
-    selectedVersion: this.fb.control({}),
-    selectedExperiment: this.fb.control({}),
-    selectedModel: this.fb.control({}, { validators: [Validators.required]}),
+    selectedModel: this.fb.control<Model | undefined>(undefined, { validators: [Validators.required]}),
   });
 
   columns = [
     { header: 'AI-model', width: 'auto' },
-    { header: 'Resolution', width: 'auto' },
     { header: 'FDS', width: 'auto' },
-    { header: 'Experiment', width: 'auto' },
-    { header: 'Condition', width: 'auto' },
-    { header: 'Scale', width: 'auto' }
   ];
-
-  rows$ = this.models$.pipe(
-    filter(models => !!models.length),
-    map(models =>
-      models.map(model => model.experiments
-        .filter(experiment => !(this.form.value.selectedExperiment as Experiment)?.id?.length || experiment.id === (this.form.value.selectedExperiment as Experiment)?.id)
-        .map(exp => exp.conditions
-          .map(condition => {
-            const experiment: Experiment & { condition: number } = {
-              ...exp,
-              condition
-            }
-            const row: Model & { experiment: Experiment & { condition: number } } = {
-              ...model,
-              experiment
-            }
-            return row;
-          }).flat()
-        ).flat()
-      ).flat().filter(
-        model => this.isEmptyOrNull(this.form.value.selectedVersion) ||
-        model.fds.version === (this.form.value.selectedVersion as FDS)?.version!
-      )
-    )
-  );
 
   constructor(
     private store: Store,
     private fb: FormBuilder
   ) {
-    this.models$.pipe(takeUntilDestroyed(), filter(models => !!models?.length)).subscribe(models => this.updateSelectedModel(models[0]));
+    this.models$.pipe(takeUntilDestroyed(), filter(models => !!models?.length)).subscribe(models => this.onRowSelect({ data: models[0] }));
   }
-
+  
   ngOnInit(): void {
-    this.store.dispatch(findModels({}));
+    this.store.dispatch(findModels());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(Math.random())
     if (changes['task']?.previousValue && changes['task'].previousValue.id !== this.task?.id) {
       this.taskId$.next(this.task!.id);
     }
@@ -102,37 +67,14 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
     this.taskId$.next(this.task!.id);
   }
 
-  updateSelectedModel(model: Model) {
-    this.form.controls.selectedModel.setValue(model);
-  }
-
-  changeFilter() {
-    this.store.dispatch(findModels({
-      fdsVersion: (this.form.value.selectedVersion as FDS)?.version,
-      experimentID: (this.form.value.selectedExperiment as Experiment)?.id,
-    }));
-  }
-
-  resetFilters() {
-    this.form.controls.selectedVersion.setValue({});
-    this.form.controls.selectedExperiment.setValue({});
-    this.changeFilter();
-  }
-
   runTask() {
     this.store.dispatch(runTask({
       taskId: this.task?.id!,
-      modelId: (this.form.value.selectedModel as Model).id
+      modelId: this.form.value.selectedModel!.id
     }));
   }
 
-  onRowSelect(event: { data?: Model & { experiment?: Experiment & { condition: number } } }){
-    const model = { ...event.data! };
-    delete model.experiment;
-    this.updateSelectedModel(model);
-  }
-
-  isEmptyOrNull(object: any) {
-    return !object || !Object.keys(object).length;
+  onRowSelect(event: { data?: Model }){
+    this.form.controls.selectedModel.setValue(event.data!);
   }
 }
