@@ -7,7 +7,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Task } from '../store/task';
 import { DropdownModule } from 'primeng/dropdown';
-import { fdsVersions, experiments, models } from '../store/model.selector';
+import { fdsVersions, experimentOptions, models } from '../store/model.selector';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { findModels } from '../store/model.actions';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -39,7 +39,7 @@ export class TaskRunComponent implements OnInit, OnChanges, AfterViewInit {
 
   models$ = this.store.select(models);
   fdsVersions$ = this.store.select(fdsVersions).pipe(first(fdsVersion => !!fdsVersion?.length));
-  experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
+  experiments$ = this.store.select(experimentOptions).pipe(first(experiments => !!experiments?.length));
 
   form = this.fb.group({
     selectedVersion: this.fb.control({}),

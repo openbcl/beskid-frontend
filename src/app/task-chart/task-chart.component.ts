@@ -11,6 +11,7 @@ import { ChartModule } from 'primeng/chart';
 })
 export class TaskChartComponent implements OnInit, OnChanges {
   @Input({ required: true }) values: string[] = [];
+  @Input() class: string = '';
 
   data = {
     labels: this.values.map((_, key) => `${key + 1}`),

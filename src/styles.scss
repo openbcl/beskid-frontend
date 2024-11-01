@@ -111,6 +111,10 @@ body {
   border: 0.25em solid var(--primary-color);
   border-radius: 10px;
   margin: -0.25em;
+  @media screen and (max-width: 767px) {
+     margin: 0;
+     padding: -0.25em;
+  }
   animation-name: be-highlighted-blinking;
   animation-duration: 1.5s;
   animation-iteration-count: infinite
@@ -210,8 +214,17 @@ p-panel.be-panel-no-padding .p-panel-content {
       padding-left: 1.25em;
     }
     
-    th:last-of-type, td:last-of-type  {
+    th:last-of-type, td:last-of-type {
       padding-right: 1.25em;
+    }
+    tr:last-of-type {
+      background: unset;
+      td:first-of-type {
+        border-bottom-left-radius: 6px;
+      }
+      td:last-of-type {
+        border-bottom-right-radius: 6px;
+      }
     }
   }
 }

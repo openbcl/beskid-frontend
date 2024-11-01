@@ -11,21 +11,24 @@ import { FileUpload, FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { PanelModule } from 'primeng/panel';
 import { DropdownModule } from 'primeng/dropdown';
+import { AccordionModule } from 'primeng/accordion';
 import { addTask } from '../store/task.actions';
 import { TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { environment } from '../../environments/environment';
 import { FileSizePipe } from '../shared/file-size.pipe';
-import { experiments } from '../store/model.selector';
-import { first } from 'rxjs';
-import { Experiment } from '../store/model';
+import { RecreateViewDirective } from '../shared/recreate-view.directive';
+import { ExperimentOption, ExperimentConditionOption, experimentOptions, models } from '../store/model.selector';
+import { filter, first, map } from 'rxjs';
 import { findModels } from '../store/model.actions';
+import { Experiment, Model } from '../store/model';
+import { uiState } from '../store/ui.selector';
 
 @Component({
     selector: 'be-task-create',
     standalone: true,
-    imports: [AsyncPipe, FileSizePipe, FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, DropdownModule, FileUploadModule, DialogModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent],
+    imports: [AsyncPipe, FileSizePipe, FormsModule, ReactiveFormsModule, InputSwitchModule, TableModule, InputTextModule, DropdownModule, FileUploadModule, DialogModule, ButtonModule, TooltipModule, PanelModule, TaskChartComponent, RecreateViewDirective, AccordionModule],
     providers: [DecimalPipe],
     templateUrl: './task-create.component.html',
     styleUrl: './task-create.component.scss'
@@ -33,24 +36,55 @@ import { findModels } from '../store/model.actions';
 export class TaskCreateComponent implements OnInit {
   isDevMode = () => isDevMode() || !environment.production
   numberPattern = /^-?\d+\.?\d*(e[+-]\d+)?$/;
-  help = 'You should submit exactly 100 values (numbers), separated either by commas, semicolons, line breaks or spaces.';
 
   @ViewChild('fileUpload')
   fileUpload!: FileUpload;
 
   form = this.fb.group({
     values: this.fb.array<FormControl<string>>([], { validators: [Validators.required]}),
-    selectedExperiment: this.fb.control({}, { validators: [Validators.required]}),
-    experimentCondition: this.fb.control({}, { validators: [Validators.required]}),
-    resolution: this.fb.control({}, { validators: [Validators.required]}),
-    training: false
+    experimentOption: this.fb.control<ExperimentOption | undefined>(undefined, { validators: [Validators.required] }),
+    experimentCondition: this.fb.control<ExperimentConditionOption | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
+    experimentResolution: this.fb.control<number | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
+    training: true
   });
 
-  experiments$ = this.store.select(experiments).pipe(first(experiments => !!experiments?.length));
+  help = () => `You should submit exactly ${this.form.value.experimentResolution} values (numbers), separated either by commas, semicolons, line breaks or spaces.`;
 
+  experimentOptions$ = this.store.select(experimentOptions).pipe(first(eO => !!eO?.length));
+  breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
   values$ = this.form.controls.values.valueChanges;
 
   showUploadDialog = false;
+
+  columns = [
+    { header: 'AI-model', width: 'auto' },
+    { header: 'Resolution', width: 'auto' },
+    { header: 'FDS', width: 'auto' },
+    { header: 'Experiment', width: 'auto' },
+    { header: 'Condition', width: 'auto' },
+    { header: 'Scale', width: 'auto' }
+  ];
+
+  rows$ = this.store.select(models).pipe(
+    filter(models => !!models.length),
+    map(models =>
+      models.map(model => model.experiments
+        .map(exp => exp.conditions
+          .map(condition => {
+            const experiment: Experiment & { condition: number } = {
+              ...exp,
+              condition
+            }
+            const row: Model & { experiment: Experiment & { condition: number } } = {
+              ...model,
+              experiment
+            }
+            return row;
+          }).flat()
+        ).flat()
+      ).flat()
+    )
+  );
 
   constructor(
     private fb: NonNullableFormBuilder,
@@ -59,6 +93,21 @@ export class TaskCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(findModels({}));
+  }
+
+  onChanges(fc: FormControl, event?: { value: ExperimentConditionOption }) {
+    if (event?.value.resolutions.length === 1) {
+      fc.setValue(event.value.resolutions[0]);
+    } else if (!event?.value || !this.form.value.experimentResolution || !event.value.resolutions.includes(this.form.value.experimentResolution)) {
+      fc.setValue(undefined);
+      this.form.controls.values.clear();
+    }
+    if (!this.form.value.experimentCondition?.value) {
+      this.form.controls.experimentCondition.enable();
+      this.form.controls.experimentResolution.disable();
+    } else {
+      this.form.controls.experimentResolution.enable();
+    }
   }
 
   async pasteFromClipboard() {
@@ -75,12 +124,12 @@ export class TaskCreateComponent implements OnInit {
     const splittedInput = input.replace(/\r\n|\s|;/g, ',').split(',');
     const rightValues = splittedInput.filter(value => !!value && value.match(this.numberPattern));
     this.form.controls.values.clear();
-    if (rightValues.length == 100) {
+    if (rightValues.length == this.form.value.experimentResolution!) {
       rightValues.forEach(value => this.form.controls.values.push(this.fb.control(value, { validators: [Validators.pattern(this.numberPattern)] })));
     } else if (!!input?.length) {
       const wrongValues = splittedInput.filter(value => !!value?.length && !value.match(this.numberPattern));
-      if (rightValues.length + wrongValues.length < 100) {
-        errors.push(this.help);
+      if (rightValues.length + wrongValues.length < this.form.value.experimentResolution!) {
+        errors.push(this.help());
       }
       if (!!wrongValues.length) {
         errors.push(`You have submitted ${rightValues.length} correct and ${wrongValues.length} incorrect values.`);
@@ -91,7 +140,7 @@ export class TaskCreateComponent implements OnInit {
   }
 
   addRandomValues() {
-    const values = [ ...Array(100) ].map(() => (Math.random() * 100 * [0.25, 1][Math.round(Math.random())])).sort((a, b) => a - b);
+    const values = [ ...Array(this.form.value.experimentResolution!) ].map(() => (Math.random() * this.form.value.experimentResolution! * [0.25, 1][Math.round(Math.random())])).sort((a, b) => a - b);
     const valuesUp = values.filter((_, i) => i % 4);
     const valuesDown = values.filter((_, i) => !(i % 4)).reverse();
     this.updateValues(valuesUp.concat(valuesDown).map(value => value.toExponential(18)).join(','));
@@ -115,9 +164,9 @@ export class TaskCreateComponent implements OnInit {
     const createTask = {
       values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
       condition: {
-        id: (this.form.value.selectedExperiment as Experiment).id,
-        resolution: this.form.value.resolution as number,
-        value: this.form.value.experimentCondition as number
+        id: this.form.value.experimentOption!.id,
+        resolution: this.form.value.experimentResolution as number,
+        value: this.form.value.experimentCondition!.value as number
       },
       training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
     };
