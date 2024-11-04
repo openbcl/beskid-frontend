@@ -11,6 +11,7 @@ import { ChartModule } from 'primeng/chart';
 })
 export class TaskChartComponent implements OnInit, OnChanges {
   @Input({ required: true }) values: string[] = [];
+  @Input() condition: string = '';
   @Input() class: string = '';
 
   data = {
@@ -67,7 +68,7 @@ export class TaskChartComponent implements OnInit, OnChanges {
       this.data = {
         labels: this.values.map((_, key) => `${key + 1}`),
         datasets: [{
-          label: 'Input values',
+          label: `Input values ${this.condition}`,
           data: this.values,
         }]
       }

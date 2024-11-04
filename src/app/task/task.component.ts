@@ -16,7 +16,7 @@ import { TaskRunComponent } from "../task-run/task-run.component";
 import { TaskResultsComponent } from "../task-results/task-results.component";
 import { TaskJobsComponent } from "../task-jobs/task-jobs.component";
 import { findModels } from '../store/model.actions';
-import { compatibleModels$ } from '../store/model.selector';
+import { compatibleModels$, models } from '../store/model.selector';
 import { filterNullish } from '../shared/rx.filter';
 import { LockableModel } from '../store/model';
 import { jobs } from '../store/job.selector';
@@ -47,14 +47,20 @@ export class TaskComponent implements OnInit {
   );
   
   running$ = this.store.select(isTaskRunning$(this.task$)).pipe(switchMap(running => running));
-  models$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
-  lockableModels$ = combineLatest([this.task$, this.store.select(jobs), this.models$]).pipe(map(combined => combined[2].map(model => ({
+  compatibleModels$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
+  lockableModels$ = combineLatest([this.task$, this.store.select(jobs), this.compatibleModels$]).pipe(map(combined => combined[2].map(model => ({
     ...model,
     locked:
       !!combined[0].results.find(result => result.model.id === model.id) || 
       !!combined[0].jobs?.find(job => job.model.id === model.id) ||
       !!combined[1].find(job => job.taskId === combined[0].id && job.model.id === model.id)
   }) as LockableModel)));
+  conditionDesc$ = combineLatest([this.task$, this.store.select(models)]).pipe(map(combined =>
+    {
+      const conditionMU = combined[1].map(model => model.experiments).flat().find(experiment => experiment.id === combined[0].condition.id && experiment.conditions.includes(combined[0].condition.value))?.conditionMU;
+      return !!conditionMU?.length ? `(${combined[0].condition.id}): ${combined[0].condition.value} ${conditionMU}` : ''
+    }
+  ));
 
   constructor(
     private confirmationService: ConfirmationService,
