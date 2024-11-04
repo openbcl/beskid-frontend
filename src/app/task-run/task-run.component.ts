@@ -1,25 +1,26 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { map } from 'rxjs';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
+import { MessagesModule } from 'primeng/messages';
+import { Table, TableModule } from 'primeng/table';
 import { Task } from '../store/task';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { map } from 'rxjs';
 import { LockableModel, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
-import { TooltipModule } from 'primeng/tooltip';
-import { Table, TableModule } from 'primeng/table';
 import { uiState } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
   selector: 'be-task-run',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, ButtonModule, TableModule, TooltipModule, BlockUIModule, ProgressSpinnerModule, RecreateViewDirective, TagModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, PanelModule, MessagesModule, ButtonModule, TableModule, TooltipModule, BlockUIModule, ProgressSpinnerModule, RecreateViewDirective, TagModule],
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
