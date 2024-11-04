@@ -1,44 +1,40 @@
 <form [formGroup]="form">
-  @if (running$ | async; as running) {
+  @if (running) {
     <p-blockUI [target]="pnl" [blocked]="running">
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
   }
   <p-panel #pnl header="Run Task Job">
     @if(breakpoint$ | async; as breakpoint) {
-      @if(models$ | async; as models) {
-        <p-table *beRecreateViewKey="breakpoint" responsiveLayout="stack" [breakpoint]="breakpoint" styleClass="p-datatable-striped" [columns]="columns" [value]="models" sortMode="multiple" selectionMode="single" (onRowSelect)="onRowSelect($event)">
-          <ng-template pTemplate="header" let-columns>
-              <tr>
-                <th [style]="'width: ' + columns[0].width" pSortableColumn="name">
-                  {{ columns[0].header }}
-                  <p-sortIcon field="name" />
-                </th>
-                <th [style]="'width: ' + columns[1].width" pSortableColumn="fds.version">
-                  {{ columns[1].header }}
-                  <p-sortIcon field="fds.version" />
-                </th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
-                <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.name }}</td>
-                <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>
-                  <div>
-                    {{ rowData.fds.version }}
-                    @if(!!rowData.fds.revision?.length) {
-                      <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.fds.revision}}" tooltipPosition="top"></i>
-                    }
-                  </div>
-                </td>
-              </tr>
-          </ng-template>
-        </p-table>
-      }
+      <p-table *beRecreateViewKey="breakpoint" responsiveLayout="stack" [breakpoint]="breakpoint" styleClass="p-datatable-striped" [columns]="columns" [value]="models" sortMode="multiple" selectionMode="single" (onRowSelect)="onRowSelect($event)">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th [style]="'width: ' + columns[0].width" pSortableColumn="name">
+                {{ columns[0].header }}
+                <p-sortIcon field="name" />
+              </th>
+              <th [style]="'width: ' + columns[1].width" pSortableColumn="fds.version">
+                {{ columns[1].header }}
+                <p-sortIcon field="fds.version" />
+              </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr [pSelectableRow]="rowData">
+              <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.name }}</td>
+              <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>
+                <div>
+                  {{ rowData.fds.version }}
+                  <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.fds.revision}}" tooltipPosition="top"></i>
+                </div>
+              </td>
+            </tr>
+        </ng-template>
+      </p-table>
     }
     <ng-template pTemplate="footer">
       <div class="flex justify-content-end align-items-center">
-        <p-button [class.be-highlighted]="!task?.results?.length" label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
+        <p-button [class.be-highlighted]="!task.results.length" label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
       </div>
     </ng-template>
   </p-panel>

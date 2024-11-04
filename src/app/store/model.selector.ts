@@ -2,6 +2,7 @@ import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { ModelState, modelFeatureKey } from "./model.reducer";
 import { Experiment, Model } from "./model";
 import { Task } from "./task";
+import { map, Observable } from "rxjs";
 
 export const getModelState = createFeatureSelector<ModelState>(modelFeatureKey);
 
@@ -35,11 +36,13 @@ export interface ExperimentOption {
   conditions: ExperimentConditionOption[]
 }
 
-export const compatibleModels = (task: Task) => createSelector(
+export const compatibleModels$ = (task$: Observable<Task>) => createSelector(
   getModelState,
-  modelState => modelState.models.filter(model => 
-    task.condition.resolution === model.resolution &&
-    model.experiments.find(e => e.id === task.condition.id && e.conditions.includes(task.condition.value))
+  modelState => task$.pipe(
+    map(task => modelState.models.filter(model => 
+      task.condition.resolution === model.resolution &&
+      model.experiments.find(e => e.id === task.condition.id && e.conditions.includes(task.condition.value))
+    ))
   )
 )
 

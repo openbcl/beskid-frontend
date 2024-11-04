@@ -2,8 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { task } from '../store/task.selector';
-import { filter, map, switchMap,  take,  tap } from 'rxjs';
+import { isTaskRunning$, task } from '../store/task.selector';
+import { filter, map, Observable, switchMap,  take,  tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
 import { Task, TaskResultEvaluation } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
@@ -15,6 +15,9 @@ import { deleteTask } from '../store/task.actions';
 import { TaskRunComponent } from "../task-run/task-run.component";
 import { TaskResultsComponent } from "../task-results/task-results.component";
 import { TaskJobsComponent } from "../task-jobs/task-jobs.component";
+import { findModels } from '../store/model.actions';
+import { compatibleModels$ } from '../store/model.selector';
+import { filterNullish } from '../shared/rx.filter';
 
 
 @Component({
@@ -37,8 +40,12 @@ export class TaskComponent implements OnInit {
           taskId && this.store.dispatch(findTask({ taskId }))
         }
       })
-    ))
+    )),
+    filterNullish()
   );
+
+  running$ = this.store.select(isTaskRunning$(this.task$)).pipe(switchMap(running => running));
+  models$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -46,6 +53,7 @@ export class TaskComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.store.dispatch(findModels());
     this.activatedRoute.params.pipe(take(1), map((p) => p['taskId'] as string)).subscribe(taskId => this.store.dispatch(findTask({ taskId })));
   }
 
