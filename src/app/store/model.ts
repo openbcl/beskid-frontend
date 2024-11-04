@@ -24,4 +24,8 @@ export interface Model {
   fds: FDS;
 }
 
+export interface LockableModel extends Model {
+  locked: boolean;
+}
+
 export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds'> {}

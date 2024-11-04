@@ -1,6 +1,6 @@
 <div class="flex flex-column row-gap-3">
 @if (task$ | async; as task) {
-    <be-task-run [task]="task" [models]="(models$ | async) || []" [running]="(running$ | async) || false"></be-task-run>
+    <be-task-run [task]="task" [lockableModels]="(lockableModels$ | async) || []" [running]="(running$ | async) || false"></be-task-run>
     <be-task-results [task]="task"></be-task-results>
     <div class="grid -mb-2">
         <p-panel class="be-panel-data col-12 xl:col-6">

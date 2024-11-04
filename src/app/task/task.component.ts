@@ -2,15 +2,15 @@ import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmationService } from 'primeng/api';
+import { combineLatest, filter, map, switchMap,  take,  tap } from 'rxjs';
 import { isTaskRunning$, task } from '../store/task.selector';
-import { filter, map, Observable, switchMap,  take,  tap } from 'rxjs';
 import { findTask } from '../store/task.actions';
 import { Task, TaskResultEvaluation } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { NumbersToStringsPipe } from "../shared/numbers-to-strings.pipe";
-import { PanelModule } from 'primeng/panel';
-import { ButtonModule } from 'primeng/button';
-import { ConfirmationService } from 'primeng/api';
 import { deleteTask } from '../store/task.actions';
 import { TaskRunComponent } from "../task-run/task-run.component";
 import { TaskResultsComponent } from "../task-results/task-results.component";
@@ -18,6 +18,8 @@ import { TaskJobsComponent } from "../task-jobs/task-jobs.component";
 import { findModels } from '../store/model.actions';
 import { compatibleModels$ } from '../store/model.selector';
 import { filterNullish } from '../shared/rx.filter';
+import { LockableModel } from '../store/model';
+import { jobs } from '../store/job.selector';
 
 
 @Component({
@@ -43,9 +45,16 @@ export class TaskComponent implements OnInit {
     )),
     filterNullish()
   );
-
+  
   running$ = this.store.select(isTaskRunning$(this.task$)).pipe(switchMap(running => running));
   models$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
+  lockableModels$ = combineLatest([this.task$, this.store.select(jobs), this.models$]).pipe(map(combined => combined[2].map(model => ({
+    ...model,
+    locked:
+      !!combined[0].results.find(result => result.model.id === model.id) || 
+      !!combined[0].jobs?.find(job => job.model.id === model.id) ||
+      !!combined[1].find(job => job.taskId === combined[0].id && job.model.id === model.id)
+  }) as LockableModel)));
 
   constructor(
     private confirmationService: ConfirmationService,
