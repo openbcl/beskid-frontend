@@ -40,8 +40,8 @@ export const compatibleModels$ = (task$: Observable<Task>) => createSelector(
   getModelState,
   modelState => task$.pipe(
     map(task => modelState.models.filter(model => 
-      task.condition.resolution === model.resolution &&
-      model.experiments.find(e => e.id === task.condition.id && e.conditions.includes(task.condition.value))
+      task.setting.resolution === model.resolution &&
+      model.experiments.find(e => e.id === task.setting.id && e.conditions.includes(task.setting.condition))
     ))
   )
 )

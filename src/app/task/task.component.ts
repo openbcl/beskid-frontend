@@ -57,8 +57,8 @@ export class TaskComponent implements OnInit {
   }) as LockableModel)));
   conditionDesc$ = combineLatest([this.task$, this.store.select(models)]).pipe(map(combined =>
     {
-      const conditionMU = combined[1].map(model => model.experiments).flat().find(experiment => experiment.id === combined[0].condition.id && experiment.conditions.includes(combined[0].condition.value))?.conditionMU;
-      return !!conditionMU?.length ? `(${combined[0].condition.id}): ${combined[0].condition.value} ${conditionMU}` : ''
+      const conditionMU = combined[1].map(model => model.experiments).flat().find(experiment => experiment.id === combined[0].setting.id && experiment.conditions.includes(combined[0].setting.condition))?.conditionMU;
+      return !!conditionMU?.length ? `(${combined[0].setting.id}): ${combined[0].setting.condition} ${conditionMU}` : ''
     }
   ));
 

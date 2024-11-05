@@ -6,23 +6,23 @@ export enum TaskTraining {
   ENABLED = 'ENABLED',
 }
 
-export interface TaskCondition {
+export interface TaskSetting {
   id: string;
   resolution: number;
-  value: number;
+  condition: number;
 }
 
 export interface Task {
   id: string;
   values: number[];
-  condition: TaskCondition;
+  setting: TaskSetting;
   training: TaskTraining;
   date: Date;
   results: TaskResult[];
   jobs?: Job[];
 }
 
-export interface CreateTask extends Pick<Task, 'values' | 'condition' | 'training'>{};
+export interface CreateTask extends Pick<Task, 'values' | 'setting' | 'training'>{};
 
 export enum TaskResultEvaluation {
   NEUTRAL = 'NEUTRAL',

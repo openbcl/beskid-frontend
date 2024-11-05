@@ -163,10 +163,10 @@ export class TaskCreateComponent implements OnInit {
   addTask() {
     const createTask = {
       values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
-      condition: {
+      setting: {
         id: this.form.value.experimentOption!.id,
         resolution: this.form.value.experimentResolution as number,
-        value: this.form.value.experimentCondition!.value as number
+        condition: this.form.value.experimentCondition!.value as number
       },
       training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
     };
