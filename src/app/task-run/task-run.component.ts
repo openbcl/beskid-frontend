@@ -42,6 +42,7 @@ export class TaskRunComponent {
     { header: '', width: '1px' },
     { header: 'AI-model', width: 'auto' },
     { header: 'FDS', width: 'auto' },
+    { header: 'Description', width: 'auto' },
   ];
 
   constructor(

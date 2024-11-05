@@ -18,6 +18,7 @@ export interface Experiment {
 
 export interface Model {
   id: number;
+  description: string,
   name: string;
   resolution: number;
   experiments: Experiment[];

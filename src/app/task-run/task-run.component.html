@@ -26,7 +26,7 @@
         (onRowUnselect)="unselectRow()">
         <ng-template pTemplate="header" let-columns>
             <tr>
-              <th [style]="'width: ' + columns[0].width" pSortableColumn="name"></th>
+              <th [style]="'width: ' + columns[0].width"></th>
               <th [style]="'width: ' + columns[1].width" pSortableColumn="name">
                 {{ columns[1].header }}
                 <p-sortIcon field="name" />
@@ -35,23 +35,34 @@
                 {{ columns[2].header }}
                 <p-sortIcon field="fds.version" />
               </th>
+              <th [style]="'width: ' + columns[3].width" pSortableColumn="description">
+                {{ columns[3].header }}
+                <p-sortIcon field="description" />
+              </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData" [pSelectableRowDisabled]="rowData.locked" [class.text-400]="rowData.locked">
               <td><p-tableCheckbox [value]="rowData" [disabled]="rowData.locked"/></td>
-              <td [class.flex]="rowData.locked" class="align-items-center gap-2">
+              <td>
                 <span class="p-column-title font-semibold">{{ columns[1].header }}</span>
-                {{ rowData.name }}
-                @if (rowData.locked) {
-                  <p-tag [rounded]="true" severity="secondary" value="already processed"/>
-                }
+                <div class="flex align-items-center align-content-between gap-2">
+                  {{ rowData.name }}
+                  @if (rowData.locked) {
+                    <p-tag [rounded]="true" severity="secondary" value="already processed"/>
+                  }
+                </div>
               </td>
-              <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>
+              <td>
+                <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
                 <div>
                   {{ rowData.fds.version }}
                   <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.fds.revision}}" tooltipPosition="top"></i>
                 </div>
+              </td>
+              <td>
+                <span class="p-column-title font-semibold">{{ columns[3].header }}</span>
+                {{ rowData.description }}
               </td>
             </tr>
         </ng-template>
