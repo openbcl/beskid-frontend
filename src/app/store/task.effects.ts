@@ -118,7 +118,7 @@ export class TaskEffects {
     tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs())),
     switchMap(action => of(
       !!action.task.jobs?.length ?
-        ToastActions.toastSuccess({
+        ToastActions.toastInfo({
           summary: 'New job added to queue!',
           detail: action.task.id
         }) :
