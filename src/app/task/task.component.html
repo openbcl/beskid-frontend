@@ -16,9 +16,7 @@
           </div>
         </div>
       </ng-template>
-      @if (conditionDesc$ | async; as conditionDesc) {
-        <be-task-chart [values]="(task.values) | numbersToStrings" [condition]="conditionDesc"></be-task-chart>
-      }
+      <be-task-chart [values]="(task.values) | numbersToStrings" [title]="task.setting.name" label="Input values, condition: {{task.setting.condition}} {{task.setting.conditionMU}}"></be-task-chart>
     </p-panel>
     <be-task-jobs class="col-12 xl:col-6" [taskId]="task.id"></be-task-jobs>
   </div>

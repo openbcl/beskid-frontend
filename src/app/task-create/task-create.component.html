@@ -99,7 +99,7 @@
     </ng-template>
     @if(values$ | async; as values) {
       @if(!!values?.length) {
-        <be-task-chart class="p-2" [values]="values" condition="({{form.value.experimentOption?.id}}): {{form.value.experimentCondition?.name}}"></be-task-chart>
+        <be-task-chart class="p-2 pt-0" [values]="values" [title]="form.value.experimentOption?.name || ''" label="Input values, condition: {{form.value.experimentCondition?.name}}"></be-task-chart>
       }
     }
     <p-table [value]="form.controls.values.controls" styleClass="p-datatable-striped">

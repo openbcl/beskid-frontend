@@ -16,7 +16,7 @@ import { TaskRunComponent } from "../task-run/task-run.component";
 import { TaskResultsComponent } from "../task-results/task-results.component";
 import { TaskJobsComponent } from "../task-jobs/task-jobs.component";
 import { findModels } from '../store/model.actions';
-import { compatibleModels$, models } from '../store/model.selector';
+import { compatibleModels$ } from '../store/model.selector';
 import { filterNullish } from '../shared/rx.filter';
 import { LockableModel } from '../store/model';
 import { jobs } from '../store/job.selector';
@@ -55,12 +55,6 @@ export class TaskComponent implements OnInit {
       !!combined[0].jobs?.find(job => job.model.id === model.id) ||
       !!combined[1].find(job => job.taskId === combined[0].id && job.model.id === model.id)
   }) as LockableModel)));
-  conditionDesc$ = combineLatest([this.task$, this.store.select(models)]).pipe(map(combined =>
-    {
-      const conditionMU = combined[1].map(model => model.experiments).flat().find(experiment => experiment.id === combined[0].setting.id && experiment.conditions.includes(combined[0].setting.condition))?.conditionMU;
-      return !!conditionMU?.length ? `(${combined[0].setting.id}): ${combined[0].setting.condition} ${conditionMU}` : ''
-    }
-  ));
 
   constructor(
     private confirmationService: ConfirmationService,

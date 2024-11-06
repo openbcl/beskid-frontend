@@ -14,7 +14,7 @@ import { Table, TableModule } from 'primeng/table';
 import { Task } from '../store/task';
 import { LockableModel, Model } from '../store/model';
 import { runTask } from '../store/task.actions';
-import { uiState } from '../store/ui.selector';
+import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
@@ -32,7 +32,7 @@ export class TaskRunComponent {
   @ViewChild('beModelTable')
   beModelTable!: Table;
 
-  breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
+  breakpoint$ = this.store.select(breakpoint);
 
   form = this.fb.group({
     selectedModel: this.fb.control<Model | undefined>(undefined, { validators: [Validators.required]}),

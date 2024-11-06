@@ -61,7 +61,7 @@ export class ToolbarComponent {
 
   checkChangeShowTaskListSidebar() {
     const body = (this.elementRef.nativeElement as HTMLElement).parentElement;
-    if (body && body.offsetWidth <= 700) {
+    if (body && body.offsetWidth <= 764) {
       this.changeShowTaskListSidebar();
     }
   }

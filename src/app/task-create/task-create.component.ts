@@ -13,7 +13,7 @@ import { PanelModule } from 'primeng/panel';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { addTask } from '../store/task.actions';
-import { TaskTraining } from '../store/task';
+import { CreateTask, TaskTraining } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { environment } from '../../environments/environment';
@@ -23,7 +23,7 @@ import { ExperimentOption, ExperimentConditionOption, experimentOptions, models 
 import { filter, first, map } from 'rxjs';
 import { findModels } from '../store/model.actions';
 import { Experiment, Model } from '../store/model';
-import { uiState } from '../store/ui.selector';
+import { breakpoint } from '../store/ui.selector';
 
 @Component({
     selector: 'be-task-create',
@@ -51,7 +51,7 @@ export class TaskCreateComponent implements OnInit {
   help = () => `You should submit exactly ${this.form.value.experimentResolution} values (numbers), separated either by commas, semicolons, line breaks or spaces.`;
 
   experimentOptions$ = this.store.select(experimentOptions).pipe(first(eO => !!eO?.length));
-  breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
+  breakpoint$ = this.store.select(breakpoint);
   values$ = this.form.controls.values.valueChanges;
 
   showUploadDialog = false;
@@ -161,7 +161,7 @@ export class TaskCreateComponent implements OnInit {
   }
 
   addTask() {
-    const createTask = {
+    const createTask: CreateTask = {
       values: (this.form.value.values as string[]).map(value => Number.parseFloat(value)),
       setting: {
         id: this.form.value.experimentOption!.id,

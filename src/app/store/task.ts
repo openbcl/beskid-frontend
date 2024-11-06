@@ -8,8 +8,10 @@ export enum TaskTraining {
 
 export interface TaskSetting {
   id: string;
+  name: string;
   resolution: number;
   condition: number;
+  conditionMU: string;
 }
 
 export interface Task {
@@ -22,7 +24,9 @@ export interface Task {
   jobs?: Job[];
 }
 
-export interface CreateTask extends Pick<Task, 'values' | 'setting' | 'training'>{};
+export interface CreateTask extends Pick<Task, 'values' | 'training'> {
+  setting: Omit<TaskSetting, 'name' | 'conditionMU'>
+};
 
 export enum TaskResultEvaluation {
   NEUTRAL = 'NEUTRAL',

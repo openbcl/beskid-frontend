@@ -1,14 +1,29 @@
 <p-card class="select-none cursor-pointer border-round-3xl">
   <ng-template pTemplate="header">
-    <div class="be-task-item-header flex justify-content-between align-items-center px-2 pt-2 pb-1 border-round-top-lg border-bottom-1 surface-border">
-      <span class="text-xl font-bold ml-2 py-2">Task {{ nr }}</span><span class="text-sm font-bold ml-2 py-2">#{{ task.id.split('-')[0] }}</span>
-      @if (running$ | async) {
-        <p-progressSpinner styleClass="ml-2 w-2rem h-2rem"></p-progressSpinner>
-      }
+    <div class="be-task-item-header grid m-0 px-3 h-3rem align-items-center border-round-top-lg border-bottom-1 surface-border">
+      <span class="col-4 text-xl font-bold p-0">Task</span>
+      <span class="col-4 text-sm font-bold p-0 text-center">#{{ task.id.split('-')[0] }}</span>
+      <div class="col-4 text-right p-0">
+        @if (running$ | async) {
+          <p-progressSpinner styleClass="ml-2 w-2rem h-2rem"></p-progressSpinner>
+        }
+      </div>
   </div>
   </ng-template>
   <div class="flex flex-column justify-content-center gap-2 align-items-center">
-    <p class="m-0">{{ task.date | date }}</p>
-    <p class="m-0">{{ task.date | date:'shortTime' }}</p>
+    <table class="w-full">
+      <tr>
+        <td class="font-semibold pr-1">Input</td>
+        <td>{{ task.setting.name }}</td>
+      </tr>
+      <tr>
+        <td class="font-semibold pr-1">Condition</td>
+        <td>{{ task.setting.condition }} {{ task.setting.conditionMU }}</td>
+      </tr>
+      <tr>
+        <td class="font-semibold pr-1">Date</td>
+        <td>{{ task.date | date }} {{ task.date | date:'shortTime' }}</td>
+      </tr>
+    </table>
   </div>
 </p-card>
