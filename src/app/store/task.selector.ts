@@ -1,6 +1,8 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { TaskState, taskFeatureKey } from "./task.reducer";
 import { activeOrWaitingJobsOfTask } from "./job.selector";
+import { map, Observable } from "rxjs";
+import { Task } from "./task";
 
 export const getTaskState = createFeatureSelector<TaskState>(taskFeatureKey);
 
@@ -13,6 +15,11 @@ export const task = (taskId?: string) => createSelector(
 export const tasks = createSelector(
   getTaskState,
   taskState => taskState.tasks
+);
+
+export const isTaskRunning$ = (task$: Observable<Task>) => createSelector(
+  getTaskState,
+  taskState => task$.pipe(map(task => !!taskState.running.find(runningTaskId => runningTaskId === task.id)))
 );
 
 export const isTaskRunning = (taskId: string) => createSelector(

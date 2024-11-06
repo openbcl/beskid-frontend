@@ -77,7 +77,7 @@ export const deleteTaskFailure = createAction(
 
 export const runTask = createAction(
   '[Task] Run Task',
-  props<{ taskId: string, modelId: number, resolution: number }>()
+  props<{ taskId: string, modelId: number }>()
 );
 
 export const runTaskSuccess = createAction(

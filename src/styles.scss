@@ -111,6 +111,10 @@ body {
   border: 0.25em solid var(--primary-color);
   border-radius: 10px;
   margin: -0.25em;
+  @media screen and (max-width: 767px) {
+     margin: 0;
+     padding: -0.25em;
+  }
   animation-name: be-highlighted-blinking;
   animation-duration: 1.5s;
   animation-iteration-count: infinite
@@ -210,9 +214,41 @@ p-panel.be-panel-no-padding .p-panel-content {
       padding-left: 1.25em;
     }
     
-    th:last-of-type, td:last-of-type  {
+    th:last-of-type, td:last-of-type {
       padding-right: 1.25em;
     }
+    tr:last-of-type {
+      background: unset;
+      td:first-of-type {
+        border-bottom-left-radius: 6px;
+      }
+      td:last-of-type {
+        border-bottom-right-radius: 6px;
+      }
+    }
+  }
+}
+
+.be-no-top-margin {
+  div {
+    margin-top: 0;
+  }
+}
+
+.be-table-rounded table {
+  border: solid 1px var(--surface-d);
+  border-radius: 6px;
+  th:first-of-type {
+    border-top-left-radius: 6px;
+  }
+  th:last-of-type {
+    border-top-right-radius: 6px;
+  }
+  td:first-of-type {
+    border-bottom-left-radius: 6px;
+  }
+  td:last-of-type {
+    border-bottom-right-radius: 6px;
   }
 }
 
@@ -284,9 +320,9 @@ be-task-list {
   background-color: var(--primary-100);
   height: 100vh;
   z-index: 80;
-  min-width: calc(env(safe-area-inset-right) + 16rem);
+  min-width: calc(env(safe-area-inset-right) + 20rem);
   padding-left: env(safe-area-inset-right) !important;
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 764px) {
     width: 100vw;
   }
 
@@ -307,8 +343,11 @@ be-task-list {
         background-color: var(--surface-ground);
       }
     }
-    .p-card-content {
-      padding: 0;
+    .p-card-body {
+      padding: 0.5rem 1rem 0.75rem 1rem;
+      .p-card-content {
+        padding: 0;
+      }
     }
     .p-card.p-component {
       border-radius: 0.5rem;
@@ -357,10 +396,10 @@ be-task-list {
 }
 
 .be-content.be-sidebar-visible {
-  @media screen and (min-width: 701px) {
-    margin-left: 16rem;
+  @media screen and (min-width: 765px) {
+    margin-left: 20rem;
   }
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: 764px) {
     margin-left: 100vw;
     visibility: collapse;
     transition: visibility 0.15s;

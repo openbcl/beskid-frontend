@@ -23,7 +23,7 @@
         <div class="table be-jobs-in-queue">
           @if(jobs$ | async; as jobs){
             @for (job of jobs; track $index) {
-              <div class="col flex align-items-center cursor-pointer justify-content-between be-job" [routerLink]="[ 'tasks', job.taskId ]" (click)="op.hide()">
+              <div class="col flex align-items-center cursor-pointer justify-content-between be-job" [routerLink]="[ '/tasks', job.taskId ]" [fragment]="job.model.name" (click)="op.hide()">
                 <p>Job <span class="be-courier-font text-lg">#{{ job.jobId.split('-')[0] }}</span> |
                   Task <span class="be-courier-font text-lg" [style.color]="'#'+ job.taskId.split('-')[0].substring(0,6)">#{{ job.taskId.split('-')[0] }}</span>
                 </p>

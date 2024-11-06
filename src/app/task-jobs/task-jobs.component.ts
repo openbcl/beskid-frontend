@@ -7,11 +7,12 @@ import { AsyncPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Job } from '../store/job';
 import { JobStatusComponent } from '../job-status/job-status.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'be-task-jobs',
   standalone: true,
-  imports: [AsyncPipe, PanelModule, TableModule, JobStatusComponent],
+  imports: [AsyncPipe, PanelModule, TableModule, RouterLink, JobStatusComponent],
   templateUrl: './task-jobs.component.html',
   styleUrl: './task-jobs.component.scss'
 })
@@ -24,7 +25,7 @@ export class TaskJobsComponent implements OnChanges  {
 
   columns = [
     { header: 'AI-model', width: 'auto' },
-    { header: 'Resolution', width: 'auto' },
+    { header: 'FDS', width: 'auto' },
     { header: 'State', width: 'auto' }
   ];
 

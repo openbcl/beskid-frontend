@@ -12,12 +12,21 @@ export interface Experiment {
   id: string;
   name: string;
   scale: Scale;
+  conditions: number[];
+  conditionMU: string
 }
 
 export interface Model {
   id: number;
+  description: string,
   name: string;
-  resolutions: number[];
-  experiments?: Experiment[];
-  fds?: FDS[];
+  resolution: number;
+  experiments: Experiment[];
+  fds: FDS;
 }
+
+export interface LockableModel extends Model {
+  locked: boolean;
+}
+
+export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds'> {}

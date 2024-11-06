@@ -14,7 +14,7 @@ import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult } from '
 import { resultFile } from '../store/task.selector';
 import { ConfirmationService } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
-import { uiState } from '../store/ui.selector';
+import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
@@ -27,7 +27,7 @@ import { RecreateViewDirective } from '../shared/recreate-view.directive';
 export class TaskResultsComponent implements OnChanges {
   @Input({ required: true }) task!: Task;
 
-  breakpoint$ = this.store.select(uiState).pipe(map(uiState => uiState.showTaskListSidebar ? '1200px' : '830px'));
+  breakpoint$ = this.store.select(breakpoint);
 
   evaluationOptions = [
     { icon: 'far fa-face-frown', evaluation: TaskResultEvaluation.NEGATIVE },
@@ -40,7 +40,7 @@ export class TaskResultsComponent implements OnChanges {
   data$ = this.task$.pipe(map(task => {
     const columns = [
       { header: 'AI-model', width: 'auto' },
-      { header: 'Resolution', width: 'auto' },
+      { header: 'FDS', width: 'auto' },
       { header: 'Date', width: 'auto' }
     ];
     if (task!.training === TaskTraining.ENABLED) {
