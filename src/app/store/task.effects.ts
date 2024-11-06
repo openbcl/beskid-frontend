@@ -106,7 +106,7 @@ export class TaskEffects {
   runTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTask),
     concatMap(action =>
-      this.taskService.runTask(action.taskId, action.modelId, action.resolution).pipe(
+      this.taskService.runTask(action.taskId, action.modelId).pipe(
         map(task => TaskActions.runTaskSuccess({ task })),
         catchError(error => of(TaskActions.runTaskFailure({ error, taskId: action.taskId })))
       )
@@ -118,7 +118,7 @@ export class TaskEffects {
     tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs())),
     switchMap(action => of(
       !!action.task.jobs?.length ?
-        ToastActions.toastSuccess({
+        ToastActions.toastInfo({
           summary: 'New job added to queue!',
           detail: action.task.id
         }) :

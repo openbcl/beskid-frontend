@@ -14,15 +14,7 @@ export class ModelService {
     return this.http.get<Model>(`${environment.api}/v1/models/${modelId}`);
   }
 
-  findModels(fdsVersion?: string, experimentID?: string) {
-    let url = `${environment.api}/v1/models`
-    if (!!fdsVersion?.length && !!experimentID?.length) {
-      url += `?fdsVersion=${fdsVersion}&experimentID=${experimentID}`
-    } else if (!!fdsVersion?.length) {
-      url += `?fdsVersion=${fdsVersion}`
-    } else if (!!experimentID?.length) {
-      url += `?experimentID=${experimentID}`
-    }
-    return this.http.get<Model[]>(url);
+  findModels() {
+    return this.http.get<Model[]>(`${environment.api}/v1/models`);
   }
 }

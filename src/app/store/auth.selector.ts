@@ -12,3 +12,8 @@ export const isValid = createSelector(
   getAuthState,
   authState => authState.isValid
 );
+
+export const validityPeriodInDays = createSelector(
+  getAuthState,
+  authState => authState.validityPeriodInDays
+);

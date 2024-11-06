@@ -17,8 +17,7 @@ export const findModelFailure = createAction(
 );
 
 export const findModels = createAction(
-  '[Model] Find Models',
-  props<{ fdsVersion?: string, experimentID?: string }>()
+  '[Model] Find Models'
 );
 
 export const findModelsSuccess = createAction(

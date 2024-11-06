@@ -23,7 +23,7 @@ export class TaskListComponent {
 
   changeShowTaskListSidebar() {
     const body = (this.elementRef.nativeElement as HTMLElement).parentElement?.parentElement;
-    if (body && body.offsetWidth <= 700) {
+    if (body && body.offsetWidth <= 764) {
       this.store.dispatch(changeTaskListSidebarVisibility())
     }
   }

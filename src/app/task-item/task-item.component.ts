@@ -16,7 +16,6 @@ import { Subject, switchMap } from 'rxjs';
 })
 export class TaskItemComponent implements AfterViewInit {
   @Input(({ required: true })) task!: Task;
-  @Input(({ required: true })) nr!: number;
 
   taskId$ = new Subject<string>();
   running$ = this.taskId$.pipe(switchMap(taskId => this.store.select(areTaskJobsRunning(taskId))));

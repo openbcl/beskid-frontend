@@ -11,6 +11,9 @@ import { ChartModule } from 'primeng/chart';
 })
 export class TaskChartComponent implements OnInit, OnChanges {
   @Input({ required: true }) values: string[] = [];
+  @Input() label: string = '';
+  @Input() title: string = '';
+  @Input() class: string = '';
 
   data = {
     labels: this.values.map((_, key) => `${key + 1}`),
@@ -32,11 +35,23 @@ export class TaskChartComponent implements OnInit, OnChanges {
       maintainAspectRatio: false,
       aspectRatio: 0.8,
       plugins: {
-          legend: {
-              labels: {
-                  color: textColor
-              }
+        legend: {
+            labels: {
+                color: textColor,
+                font: {
+                  family: documentStyle.getPropertyValue('--font-family')
+                }
+            }
+        },
+        title: {
+          display: true,
+          text: this.title,
+          color: textColor,
+          font: {
+            size: 15,
+            family: documentStyle.getPropertyValue('--font-family')
           }
+        }
       },
       scales: {
           x: {
@@ -62,11 +77,14 @@ export class TaskChartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['title'] && this.title && this.options) {
+      this.options.plugins.title.text = this.title;
+    }
     if (changes['values'] && this.values) {
       this.data = {
         labels: this.values.map((_, key) => `${key + 1}`),
         datasets: [{
-          label: 'Input values',
+          label: this.label,
           data: this.values,
         }]
       }

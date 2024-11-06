@@ -10,3 +10,8 @@ export const uiState = createSelector(
     processing: uiState.processing
   })
 );
+
+export const breakpoint = createSelector(
+  getUiState,
+  uiState => uiState.showTaskListSidebar ? '1264px' : '894px'
+);
