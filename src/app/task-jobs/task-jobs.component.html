@@ -18,7 +18,7 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
+        <tr class="cursor-pointer" [pSelectableRow]="rowData" [routerLink]="[]" [fragment]="rowData.model.name">
           <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
           <td class="text-center"><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.fds.version }}</td>
           <td class="flex justify-content-end">
@@ -28,7 +28,7 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
-        <tr>
+        <tr class="cursor-pointer" [routerLink]="[]" fragment="run">
           <td colspan="3" class="text-center">No jobs are currently running.</td>
         </tr>
       </ng-template>

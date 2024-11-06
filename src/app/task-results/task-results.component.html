@@ -36,7 +36,7 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-          <tr [pSelectableRow]="rowData">
+          <tr [pSelectableRow]="rowData" [id]="rowData.model.name">
               <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
               <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.fds.version }}</td>
               <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>{{ rowData.date | date:'medium' }}</td>
