@@ -54,7 +54,7 @@
       </p-table>
     }
   </p-panel>
-  <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': ' + selectedResult?.model?.resolution + ')'" [(visible)]="selectedResult" [modal]="true" [maximizable]="true">
+  <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': FDS ' + selectedResult?.model?.fds?.version + ')'" [(visible)]="selectedResult" [modal]="true" [maximizable]="true">
     <label class="flex justify-content-center pt-2 pb-2 bg-primary border-noround-bottom border-round-2xl">{{ selectedResult?.date | date:'medium' }}</label>
     @if (taskResult$ | async; as taskResultData) {
       <p-table [value]="taskResultData" styleClass="p-datatable-striped">
