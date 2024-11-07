@@ -115,18 +115,11 @@ export class TaskEffects {
 
   runTaskSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.runTaskSuccess),
-    tap(action => !!action.task.jobs?.length && this.store.dispatch(JobActions.findJobs())),
-    switchMap(action => of(
-      !!action.task.jobs?.length ?
-        ToastActions.toastInfo({
-          summary: 'New job added to queue!',
-          detail: action.task.id
-        }) :
-        ToastActions.toastSuccess({
-          summary: 'Task run successfully completed!',
-          detail: action.task.id
-        })
-    ))
+    map(action => ToastActions.toastInfo({
+      summary: 'New job added to queue!',
+      detail: action.task.id
+    })),
+    tap(() => this.store.dispatch(JobActions.findJobs()))
   ));
 
 
