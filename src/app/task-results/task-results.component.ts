@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges  } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, filter, map, take } from 'rxjs';
 import { KeepTrainingData, Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { PanelModule } from 'primeng/panel';
@@ -9,18 +10,18 @@ import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ConfirmationService } from 'primeng/api';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
 import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
 import { resultFile } from '../store/task.selector';
-import { ConfirmationService } from 'primeng/api';
-import { TooltipModule } from 'primeng/tooltip';
 import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -35,6 +36,8 @@ export class TaskResultsComponent implements OnChanges {
     { icon: 'far fa-face-smile-beam', evaluation: TaskResultEvaluation.POSITIVE },
   ];
 
+  form = this.fb.group({ training: true });
+
   selectedResult: any = null;
   task$ = new Subject<Task>();
   data$ = this.task$.pipe(map(task => {
@@ -43,7 +46,8 @@ export class TaskResultsComponent implements OnChanges {
       { header: 'FDS', width: 'auto' },
       { header: 'Date', width: 'auto' }
     ];
-    if (task!.training === TaskTraining.ENABLED) {
+    this.form.controls.training.setValue(task.training === TaskTraining.ENABLED);
+    if (task.training === TaskTraining.ENABLED) {
       columns.push({ header: 'Evaluation (Training)', width: '14rem' });
     }
     columns.push({ header: '', width: '10rem' });
@@ -63,7 +67,7 @@ export class TaskResultsComponent implements OnChanges {
     private store: Store,
     private confirmationService: ConfirmationService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   changeTraining() {
     if (this.task.training === TaskTraining.ENABLED && !!this.task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
