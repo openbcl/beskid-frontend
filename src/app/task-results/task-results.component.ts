@@ -13,6 +13,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmationService } from 'primeng/api';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
+import { TagModule } from 'primeng/tag';
 import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
 import { resultFile } from '../store/task.selector';
 import { breakpoint } from '../store/ui.selector';
@@ -21,7 +22,7 @@ import { RecreateViewDirective } from '../shared/recreate-view.directive';
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })

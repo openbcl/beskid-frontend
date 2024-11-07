@@ -37,7 +37,15 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData" [id]="rowData.model.name">
-              <td><span class="p-column-title pr-2 font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
+              <td>
+                <span class="p-column-title pr-2 font-semibold">{{ columns[0].header }}</span>
+                <div class="flex align-items-center gap-2">
+                  {{ rowData.model.name }}
+                  @if (rowData.model.disabled) {
+                    <p-tag [rounded]="true" severity="danger" value="Deprecated AI Model"/>
+                  }
+                </div>
+              </td>
               <td>
                 <span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>
                 <div>

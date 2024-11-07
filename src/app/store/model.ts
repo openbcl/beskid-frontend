@@ -23,10 +23,11 @@ export interface Model {
   resolution: number;
   experiments: Experiment[];
   fds: FDS;
+  disabled: boolean;
 }
 
 export interface LockableModel extends Model {
   locked: boolean;
 }
 
-export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds'> {}
+export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds' | 'disabled'> {}
