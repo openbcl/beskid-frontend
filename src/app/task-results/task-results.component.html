@@ -1,16 +1,16 @@
 @if (data$ | async; as data) {
-  <p-panel class="be-panel-no-padding">
+  <p-panel class="be-panel-no-padding be-table-rounded-last-row">
     <ng-template pTemplate="header">
       <div class="flex justify-content-between align-items-center flex-wrap column-gap-2 w-full">
         <div class="flex flex-column row-gap-2 align-items-start">
           <span class="font-bold">Task Job Results</span>
-          <div class="flex column-gap-2 align-items-center">
-            <span>Providing data for AI training: <span [class]="task.training === 'ENABLED' ? 'text-green-500' : 'text-red-500'">{{ task.training }}</span></span>
-            <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm."></i>
-          </div>
         </div>
-        <div class="flex justify-content-end w-full sm:w-auto">
-          <p-button class="mt-2" [label]="task.training === 'ENABLED' ? 'Disable Training' : 'Enable Training'" icon="fas fa-robot" [severity]="task.training === 'ENABLED' ? 'warning' : 'info'" (click)="changeTraining()"></p-button>
+        <div class="flex column-gap-2 align-items-center w-full sm:w-auto">
+          <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm."></i>
+          <span>Provide data for AI training</span>
+          <form [formGroup]="form">
+            <p-inputSwitch class="flex" formControlName="training" (onChange)="changeTraining()"></p-inputSwitch>
+          </form>
         </div>
       </div>
     </ng-template>
@@ -37,12 +37,18 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr [pSelectableRow]="rowData" [id]="rowData.model.name">
-              <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
-              <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.model.fds.version }}</td>
-              <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>{{ rowData.date | date:'medium' }}</td>
+              <td><span class="p-column-title pr-2 font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
+              <td>
+                <span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>
+                <div>
+                  {{ rowData.model.fds.version }}
+                  <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.model.fds.revision}}" tooltipPosition="top"></i>
+                </div>
+              </td>
+              <td><span class="p-column-title pr-2 font-semibold">{{ columns[2].header }}</span>{{ rowData.date | date:'medium' }}</td>
               @if(columns.length === 5) {
                 <td>
-                  <span class="p-column-title font-semibold">{{ columns[3].header.split(' ')[0] }}</span>
+                  <span class="p-column-title pr-2 font-semibold">{{ columns[3].header.split(' ')[0] }}</span>
                   <form [formGroup]="rowData.form">
                     <p-selectButton [pSelectableRow]="" [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon" (onChange)="evaluateTaskResult($event, rowData.filename)">
                       <ng-template let-item pTemplate>

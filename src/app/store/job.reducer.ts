@@ -19,7 +19,7 @@ export const jobReducer = createReducer(
   initialJobState,
 
   on(TaskAction.runTaskSuccess, (state, action) => {
-    return { ...state, jobs: [ ...state.jobs.filter(job => job.taskId === action.task.id), ...(action.task.jobs || [])] };
+    return { ...state, jobs: action.task.jobs || [] };
   }),
 
   on(JobAction.findJobsSuccess, (state, action) => {

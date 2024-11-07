@@ -2,9 +2,10 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PanelModule } from 'primeng/panel';
 import { allJobsOfTask } from '../store/job.selector';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { Job } from '../store/job';
 import { JobStatusComponent } from '../job-status/job-status.component';
 import { RouterLink } from '@angular/router';
@@ -12,7 +13,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'be-task-jobs',
   standalone: true,
-  imports: [AsyncPipe, PanelModule, TableModule, RouterLink, JobStatusComponent],
+  imports: [AsyncPipe, PanelModule, TableModule, RouterLink, JobStatusComponent, TooltipModule],
   templateUrl: './task-jobs.component.html',
   styleUrl: './task-jobs.component.scss'
 })

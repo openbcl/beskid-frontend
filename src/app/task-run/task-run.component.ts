@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map } from 'rxjs';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
@@ -35,7 +35,7 @@ export class TaskRunComponent {
   breakpoint$ = this.store.select(breakpoint);
 
   form = this.fb.group({
-    selectedModel: this.fb.control<Model | undefined>(undefined, { validators: [Validators.required]}),
+    selectedModels: this.fb.control<Model[]>([], { validators: [Validators.required]}),
   });
 
   columns = [
@@ -47,19 +47,25 @@ export class TaskRunComponent {
 
   constructor(
     private store: Store,
-    private fb: FormBuilder
+    private fb: NonNullableFormBuilder
   ) { }
 
   runTask() {
-    this.store.dispatch(runTask({
-      taskId: this.task.id,
-      modelId: this.form.value.selectedModel!.id
-    }));
-    this.unselectRow();
+    this.form.value.selectedModels?.forEach(model => {
+      this.store.dispatch(runTask({
+        taskId: this.task.id,
+        modelId: model.id
+      }));
+    });
+    this.beModelTable.selection = [];
+    this.form.controls.selectedModels.setValue([]);
   }
 
-  unselectRow() {
-    this.beModelTable.selection = [];
-    this.form.controls.selectedModel.setValue(undefined);
+  selectRow(model: Model) {
+    this.form.controls.selectedModels.setValue([ ...(this.form.value.selectedModels || []), model ])
+  }
+
+  unselectRow(model: Model) {
+    this.form.controls.selectedModels.setValue((this.form.value.selectedModels || []).filter(selectedModel => selectedModel.id !== model.id))
   }
 }
