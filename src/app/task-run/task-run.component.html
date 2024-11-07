@@ -4,16 +4,15 @@
       <p-progressSpinner></p-progressSpinner>
     </p-blockUI>
   }
-  <p-panel #pnl header="Run Task Job">
-    <p-messages class="be-no-top-margin" [value]="[{
+  <p-panel #pnl header="Run Task Job" class="be-panel-no-padding">
+    <p-messages [value]="[{
         severity: 'info',
-        detail: 'Please select one of the AI models listed below. Then press the run-button to start the calculation. This can only be performed once for each model per task.'
+        detail: 'Please select at least one of the AI models listed below. Then press the run-button to start the calculation(s).'
       }]" [enableService]="false" [closable]="false">
     </p-messages>
     @if(breakpoint$ | async; as breakpoint) {
       <p-table
         #beModelTable
-        class="be-table-rounded"
         *beRecreateViewKey="breakpoint"
         responsiveLayout="stack"
         [breakpoint]="breakpoint"
@@ -21,9 +20,9 @@
         [columns]="columns"
         [value]="lockableModels"
         sortMode="multiple"
-        selectionMode="single"
-        (onRowSelect)="form.controls.selectedModel.setValue($event.data!)"
-        (onRowUnselect)="unselectRow()">
+        selectionMode="multiple"
+        (onRowSelect)="selectRow($event.data)"
+        (onRowUnselect)="unselectRow($event.data)">
         <ng-template pTemplate="header" let-columns>
             <tr>
               <th [style]="'width: ' + columns[0].width"></th>
@@ -66,12 +65,12 @@
               </td>
             </tr>
         </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="flex justify-content-end align-items-center pr-1">
+            <p-button [class.be-highlighted]="!form.invalid" label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
+          </div>
+        </ng-template>
       </p-table>
     }
-    <ng-template pTemplate="footer">
-      <div class="flex justify-content-end align-items-center">
-        <p-button [class.be-highlighted]="!form.invalid" label="Run" icon="fas fa-play" [disabled]="form.invalid" severity="success" (click)="runTask()"></p-button>
-      </div>
-    </ng-template>
   </p-panel>
 </form>
