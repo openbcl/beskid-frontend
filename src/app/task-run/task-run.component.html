@@ -42,7 +42,9 @@
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
           <tr id="run" [pSelectableRow]="rowData" [pSelectableRowDisabled]="rowData.locked" [class.text-400]="rowData.locked">
-              <td><p-tableCheckbox [value]="rowData" [disabled]="rowData.locked"/></td>
+              <td>
+                <p-tableCheckbox [value]="rowData" [pSelectableRow]="rowData" [disabled]="rowData.locked"/>
+              </td>
               <td>
                 <span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>
                 {{ rowData.name }}
