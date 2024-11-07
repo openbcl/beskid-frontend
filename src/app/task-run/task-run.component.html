@@ -44,24 +44,26 @@
           <tr id="run" [pSelectableRow]="rowData" [pSelectableRowDisabled]="rowData.locked" [class.text-400]="rowData.locked">
               <td><p-tableCheckbox [value]="rowData" [disabled]="rowData.locked"/></td>
               <td>
-                <span class="p-column-title font-semibold">{{ columns[1].header }}</span>
-                <div class="flex align-items-center align-content-between gap-2">
-                  {{ rowData.name }}
-                  @if (rowData.locked) {
-                    <p-tag [rounded]="true" severity="secondary" value="already processed"/>
-                  }
-                </div>
+                <span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>
+                {{ rowData.name }}
               </td>
               <td>
-                <span class="p-column-title font-semibold">{{ columns[2].header }}</span>
+                <span class="p-column-title pr-2 font-semibold">{{ columns[2].header }}</span>
                 <div>
                   {{ rowData.fds.version }}
                   <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.fds.revision}}" tooltipPosition="top"></i>
                 </div>
               </td>
               <td>
-                <span class="p-column-title font-semibold">{{ columns[3].header }}</span>
-                {{ rowData.description }}
+                <span class="p-column-title pr-2 font-semibold">{{ columns[3].header }}</span>
+                <div class="flex align-items-center justify-content-between gap-2">
+                  <span class="text-right">
+                    {{ rowData.description }}
+                  </span>
+                  @if (rowData.locked) {
+                    <p-tag [rounded]="true" severity="secondary" value="already processed"/>
+                  }
+                </div>
               </td>
             </tr>
         </ng-template>

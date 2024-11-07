@@ -57,9 +57,9 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr [pSelectableRow]="rowData">
-                    <td><span class="p-column-title font-semibold">{{ columns[0].header }}</span>{{ rowData.name }}</td>
-                    <td><span class="p-column-title font-semibold">{{ columns[1].header }}</span>{{ rowData.resolution }}</td>
-                    <td><span class="p-column-title font-semibold">{{ columns[2].header }}</span>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[0].header }}</span>{{ rowData.name }}</td>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>{{ rowData.resolution }}</td>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[2].header }}</span>
                       <div>
                         {{ rowData.fds.version }}
                         @if(!!rowData.fds.revision?.length) {
@@ -67,9 +67,9 @@
                         }
                       </div>
                     </td>
-                    <td><span class="p-column-title font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment.name }}</td>
-                    <td><span class="p-column-title font-semibold">{{ columns[4].header }}</span>{{ rowData.experiment.condition }} {{ rowData.experiment.conditionMU }}</td>
-                    <td><span class="p-column-title font-semibold">{{ columns[5].header }}</span>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment.name }}</td>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[4].header }}</span>{{ rowData.experiment.condition }} {{ rowData.experiment.conditionMU }}</td>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[5].header }}</span>
                       <div>
                         {{ rowData.experiment?.scale.name }}
                         <i class="ml-2 fa-solid fa-circle-info" [pTooltip]="rowData.experiment?.scale.desc" tooltipPosition="top"></i>
