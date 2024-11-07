@@ -20,7 +20,13 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr class="cursor-pointer" [pSelectableRow]="rowData" [routerLink]="[]" [fragment]="rowData.model.name">
           <td><span class="p-column-title pr-2 font-semibold">{{ columns[0].header }}</span>{{ rowData.model.name }}</td>
-          <td class="text-center"><span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>{{ rowData.model.fds.version }}</td>
+          <td class="text-center">
+            <span class="p-column-title pr-2 font-semibold">{{ columns[1].header }}</span>
+            <div>
+              {{ rowData.model.fds.version }}
+              <i class="ml-2 fa-solid fa-circle-info" pTooltip="Revision: {{rowData.model.fds.revision}}" tooltipPosition="top"></i>
+            </div>
+          </td>
           <td class="flex justify-content-end">
             <span class="p-column-title pr-2 font-semibold">{{ columns[2].header }}</span>
             <be-job-status [job]="rowData"></be-job-status>
