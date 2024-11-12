@@ -15,6 +15,7 @@ import { ProcessingComponent } from "./processing/processing.component";
 import { isValid } from './store/auth.selector';
 import { findTasks } from './store/task.actions';
 import { findJobs } from './store/job.actions';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 
 
 @Component({
@@ -27,11 +28,20 @@ import { findJobs } from './store/job.actions';
 export class AppComponent {
   uiState$ = this.store.select(uiState);
 
-  constructor(private store: Store, private primengConfig: PrimeNGConfig) {
+  constructor(
+    private store: Store,
+    private swUpdate: SwUpdate,
+    private primengConfig: PrimeNGConfig
+  ) {
     this.primengConfig.ripple = true;
     this.store.select(isValid).pipe(takeUntilDestroyed(), filter(isValid => isValid)).subscribe(() => {
       this.store.dispatch(findTasks());
       this.store.dispatch(findJobs());
     });
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.versionUpdates.pipe(
+        filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY')
+      ).subscribe(() => window.location.reload());
+    }
   }
 }
