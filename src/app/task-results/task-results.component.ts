@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject, filter, map, take } from 'rxjs';
-import { KeepTrainingData, Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { BlobFile, KeepTrainingData, Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -14,15 +14,17 @@ import { ConfirmationService } from 'primeng/api';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
-import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult } from '../store/task.actions';
-import { resultFile } from '../store/task.selector';
+import { TabViewModule } from 'primeng/tabview';
+import { QuillModule } from 'ngx-quill';
+import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult, findTaskResultTemplateData, findTaskResultTemplateFile } from '../store/task.actions';
+import { resultFile, templateFile } from '../store/task.selector';
 import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, QuillModule, DatePipe, ButtonModule, TabViewModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -62,7 +64,8 @@ export class TaskResultsComponent implements OnChanges {
       })) || []
     };
   }));
-  taskResult$ = this.task$.pipe(map(task => task.results.find(result => result.filename === (this.selectedResult as TaskResult)?.filename)?.data));
+  taskResult$ = this.task$.pipe(map(task => task.results.find(result => result.filename === (this.selectedResult as TaskResult)?.filename)?.dataResult));
+  taskTemplate$ = this.task$.pipe(map(task => task.results.find(result => result.filename === (this.selectedResult as TaskResult)?.filename)?.dataFDS));
 
   constructor(
     private store: Store,
@@ -121,20 +124,21 @@ export class TaskResultsComponent implements OnChanges {
       }, 500)
     });
   }
+  
+  download(blobFile: BlobFile) {
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blobFile.blob);
+    link.download = blobFile.filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
-  downloadFile(result: TaskResult) {
-    const download = (blob: Blob) => {
-      const link = document.createElement('a');
-      link.href = window.URL.createObjectURL(blob!);
-      link.download = result.filename;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    if (result.file) {
-      download(result.file);
+  downloadResult(result: TaskResult) {
+    if (result.fileResult) {
+      this.download(result.fileResult);
     } else {
-      this.store.select(resultFile(this.task.id, result.filename)).pipe(filter(blob => !!blob), take(1)).subscribe(blob => download(blob!));
+      this.store.select(resultFile(this.task.id, result.filename)).pipe(filter(blobFile => !!blobFile), take(1)).subscribe(blobFile => this.download(blobFile!));
       this.store.dispatch(findTaskResult({
         taskId: this.task.id,
         fileId: result.filename
@@ -142,13 +146,32 @@ export class TaskResultsComponent implements OnChanges {
     }
   }
 
+  downloadTemplate(result: TaskResult) {
+    if (result.fileFDS) {
+      this.download(result.fileFDS!);
+    } else {
+      this.store.select(templateFile(this.task.id, result.filename)).pipe(filter(blobFile => !!blobFile), take(1)).subscribe(blobFile => this.download(blobFile!));
+      this.store.dispatch(findTaskResultTemplateFile({
+        taskId: this.task.id,
+        fileId: result.filename
+      }));
+    }
+  }
+
   onSelectResult(event: { data?: TaskResult }) {
-    if (event.data && !event.data.data) {
+    if (event.data && !event.data.dataResult) {
       this.store.dispatch(findTaskResult({
         taskId: this.task.id,
         fileId: event.data.filename.split('.json')[0]
       }));
-    } else {
+    }
+    if (event.data && !event.data.dataFDS) {
+      this.store.dispatch(findTaskResultTemplateData({
+        taskId: this.task.id,
+        fileId: event.data.filename
+      }));
+    }
+    if (!!event.data?.dataResult && !!event.data?.dataFDS) {
       this.task$.next(this.task);
     }
   }
@@ -159,3 +182,4 @@ export class TaskResultsComponent implements OnChanges {
     }
   }
 }
+

@@ -39,16 +39,23 @@ export enum KeepTrainingData {
   FALSE = 'FALSE',
 }
 
-export interface TaskResult extends ResultValue{
+export interface TaskResult extends ResultValue {
   filename: string;
   uriFile: string;
   uriData: string;
   date: Date;
   model: ModelPartial;
   evaluation: TaskResultEvaluation;
+  fileFDS?: BlobFile;
+  dataFDS?: string;
 }
 
 export interface ResultValue {
-  data?: { name: string, value: number }[];
-  file?: Blob;
+  dataResult?: { name: string, value: number }[];
+  fileResult?: BlobFile;
+}
+
+export interface BlobFile {
+  blob: Blob,
+  filename: string
 }

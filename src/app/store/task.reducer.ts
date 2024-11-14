@@ -70,14 +70,18 @@ export const taskReducer = createReducer(
     return { ...state, tasks: state.tasks.filter(task => task.id !== action.taskId), task: undefined };
   }),
 
-  on(TaskAction.findTaskResultSuccess, (state, action) => {
+  on(...[TaskAction.findTaskResultSuccess, TaskAction.findTaskResultTemplateFileSuccess, TaskAction.findTaskResultTemplateDataSuccess], (state, action) => {
     const updatedTask = state.task?.id === action.taskId ? state.task : state.tasks.find(task => task.id === action.taskId)
     if (!updatedTask) return state;
     const isBlob = action.fileId.toLowerCase().endsWith('.json');
     const results = updatedTask.results.map(result => !result.filename.includes(action.fileId) ? result : {
       ...result,
-      data:  !isBlob ? action.resultValue.data : result.data,
-      file:  isBlob ? action.resultValue.file : result.file
+      ...(action.type === TaskAction.findTaskResultTemplateFileSuccess.type ? { fileFDS: action.fileFDS } : {}),
+      ...(action.type === TaskAction.findTaskResultTemplateDataSuccess.type ? { dataFDS: action.dataFDS } : {}),
+      ...(action.type === TaskAction.findTaskResultSuccess.type ? {
+        dataResult: !isBlob ? action.resultValue.dataResult : result.dataResult,
+        fileResult: isBlob ? action.resultValue.fileResult : result.fileResult
+      } : {}),
     });
     return {
       ...state,
@@ -86,7 +90,7 @@ export const taskReducer = createReducer(
     };
   }),
 
-  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
+  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.findTaskResultTemplateFileFailure, TaskAction.findTaskResultTemplateDataFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
     return { ...state, error: action.error };
   }),
 

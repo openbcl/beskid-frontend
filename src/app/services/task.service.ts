@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { BlobFile, CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -38,10 +38,24 @@ export class TaskService {
   findTaskResult(taskId: string, fileId: string): Observable<ResultValue> {
     if (fileId.toLowerCase().endsWith('.json')) {
       return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`, { observe: 'response', responseType: 'blob' }).pipe(map(response => ({
-        file: (response?.body ? new Blob([response.body], { type:  'application/json' }) : undefined)
+        fileResult: {
+          blob: (response?.body ? new Blob([response.body], { type:  'application/json' }) : undefined),
+          filename: response.headers.get('content-disposition')?.match(/filename="(.+?)"/)?.[1]
+        } as BlobFile
       })));
     }
-    return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`).pipe(map(data => ({ data })));
+    return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`).pipe(map(dataResult => ({ dataResult })));
+  }
+
+  findTaskResultTemplateFile(taskId: string, fileId: string): Observable<BlobFile> {
+    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-file`, { observe: 'response', responseType: 'blob' }).pipe(map(response =>  ({
+        blob: response?.body ? new Blob([response.body], { type:  'text/plain' }) : null,
+        filename: response.headers.get('content-disposition')?.match(/filename="(.+?)"/)?.[1]
+    } as BlobFile)));
+  }
+
+  findTaskResultTemplateData(taskId: string, fileId: string) {
+    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-data`, { responseType: 'text' });
   }
 
   evaluateTaskResult(taskId: string, fileId: string, evaluation: TaskResultEvaluation) {

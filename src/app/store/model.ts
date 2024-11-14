@@ -23,6 +23,7 @@ export interface Model {
   resolution: number;
   experiments: Experiment[];
   fds: FDS;
+  hasTemplate: boolean;
   disabled: boolean;
 }
 
@@ -30,4 +31,4 @@ export interface LockableModel extends Model {
   locked: boolean;
 }
 
-export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds' | 'disabled'> {}
+export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds' | 'hasTemplate' | 'disabled'> {}
