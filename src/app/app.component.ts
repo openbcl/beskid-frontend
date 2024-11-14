@@ -7,7 +7,6 @@ import { filter } from 'rxjs';
 import { PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { TaskCreateComponent } from "./task-create/task-create.component";
 import { TaskListComponent } from "./task-list/task-list.component";
 import { ToolbarComponent } from "./toolbar/toolbar.component";
 import { uiState } from './store/ui.selector';
@@ -23,7 +22,7 @@ import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [AsyncPipe, RouterOutlet, TaskCreateComponent, ConfirmDialogModule, ToastModule, TaskListComponent, ToolbarComponent, ProcessingComponent]
+    imports: [AsyncPipe, RouterOutlet, ConfirmDialogModule, ToastModule, TaskListComponent, ToolbarComponent, ProcessingComponent]
 })
 export class AppComponent {
   uiState$ = this.store.select(uiState);

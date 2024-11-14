@@ -134,6 +134,28 @@ export class TaskEffects {
     )
   ));
 
+  findTaskResultTemplateFile$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.findTaskResultTemplateFile),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
+    switchMap(action =>
+      this.taskService.findTaskResultTemplateFile(action.taskId, action.fileId).pipe(
+        switchMap(fileFDS => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateFileSuccess({ taskId: action.taskId, fileId: action.fileId, fileFDS: fileFDS }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateFileFailure({ error })))
+      )
+    )
+  ));
+
+  findTaskResultTemplateData$ = createEffect(() => this.actions$.pipe(
+    ofType(TaskActions.findTaskResultTemplateData),
+    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
+    switchMap(action =>
+      this.taskService.findTaskResultTemplateData(action.taskId, action.fileId).pipe(
+        switchMap(plaintext => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateDataSuccess({ taskId: action.taskId, fileId: action.fileId, dataFDS: plaintext }))),
+        catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateDataFailure({ error })))
+      )
+    )
+  ));
+
   evaluateTaskResult$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.evaluateTaskResult),
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),

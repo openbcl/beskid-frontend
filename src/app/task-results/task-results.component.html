@@ -67,7 +67,10 @@
                 </td>
               }
               <td class="flex gap-2 justify-content-end">
-                <p-button severity="info" icon="fas fa-file-arrow-down" (click)="downloadFile(rowData)"></p-button>
+                @if (rowData.model.hasTemplate) {
+                  <p-button severity="info" icon="fas fa-file-code" (click)="downloadTemplate(rowData)"></p-button>
+                }
+                <p-button severity="info" icon="fas fa-file-arrow-down" (click)="downloadResult(rowData)"></p-button>
                 <p-button severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData)"></p-button>
               </td>
           </tr>
@@ -83,20 +86,29 @@
   <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': FDS ' + selectedResult?.model?.fds?.version + ')'" [(visible)]="selectedResult" [modal]="true" [maximizable]="true">
     <label class="flex justify-content-center pt-2 pb-2 bg-primary border-noround-bottom border-round-2xl">{{ selectedResult?.date | date:'medium' }}</label>
     @if (taskResult$ | async; as taskResultData) {
-      <p-table [value]="taskResultData" styleClass="p-datatable-striped">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Property</th>
-            <th>Value</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData>
-          <tr>
-            <td>{{ rowData.name }}</td>
-            <td>{{ rowData.value }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+      <p-tabView class="be-result-tabView">
+        <p-tabPanel header="Values">
+          <p-table [value]="taskResultData" styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Property</th>
+                <th>Value</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+              <tr>
+                <td>{{ rowData.name }}</td>
+                <td>{{ rowData.value }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+        @if (taskTemplate$ | async; as taskTemplatetData) {
+          <p-tabPanel header="FDS Template">
+            <quill-view [content]="taskTemplatetData" format="text" theme="snow"></quill-view>
+          </p-tabPanel>
+        }
+      </p-tabView>
     } @else {
       <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
     }

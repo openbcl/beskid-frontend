@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
+import { BlobFile, CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from './task';
 
 export const addTask = createAction(
   '[Task] Add Task',
@@ -102,6 +102,36 @@ export const findTaskResultSuccess = createAction(
 
 export const findTaskResultFailure = createAction(
   '[Task] Find Task Result Failure',
+  props<{ error: any }>()
+);
+
+export const findTaskResultTemplateFile = createAction(
+  '[Task] Find Task Result Template File',
+  props<{ taskId: string, fileId: string }>()
+);
+
+export const findTaskResultTemplateFileSuccess = createAction(
+  '[Task] Find Task Result Template File Success',
+  props<{ taskId: string, fileId: string, fileFDS: BlobFile }>()
+);
+
+export const findTaskResultTemplateFileFailure = createAction(
+  '[Task] Find Task Result Template File Failure',
+  props<{ error: any }>()
+);
+
+export const findTaskResultTemplateData = createAction(
+  '[Task] Find Task Result Template Data',
+  props<{ taskId: string, fileId: string }>()
+);
+
+export const findTaskResultTemplateDataSuccess = createAction(
+  '[Task] Find Task Result Template Data Success',
+  props<{ taskId: string, fileId: string, dataFDS: string }>()
+);
+
+export const findTaskResultTemplateDataFailure = createAction(
+  '[Task] Find Task Result Template Data Failure',
   props<{ error: any }>()
 );
 

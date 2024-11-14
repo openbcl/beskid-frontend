@@ -2,6 +2,8 @@
 @import "primeng/resources/themes/lara-light-amber/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
+@import "quill/dist/quill.bubble.css";
+@import 'quill/dist/quill.snow.css';
 
 :root {
   --highlight-text-color: #af1b08;
@@ -69,6 +71,17 @@ p-dialog.be-dialog-tabView {
     .p-tabview-panels {
       padding-bottom: 0;
     }
+  }
+}
+
+.be-result-tabView {
+  &>div {
+    border: solid 1px var(--surface-border);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  .p-tabview-panels {
+    padding: 0;
   }
 }
 
@@ -233,7 +246,7 @@ p-panel.be-panel-no-padding .p-panel-content {
   }
 }
 
-p-panel.be-panel-no-padding.be-table-rounded-last-row .p-panel-content {
+p-panel.be-panel-no-padding.be-table-rounded-last-row .p-panel-content, .be-result-tabView, .p-accordion-tab {
   table {
     tr:last-of-type {
       background: unset;
