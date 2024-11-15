@@ -6,10 +6,14 @@ import { Task } from "./task";
 
 export const getTaskState = createFeatureSelector<TaskState>(taskFeatureKey);
 
-export const task = (taskId?: string) => createSelector(
+export const task = (taskId: string) => createSelector(
   getTaskState,
-  taskState => !!taskId?.length ?
-    (taskState.task?.id === taskId ? taskState.task : taskState.tasks.find(task => task.id === taskId)) : taskState.task
+  taskState => taskState.tasks.find(task => task.id === taskId)
+);
+
+export const selectedTask = createSelector(
+  getTaskState,
+  taskState => taskState.task
 );
 
 export const tasks = createSelector(

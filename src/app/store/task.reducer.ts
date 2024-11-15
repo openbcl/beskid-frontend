@@ -45,6 +45,10 @@ export const taskReducer = createReducer(
     return { ...initialTaskState };
   }),
 
+  on(TaskAction.selectTask, (state, action) => {
+    return { ...state, task: { ...action.task } };
+  }),
+  
   on(TaskAction.runTask, (state, action) => {
     return { ...state, running: [ ...state.running, action.taskId ] };
   }),

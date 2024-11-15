@@ -1,5 +1,5 @@
 <div class="flex flex-column row-gap-3">
-@if (task$ | async; as task) {
+@if (taskWithValues$ | async; as task) {
   <div class="grid -mb-2">
     <p-panel class="be-panel-data col-12 xl:col-6">
       <ng-template pTemplate="header">
@@ -19,6 +19,6 @@
     <be-task-jobs class="col-12 xl:col-6" [taskId]="task.id"></be-task-jobs>
   </div>
   <be-task-run [task]="task" [lockableModels]="(lockableModels$ | async) || []" [running]="(running$ | async) || false"></be-task-run>
-  <be-task-results [task]="task"></be-task-results>
+  <be-task-results/>
 }
 </div>

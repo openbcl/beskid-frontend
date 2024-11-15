@@ -31,6 +31,11 @@ export const findTaskFailure = createAction(
   props<{ error: any }>()
 );
 
+export const selectTask = createAction(
+  '[Task] Select Task',
+  props<{ task: Task }>()
+);
+
 export const findTasks = createAction(
   '[Task] Find Tasks'
 );
