@@ -108,7 +108,11 @@
           </p-tabPanel>
           @if (taskTemplate$ | async; as taskTemplatetData) {
             <p-tabPanel header="FDS Template">
-              <quill-view [content]="taskTemplatetData" format="text" theme="snow"></quill-view>
+              <div class="be-code-viewer ">
+                @for (line of taskTemplatetData; track $index) {
+                  <p>{{line}}</p>
+                }
+              </div>
             </p-tabPanel>
           }
         </p-tabView>

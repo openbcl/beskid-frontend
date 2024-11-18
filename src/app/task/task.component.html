@@ -10,7 +10,7 @@
             <p class="m-0">{{ task.date | date:'shortTime' }}</p>
           </div>
           <div class="flex justify-content-end w-full sm:w-auto">
-            <p-button severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
+            <p-button pTooltip="Delete this task, its data and all job results" tooltipPosition="left" severity="danger" icon="fas fa-trash" (click)="deleteTask(task)"></p-button>
           </div>
         </div>
       </ng-template>

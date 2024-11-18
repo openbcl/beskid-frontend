@@ -15,7 +15,6 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
 import { TabViewModule } from 'primeng/tabview';
-import { QuillModule } from 'ngx-quill';
 import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult, findTaskResultTemplateData, findTaskResultTemplateFile } from '../store/task.actions';
 import { resultFile, selectedTask, templateFile } from '../store/task.selector';
 import { breakpoint } from '../store/ui.selector';
@@ -25,7 +24,7 @@ import { filterNullish } from '../shared/rx.filter';
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, QuillModule, DatePipe, ButtonModule, TabViewModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, TabViewModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -86,7 +85,8 @@ export class TaskResultsComponent {
         tap(dataFDS => !dataFDS && this.store.dispatch(findTaskResultTemplateData({
           taskId: selectedResult.taskId,
           fileId: selectedResult.filename
-        })))
+        }))),
+        map(dataFDS => dataFDS?.split(/\r?\n/))
       )
     )
   );

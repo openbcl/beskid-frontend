@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService } from 'primeng/api';
 import { combineLatest, filter, map, switchMap, tap } from 'rxjs';
 import { isTaskRunning$, task } from '../store/task.selector';
@@ -27,7 +28,7 @@ import { jobs } from '../store/job.selector';
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
+    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, TooltipModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
 })
 export class TaskComponent implements OnInit {
   
