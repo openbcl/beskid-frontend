@@ -16,7 +16,7 @@
     </ng-template>
     @if (data$ | async; as data) {
       @if (breakpoint$ | async; as breakpoint) {
-        <p-table *beRecreateViewKey="breakpoint" responsiveLayout="stack" [breakpoint]="breakpoint" styleClass="p-datatable-striped" [columns]="data.columns" [value]="data.rows" sortMode="multiple" selectionMode="single" [(selection)]="showResultDialog" (onRowSelect)="onSelectResult($event, task.id)">
+        <p-table *beRecreateViewKey="breakpoint" responsiveLayout="stack" [breakpoint]="breakpoint" styleClass="p-datatable-striped" [columns]="data.columns" [value]="data.rows" sortMode="multiple" selectionMode="single" (onRowSelect)="onSelectResult($event, task.id)">
           <ng-template pTemplate="header" let-columns>
               <tr>
                 <th [style]="'width: ' + columns[0].width" pSortableColumn="model.name">
@@ -59,7 +59,7 @@
                   <td>
                     <span class="p-column-title pr-2 font-semibold">{{ columns[3].header.split(' ')[0] }}</span>
                     <form [formGroup]="rowData.form">
-                      <p-selectButton [pSelectableRow]="" [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon" (onChange)="evaluateTaskResult($event, task, rowData.filename)">
+                      <p-selectButton [options]="evaluationOptions" formControlName="evaluation" optionLabel="icon" (onChange)="evaluateTaskResult($event, task, rowData.filename)">
                         <ng-template let-item pTemplate>
                           <i [class]="item.icon"></i>
                         </ng-template>

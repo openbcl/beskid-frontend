@@ -97,8 +97,11 @@ export class TaskResultsComponent {
     private fb: FormBuilder
   ) { }
 
-  onSelectResult(event: { data?: TaskResult }, taskId: string) {
-    event.data && this.selectedResult$.next({ ...event.data, taskId });
+  onSelectResult(event: { data?: TaskResult, originalEvent?: { target: any } }, taskId: string) {
+    if (!(event.originalEvent?.target?.classList as DOMTokenList)?.contains('p-button')) {
+      event.data && this.selectedResult$.next({ ...event.data, taskId });
+      this.showResultDialog = true;
+    }
   }
 
   changeTraining(task: Task) {
