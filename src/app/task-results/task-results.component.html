@@ -69,10 +69,10 @@
                 }
                 <td class="flex gap-2 justify-content-end">
                   @if (rowData.model.hasTemplate) {
-                    <p-button severity="info" icon="fas fa-file-code" (click)="downloadTemplate(rowData, task)"></p-button>
+                    <p-button pTooltip="Download FDS template" tooltipPosition="top" severity="info" icon="fas fa-file-code" (click)="downloadTemplate(rowData, task)"></p-button>
                   }
-                  <p-button severity="info" icon="fas fa-file-arrow-down" (click)="downloadResult(rowData, task)"></p-button>
-                  <p-button severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData, task)"></p-button>
+                  <p-button pTooltip="Download results (json)" tooltipPosition="top" severity="success" icon="fas fa-file-arrow-down" (click)="downloadResult(rowData, task)"></p-button>
+                  <p-button pTooltip="Delete results" tooltipPosition="top" severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData, task)"></p-button>
                 </td>
             </tr>
           </ng-template>
