@@ -1,11 +1,10 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 
 @Component({
   selector: 'be-task-chart',
   standalone: true,
-  imports: [AsyncPipe, ChartModule],
+  imports: [ChartModule],
   templateUrl: './task-chart.component.html',
   styleUrl: './task-chart.component.scss'
 })

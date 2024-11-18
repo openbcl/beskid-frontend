@@ -26,20 +26,20 @@ import { JobEffects } from './store/job.effects';
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(JwtModule.forRoot({
-        config: {
-            tokenGetter: () => localStorage.getItem('token'),
-            allowedDomains: [environment.domain, environment.backend]
-        }
+      config: {
+        tokenGetter: () => localStorage.getItem('token'),
+        allowedDomains: [environment.domain, environment.backend]
+      }
     })),
     { provide: JwtHelperService },
     { provide: MessageService },
     { provide: ConfirmationService },
     provideRouter(routes, {
-        ...withComponentInputBinding(),
-        ...withInMemoryScrolling({
-            scrollPositionRestoration: 'enabled',
-            anchorScrolling: 'enabled'
-        })
+      ...withComponentInputBinding(),
+      ...withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled'
+      })
     }),
     provideHttpClient(withInterceptors([tokenInterceptor])),
     provideStore(),
@@ -52,8 +52,8 @@ export const appConfig: ApplicationConfig = {
     provideEffects(AuthEffects, ModelEffects, TaskEffects, JobEffects, ToastEffects, UiEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideServiceWorker('ngsw-worker.js', {
-        enabled: !isDevMode(),
-        registrationStrategy: 'registerWhenStable:30000'
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
     })
-]
+  ]
 };

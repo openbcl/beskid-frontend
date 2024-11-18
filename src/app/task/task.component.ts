@@ -4,10 +4,11 @@ import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmationService } from 'primeng/api';
-import { combineLatest, filter, map, switchMap,  take,  tap } from 'rxjs';
+import { combineLatest, filter, map, switchMap, tap } from 'rxjs';
 import { isTaskRunning$, task } from '../store/task.selector';
-import { findTask } from '../store/task.actions';
+import { findTask, selectTask } from '../store/task.actions';
 import { Task, TaskResultEvaluation } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { NumbersToStringsPipe } from "../shared/numbers-to-strings.pipe";
@@ -27,7 +28,7 @@ import { jobs } from '../store/job.selector';
     standalone: true,
     templateUrl: './task.component.html',
     styleUrl: './task.component.scss',
-    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
+    imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, TooltipModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
 })
 export class TaskComponent implements OnInit {
   
@@ -35,16 +36,20 @@ export class TaskComponent implements OnInit {
 
   task$ = this.activatedRoute.params.pipe(
     map((p) => p['taskId'] as string),
-    switchMap(taskId => this.store.select(task(taskId)).pipe(
-      filter(task => task?.id === taskId),
-      tap(task => {
-        if (!task?.values?.length) {
-          taskId && this.store.dispatch(findTask({ taskId }))
-        }
-      })
-    )),
+    switchMap(taskId => this.store.select(task(taskId))),
     filterNullish()
   );
+
+  taskWithValues$ = this.task$.pipe(
+    tap(task => {
+      if(!task.values?.length) {
+        this.store.dispatch(findTask({ taskId: task.id }));
+      } else {
+        this.store.dispatch(selectTask({ task }));
+      }
+    }),
+    filter(task => !!task.values?.length)
+  )
   
   running$ = this.store.select(isTaskRunning$(this.task$)).pipe(switchMap(running => running));
   compatibleModels$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
@@ -63,7 +68,6 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(findModels());
-    this.activatedRoute.params.pipe(take(1), map((p) => p['taskId'] as string)).subscribe(taskId => this.store.dispatch(findTask({ taskId })));
   }
 
   deleteTask(task: Task) {

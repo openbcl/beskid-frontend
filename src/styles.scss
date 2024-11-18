@@ -2,8 +2,6 @@
 @import "primeng/resources/themes/lara-light-amber/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeflex/primeflex.scss";
-@import "quill/dist/quill.bubble.css";
-@import 'quill/dist/quill.snow.css';
 
 :root {
   --highlight-text-color: #af1b08;
@@ -73,6 +71,38 @@ p-dialog.be-dialog-tabView {
     }
   }
 }
+
+.p-tag.p-tag-secondary {
+  background-color: var(--surface-d);
+  color: var(--surface-400);
+}
+
+.be-code-viewer {
+  font-family: monospace;
+  counter-reset: line;
+  max-width: calc(100vw - 3rem);
+  overflow: auto; 
+  p {
+    &::before {
+      counter-increment: line;
+      content: counter(line);
+      display: inline-block;
+      border-right: 1px solid var(--surface-300);
+      padding: 0 .5em 0 0;
+      margin-right: .5em;
+      background-color: var(--surface-200);
+      width: 3.5ch;
+      text-align: right;
+    }
+    &:last-of-type::before {
+      border-bottom-left-radius: 6px;
+    }
+    line-height: 1.25em;
+    margin: 0;
+    white-space: nowrap;
+  }
+}
+
 
 .be-result-tabView {
   &>div {
