@@ -93,7 +93,7 @@
           <i class="fas fa-question-circle" pTooltip="Optionally, you can evaluate the results of this task to improve the AI algorithm. "></i>
         </div>
         <div class="flex justify-content-end w-full sm:w-auto">
-          <p-button [class.be-highlighted]="form.valid" label="Submit" [disabled]="form.invalid" severity="success" (click)="addTask()"></p-button>
+          <p-button [class.be-highlighted]="form.valid" label="Submit" [disabled]="(creating$ | async) || form.invalid" severity="success" (click)="addTask()"></p-button>
         </div>
       </div>
     </ng-template>

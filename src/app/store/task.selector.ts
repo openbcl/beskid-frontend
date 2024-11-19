@@ -31,6 +31,11 @@ export const isTaskRunning = (taskId: string) => createSelector(
   taskState => !!taskState.running.find(runningTaskId => runningTaskId === taskId)
 );
 
+export const isCreatingTask = createSelector(
+  getTaskState,
+  taskState => taskState.creating
+);
+
 export const areTaskJobsRunning = (taskId: string) => createSelector(
   isTaskRunning(taskId),
   activeOrWaitingJobsOfTask(taskId),

@@ -8,6 +8,7 @@ export const taskFeatureKey = 'tasks';
 export interface TaskState {
   task?: Task;
   tasks: Task[],
+  creating: boolean,
   running: string[],
   error: any;
 }
@@ -15,6 +16,7 @@ export interface TaskState {
 export const initialTaskState: TaskState = {
   task: undefined,
   tasks: [],
+  creating: false,
   running: [],
   error: null
 };
@@ -45,6 +47,10 @@ export const taskReducer = createReducer(
     return { ...initialTaskState };
   }),
 
+  on(TaskAction.addTask, (state) => {
+    return { ...state, creating: true };
+  }),
+
   on(TaskAction.selectTask, (state, action) => {
     return { ...state, task: { ...action.task } };
   }),
@@ -58,7 +64,7 @@ export const taskReducer = createReducer(
   }),
 
   on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.evaluateTaskResultSuccess, TaskAction.deleteTaskResultSuccess], (state, action) => {
-    return { ...state, ...mergeTasksState(action.task, state.tasks) };
+    return { ...state, ...mergeTasksState(action.task, state.tasks), creating: false };
   }),
 
   on(TaskAction.findTasksSuccess, (state, action) => {
@@ -95,7 +101,7 @@ export const taskReducer = createReducer(
   }),
 
   on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.findTaskResultTemplateFileFailure, TaskAction.findTaskResultTemplateDataFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
-    return { ...state, error: action.error };
+    return { ...state, creating: false, error: action.error };
   }),
 
   on(TaskAction.runTaskFailure, (state, action) => {
