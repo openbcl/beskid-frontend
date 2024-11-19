@@ -24,6 +24,7 @@ import { filter, first, map } from 'rxjs';
 import { findModels } from '../store/model.actions';
 import { Experiment, Model } from '../store/model';
 import { breakpoint } from '../store/ui.selector';
+import { isCreatingTask } from '../store/task.selector';
 
 @Component({
     selector: 'be-task-create',
@@ -53,6 +54,7 @@ export class TaskCreateComponent implements OnInit {
   experimentOptions$ = this.store.select(experimentOptions).pipe(first(eO => !!eO?.length));
   breakpoint$ = this.store.select(breakpoint);
   values$ = this.form.controls.values.valueChanges;
+  creating$ = this.store.select(isCreatingTask);
 
   showUploadDialog = false;
 
