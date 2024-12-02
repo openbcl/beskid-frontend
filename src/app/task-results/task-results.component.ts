@@ -68,11 +68,13 @@ export class TaskResultsComponent {
     filterNullish(),
     switchMap(selectedResult =>
       this.task$.pipe(
-        map(task => task.results.find(result => result.filename === selectedResult.filename)?.dataResult),
-        tap(dataResult => !dataResult && this.store.dispatch(findTaskResult({
+        map(task => task.results.find(result => result.filename === selectedResult.filename)),
+        tap(taskResult => !!taskResult && !taskResult.dataResult && this.store.dispatch(findTaskResult({
           taskId: selectedResult.taskId,
           fileId: selectedResult.filename.split('.json')[0]
-        })))
+        }))),
+        filterNullish(),
+        map(taskResult => taskResult.dataResult)
       )
     )
   );
@@ -81,12 +83,13 @@ export class TaskResultsComponent {
     filterNullish(),
     switchMap(selectedResult =>
       this.task$.pipe(
-        map(task => task.results.find(result => result.filename === selectedResult.filename)?.dataFDS),
-        tap(dataFDS => !dataFDS && this.store.dispatch(findTaskResultTemplateData({
+        map(task => task.results.find(result => result.filename === selectedResult.filename)),
+        tap(taskResult => !!taskResult && !taskResult.dataFDS && this.store.dispatch(findTaskResultTemplateData({
           taskId: selectedResult.taskId,
           fileId: selectedResult.filename
         }))),
-        map(dataFDS => dataFDS?.split(/\r?\n/))
+        filterNullish(),
+        map(taskResult => taskResult.dataFDS?.split(/\r?\n/))
       )
     )
   );
