@@ -9,7 +9,7 @@ import { ConfirmationService } from 'primeng/api';
 import { combineLatest, filter, map, switchMap, tap } from 'rxjs';
 import { isTaskRunning$, task } from '../store/task.selector';
 import { findTask, selectTask } from '../store/task.actions';
-import { Task, TaskResultEvaluation } from '../store/task';
+import { Task } from '../store/task';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { NumbersToStringsPipe } from "../shared/numbers-to-strings.pipe";
 import { deleteTask } from '../store/task.actions';
@@ -78,9 +78,6 @@ export class TaskComponent implements OnInit {
       message: 'Are you sure that you want to delete this task? Evaluated training data is retained.',
       accept: () => this.store.dispatch(deleteTask({ taskId: task.id }))
     };
-    if (task.training && !!task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
-      dialog.message += ' Previously evaluated training data is retained.'
-    }
     this.confirmationService.confirm(dialog);
   }
 }
