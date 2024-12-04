@@ -1,11 +1,6 @@
 import { Job } from "./job";
 import { ModelPartial } from "./model";
 
-export enum TaskTraining {
-  DISABLED = 'DISABLED',
-  ENABLED = 'ENABLED',
-}
-
 export interface TaskSetting {
   id: string;
   name: string;
@@ -18,13 +13,12 @@ export interface Task {
   id: string;
   values: number[];
   setting: TaskSetting;
-  training: TaskTraining;
   date: Date;
   results: TaskResult[];
   jobs?: Job[];
 }
 
-export interface CreateTask extends Pick<Task, 'values' | 'training'> {
+export interface CreateTask extends Pick<Task, 'values'> {
   setting: Omit<TaskSetting, 'name' | 'conditionMU'>
 };
 

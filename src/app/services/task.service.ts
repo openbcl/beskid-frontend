@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { BlobFile, CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { BlobFile, CreateTask, KeepTrainingData, ResultValue, Task, TaskResultEvaluation } from '../store/task';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -21,10 +21,6 @@ export class TaskService {
 
   findTask(taskId: string) {
     return this.http.get<Task>(`${environment.api}/v1/tasks/${taskId}`);
-  }
-
-  editTask(taskId: string, training: TaskTraining) {
-    return this.http.put<Task>(`${environment.api}/v1/tasks/${taskId}`, undefined, { params: { training } });
   }
 
   deleteTask(taskId: string) {

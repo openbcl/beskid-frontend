@@ -72,6 +72,18 @@ p-dialog.be-dialog-tabView {
   }
 }
 
+.be-evaluation-help {
+  cursor: pointer;
+  color: var(--info-color);
+  &:hover {
+    color: var(--warn-color)
+  }
+}
+
+.p-confirm-dialog {
+  max-width: 600px;
+}
+
 .p-tag.p-tag-secondary {
   background-color: var(--surface-d);
   color: var(--surface-400);

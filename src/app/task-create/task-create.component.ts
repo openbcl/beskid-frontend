@@ -13,7 +13,7 @@ import { PanelModule } from 'primeng/panel';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { addTask } from '../store/task.actions';
-import { CreateTask, TaskTraining } from '../store/task';
+import { CreateTask } from '../store/task';
 import { toastError } from '../store/toast.actions';
 import { TaskChartComponent } from "../task-chart/task-chart.component";
 import { environment } from '../../environments/environment';
@@ -46,7 +46,6 @@ export class TaskCreateComponent implements OnInit {
     experimentOption: this.fb.control<ExperimentOption | undefined>(undefined, { validators: [Validators.required] }),
     experimentCondition: this.fb.control<ExperimentConditionOption | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
     experimentResolution: this.fb.control<number | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
-    training: true
   });
 
   help = () => `You should submit exactly ${this.form.value.experimentResolution} values (numbers), separated either by commas, semicolons, line breaks or spaces.`;
@@ -169,8 +168,7 @@ export class TaskCreateComponent implements OnInit {
         id: this.form.value.experimentOption!.id,
         resolution: this.form.value.experimentResolution as number,
         condition: this.form.value.experimentCondition!.value as number
-      },
-      training: this.form.value.training ? TaskTraining.ENABLED : TaskTraining.DISABLED
+      }
     };
     this.store.dispatch(addTask({ createTask }));
   }

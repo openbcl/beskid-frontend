@@ -63,7 +63,7 @@ export const taskReducer = createReducer(
     return { ...state, ...mergeTasksState(action.task, state.tasks), running: state.running.filter(taskId => taskId !== action.task.id ) };
   }),
 
-  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.editTaskSuccess, TaskAction.evaluateTaskResultSuccess, TaskAction.deleteTaskResultSuccess], (state, action) => {
+  on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.evaluateTaskResultSuccess, TaskAction.deleteTaskResultSuccess], (state, action) => {
     return { ...state, ...mergeTasksState(action.task, state.tasks), creating: false };
   }),
 
@@ -100,7 +100,7 @@ export const taskReducer = createReducer(
     };
   }),
 
-  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.editTaskFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.findTaskResultTemplateFileFailure, TaskAction.findTaskResultTemplateDataFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
+  on(...[TaskAction.addTaskFailure, TaskAction.findTaskFailure, TaskAction.findTasksFailure, TaskAction.deleteTaskFailure, TaskAction.findTaskResultFailure, TaskAction.findTaskResultTemplateFileFailure, TaskAction.findTaskResultTemplateDataFailure, TaskAction.evaluateTaskResultFailure, TaskAction.deleteTaskResultFailure], (state, action) => {
     return { ...state, creating: false, error: action.error };
   }),
 

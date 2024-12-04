@@ -64,25 +64,6 @@ export class TaskEffects {
     )
   ));
 
-  editTask$ = createEffect(() => this.actions$.pipe(
-    ofType(TaskActions.editTask),
-    tap(action => this.store.dispatch(startProcessing({id: action.type}))),
-    switchMap(action =>
-      this.taskService.editTask(action.taskId, action.training).pipe(
-        switchMap(task => of(finishProcessing({id: action.type}), TaskActions.editTaskSuccess({ task }))),
-        catchError(error => of(finishProcessing({id: action.type}), TaskActions.editTaskFailure({ error })))
-      )
-    )
-  ));
-
-  editTaskSuccess$ = createEffect(() => this.actions$.pipe(
-    ofType(TaskActions.editTaskSuccess),
-    switchMap(action => of(ToastActions.toastInfo({
-      summary: 'Task successfully edited!',
-      detail: `Training ${action.task.training}`
-    })))
-  ));
-
   deleteTask$ = createEffect(() => this.actions$.pipe(
     ofType(TaskActions.deleteTask),
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),

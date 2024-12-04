@@ -28,8 +28,8 @@ export class UiEffects {
       AuthActions.renewSessionFailure, AuthActions.deleteSessionFailure,
       ModelActions.findModelFailure, ModelActions.findModelsFailure,
       TaskActions.addTaskFailure, TaskActions.deleteTaskFailure, TaskActions.deleteTaskResultFailure,
-      TaskActions.editTaskFailure, TaskActions.evaluateTaskResultFailure, TaskActions.findTaskFailure,
-      TaskActions.findTaskResultFailure, TaskActions.findTasksFailure, TaskActions.runTaskFailure
+      TaskActions.evaluateTaskResultFailure, TaskActions.findTaskFailure, TaskActions.findTaskResultFailure,
+      TaskActions.findTasksFailure, TaskActions.runTaskFailure
     ]),
     tap(action => action.type === TaskActions.findTaskFailure.type && this.router.navigate(['/'])),
     map(action => action.error?.status === 0 ? ToastActions.toastWarn({

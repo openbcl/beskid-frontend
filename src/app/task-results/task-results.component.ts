@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
-import { BlobFile, KeepTrainingData, Task, TaskResult, TaskResultEvaluation, TaskTraining } from '../store/task';
+import { BlobFile, KeepTrainingData, Task, TaskResult, TaskResultEvaluation } from '../store/task';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +15,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
 import { TabViewModule } from 'primeng/tabview';
-import { deleteTaskResult, editTask, evaluateTaskResult, findTaskResult, findTaskResultTemplateData, findTaskResultTemplateFile } from '../store/task.actions';
+import { deleteTaskResult, evaluateTaskResult, findTaskResult, findTaskResultTemplateData, findTaskResultTemplateFile } from '../store/task.actions';
 import { resultFile, selectedTask, templateFile } from '../store/task.selector';
 import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
@@ -39,28 +39,23 @@ export class TaskResultsComponent {
     { icon: 'far fa-face-smile-beam', evaluation: TaskResultEvaluation.POSITIVE },
   ];
 
-  form = this.fb.group({ training: true });
-
   showResultDialog = false;
 
-  data$ = this.task$.pipe(map(task => {
-    this.form.controls.training.setValue(task.training === TaskTraining.ENABLED);
-    return {
-      columns: [
-        { header: 'AI-model', width: 'auto' },
-        { header: 'FDS', width: 'auto' },
-        { header: 'Date', width: 'auto' },
-        ...(task.training === TaskTraining.ENABLED ? [{ header: 'Evaluation (Training)', width: '14rem' }] : [] ),
-        { header: '', width: '10rem' }
-      ],
-      rows: task.results?.map(result => ({
-        form: this.fb.group({
-          evaluation: this.fb.control(this.evaluationOptions.find(option => option.evaluation === result.evaluation), { validators: [Validators.required]})
-        }),
-        ...result
-      })) || []
-    };
-  }));
+  columns = [
+    { header: 'AI-model', width: 'auto' },
+    { header: 'FDS', width: 'auto' },
+    { header: 'Date', width: 'auto' },
+    { header: 'Evaluation (Training)', width: '14rem' },
+    { header: '', width: '10rem' }
+  ];
+
+  rows$ = this.task$.pipe(map(task => task.results?.map(result => ({
+      form: this.fb.group({
+        evaluation: this.fb.control(this.evaluationOptions.find(option => option.evaluation === result.evaluation), { validators: [Validators.required]})
+      }),
+      ...result
+    })) || []
+  ));
 
   selectedResult$ = new BehaviorSubject<TaskResult & { taskId: string }>(null!);
   
@@ -104,20 +99,6 @@ export class TaskResultsComponent {
     if (!(event.originalEvent?.target?.classList as DOMTokenList)?.contains('p-button')) {
       event.data && this.selectedResult$.next({ ...event.data, taskId });
       this.showResultDialog = true;
-    }
-  }
-
-  changeTraining(task: Task) {
-    if (task.training === TaskTraining.ENABLED && !!task.results?.find(result => result.evaluation !== TaskResultEvaluation.NEUTRAL)) {
-      this.confirmationService.confirm({
-        header: 'Disable task training',
-        icon: 'fas fa-robot',
-        acceptButtonStyleClass: 'p-button-danger',
-        message: 'Are you sure that you want to disable training for this task? All existing training data for this task will be deleted in this case.',
-        accept: () => this.store.dispatch(editTask({ taskId: task.id, training: TaskTraining.DISABLED }))
-      });
-    } else {
-      this.store.dispatch(editTask({ taskId: task.id, training: task.training === TaskTraining.ENABLED ? TaskTraining.DISABLED : TaskTraining.ENABLED }))
     }
   }
 
@@ -190,6 +171,20 @@ export class TaskResultsComponent {
         fileId: result.filename
       }));
     }
+  }
+
+  showEvaluationHelpDialog() {
+    this.confirmationService.confirm({
+      header: 'Share input and result data with us',
+      icon: 'fas fa-robot',
+      acceptButtonStyleClass: 'p-button-info',
+      message: `Optionally, you can evaluate the results of this task to improve the AI algorithm.
+        Negative and positive evaluated results and their corresponding input data will be shared with us.
+        This allows us to further train and improve the AI model through machine learning.
+        By setting the neutral rating again, the data previously shared with us will be deleted.`,
+      acceptLabel: 'Ok',
+      rejectVisible: false,
+    });
   }
 }
 
