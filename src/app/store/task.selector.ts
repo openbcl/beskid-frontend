@@ -56,16 +56,16 @@ export const resultData = (taskId: string, fileId: string) => createSelector(
   )?.results.find(result => result.filename.includes(fileId))?.dataResult
 );
 
-export const templateFile = (taskId: string, fileId: string) => createSelector(
+export const templateFile = (taskId: string, fileId: string, experimentId: string, condition: number) => createSelector(
   getTaskState,
   taskState => (
     taskState.task?.id === taskId ? taskState.task : taskState.tasks.find(task => task.id === task.id)
-  )?.results.find(result => result.filename.includes(fileId))?.fileFDS
+  )?.results.find(result => result.filename.includes(fileId))?.templates?.find(template => template.experimentId === experimentId && template.condition === condition)?.file
 );
 
-export const templateData = (taskId: string, fileId: string) => createSelector(
+export const templateData = (taskId: string, fileId: string, experimentId: string, condition: number) => createSelector(
   getTaskState,
   taskState => (
     taskState.task?.id === taskId ? taskState.task : taskState.tasks.find(task => task.id === task.id)
-  )?.results.find(result => result.filename.includes(fileId))?.dataFDS
+  )?.results.find(result => result.filename.includes(fileId))?.templates?.find(template => template.experimentId === experimentId && template.condition === condition)?.data
 );

@@ -56,8 +56,9 @@
                   </form>
                 </td>
                 <td class="flex gap-2 justify-content-end">
-                  @if (rowData.model.hasTemplate) {
-                    <p-button pTooltip="Download FDS template" tooltipPosition="top" severity="info" icon="fas fa-file-code" (click)="downloadTemplate(rowData, task)"></p-button>
+                  @if (!!rowData.downloadTemplateItems?.length) {
+                    <p-menu #fdsTemplatesMenu class="foo" [model]="rowData.downloadTemplateItems" [popup]="true" appendTo="body" />
+                    <p-button pTooltip="Download FDS template" tooltipPosition="top" severity="info" icon="fas fa-file-code" (click)="fdsTemplatesMenu.toggle($event)"></p-button>
                   }
                   <p-button pTooltip="Download results (json)" tooltipPosition="top" severity="success" icon="fas fa-file-arrow-down" (click)="downloadResult(rowData, task)"></p-button>
                   <p-button pTooltip="Delete results" tooltipPosition="top" severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData, task)"></p-button>
@@ -94,15 +95,17 @@
               </ng-template>
             </p-table>
           </p-tabPanel>
-          @if (taskTemplate$ | async; as taskTemplatetData) {
-            <p-tabPanel header="FDS Template">
-              <div class="be-code-viewer ">
-                @for (line of taskTemplatetData; track $index) {
-                  <p>{{line}}</p>
-                }
-              </div>
-            </p-tabPanel>
-          }
+          <!--
+            @if (taskTemplate$ | async; as taskTemplatetData) {
+              <p-tabPanel header="FDS Template">
+                <div class="be-code-viewer ">
+                  @for (line of taskTemplatetData; track $index) {
+                    <p>{{line}}</p>
+                  }
+                </div>
+              </p-tabPanel>
+            }
+          -->
         </p-tabView>
       } @else {
         <p-progressSpinner ariaLabel="loading"></p-progressSpinner>

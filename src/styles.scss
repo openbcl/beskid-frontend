@@ -152,6 +152,10 @@ p-dialog.be-dialog-tabView {
 body {
   margin: 0; 
   background-color: var(--highlight-text-color);
+
+  .p-menu.p-component.p-menu-overlay {
+    width: unset;
+  }
 }
 
 .fadeoutleft {

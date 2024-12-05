@@ -1,5 +1,5 @@
 import { Job } from "./job";
-import { ModelPartial } from "./model";
+import { ModelPartial, Template } from "./model";
 
 export interface TaskSetting {
   id: string;
@@ -40,8 +40,7 @@ export interface TaskResult extends ResultValue {
   date: Date;
   model: ModelPartial;
   evaluation: TaskResultEvaluation;
-  fileFDS?: BlobFile;
-  dataFDS?: string;
+  templates?: (Template & { file?: BlobFile, data?: string })[]
 }
 
 export interface ResultValue {
