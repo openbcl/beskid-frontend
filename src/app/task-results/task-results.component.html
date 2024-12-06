@@ -56,8 +56,9 @@
                   </form>
                 </td>
                 <td class="flex gap-2 justify-content-end">
-                  @if (rowData.model.hasTemplate) {
-                    <p-button pTooltip="Download FDS template" tooltipPosition="top" severity="info" icon="fas fa-file-code" (click)="downloadTemplate(rowData, task)"></p-button>
+                  @if (!!rowData.downloadTemplateItems?.length) {
+                    <p-menu #fdsTemplatesMenu class="foo" [model]="rowData.downloadTemplateItems" [popup]="true" appendTo="body" />
+                    <p-button pTooltip="Download FDS template" tooltipPosition="top" severity="info" icon="fas fa-file-code" (click)="fdsTemplatesMenu.toggle($event)"></p-button>
                   }
                   <p-button pTooltip="Download results (json)" tooltipPosition="top" severity="success" icon="fas fa-file-arrow-down" (click)="downloadResult(rowData, task)"></p-button>
                   <p-button pTooltip="Delete results" tooltipPosition="top" severity="danger" icon="fas fa-trash" (click)="deleteTaskResult(rowData, task)"></p-button>
@@ -77,7 +78,7 @@
     <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': FDS ' + selectedResult?.model?.fds?.version + ')'" [(visible)]="showResultDialog" [modal]="true" [maximizable]="true">
       <label class="flex justify-content-center pt-2 pb-2 bg-primary border-noround-bottom border-round-2xl">{{ selectedResult?.date | date:'medium' }}</label>
       @if (taskResult$ | async; as taskResultData) {
-        <p-tabView class="be-result-tabView">
+        <p-tabView class="be-result-tabView" [scrollable]="true">
           <p-tabPanel header="Values">
             <p-table [value]="taskResultData" styleClass="p-datatable-striped">
               <ng-template pTemplate="header">
@@ -94,11 +95,15 @@
               </ng-template>
             </p-table>
           </p-tabPanel>
-          @if (taskTemplate$ | async; as taskTemplatetData) {
-            <p-tabPanel header="FDS Template">
+          @for (template of templates$ | async; track $index) {
+            <p-tabPanel header="FDS: {{template.experimentId}} ({{template.condition}})">
               <div class="be-code-viewer ">
-                @for (line of taskTemplatetData; track $index) {
-                  <p>{{line}}</p>
+                @if (!template.data.length) {
+                  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+                } @else {
+                  @for (line of template.data; track $index) {
+                    <p>{{line}}</p>
+                  }
                 }
               </div>
             </p-tabPanel>

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, map, switchMap, take, tap } from 'rxjs';
 import { BlobFile, KeepTrainingData, Task, TaskResult, TaskResultEvaluation } from '../store/task';
 import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ConfirmationService } from 'primeng/api';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { MenuModule } from 'primeng/menu';
 import { TooltipModule } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
 import { TabViewModule } from 'primeng/tabview';
@@ -20,11 +21,12 @@ import { resultFile, selectedTask, templateFile } from '../store/task.selector';
 import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 import { filterNullish } from '../shared/rx.filter';
+import { models } from '../store/model.selector';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, TabViewModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, TabViewModule, MenuModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })
@@ -49,12 +51,30 @@ export class TaskResultsComponent {
     { header: '', width: '10rem' }
   ];
 
-  rows$ = this.task$.pipe(map(task => task.results?.map(result => ({
-      form: this.fb.group({
-        evaluation: this.fb.control(this.evaluationOptions.find(option => option.evaluation === result.evaluation), { validators: [Validators.required]})
-      }),
-      ...result
-    })) || []
+  models$ = this.store.select(models).pipe(filterNullish());
+
+  rows$ = combineLatest([this.task$, this.models$]).pipe(
+    map(combinedArray => ({task: combinedArray[0], models: combinedArray[1]})),
+    map(combined => combined.task.results?.map(result => {
+      const model = combined.models.find(model => model.id === result.model.id);
+      return {
+        form: this.fb.group({
+          evaluation: this.fb.control(this.evaluationOptions.find(option => option.evaluation === result.evaluation), { validators: [Validators.required]})
+        }),
+        ...result,
+        downloadTemplateItems: !!model?.templates.length ? [{
+          label: 'Available FDS templates',
+          items: model.templates.map(template => {
+            const experiment = model.experiments.find(exp => exp.id === template.experimentId);
+            return !!experiment ? {
+              icon: 'fas fa-file-code',
+              label: `${experiment.name}: ${template.condition} ${experiment.conditionMU}`,
+              command: () => this.downloadTemplate(result, combined.task, template.experimentId, template.condition)
+            } : undefined
+          }).filter(item => !!item)
+        }] : undefined
+      }
+    }) || []
   ));
 
   selectedResult$ = new BehaviorSubject<TaskResult & { taskId: string }>(null!);
@@ -74,19 +94,39 @@ export class TaskResultsComponent {
     )
   );
 
-  taskTemplate$ = this.selectedResult$.pipe(
-    filterNullish(),
-    switchMap(selectedResult =>
-      this.task$.pipe(
-        map(task => task.results.find(result => result.filename === selectedResult.filename)),
-        tap(taskResult => !!taskResult && !taskResult.dataFDS && this.store.dispatch(findTaskResultTemplateData({
-          taskId: selectedResult.taskId,
-          fileId: selectedResult.filename
-        }))),
-        filterNullish(),
-        map(taskResult => taskResult.dataFDS?.split(/\r?\n/))
-      )
-    )
+  templates$ = combineLatest([this.task$, this.selectedResult$.pipe(filterNullish()), this.models$]).pipe(
+    map(combinedArray => ({task: combinedArray[0], selectedResult: combinedArray[1], models: combinedArray[2]})),
+    map(combined => {
+      const taskResult = combined.task.results.find(result => result.filename === combined.selectedResult.filename);
+      if (!taskResult) {
+        return undefined;
+      }
+      const model = combined.models.find(model => model.id === taskResult.model.id);
+      if (!model) {
+        return undefined;
+      }
+      const templates = taskResult.templates || [];
+      const template = model.templates.find(modelTemplate => 
+        !templates.find(resultTemplate => 
+          modelTemplate.experimentId == resultTemplate.experimentId && modelTemplate.condition === resultTemplate.condition && !!resultTemplate.data
+        )
+      );
+      if (!!template) {
+        this.store.dispatch(findTaskResultTemplateData({
+          taskId: combined.selectedResult.taskId,
+          fileId: combined.selectedResult.filename,
+          ...template
+        }))
+      }
+      const dataTemplates = templates.filter(template => !!template.data).map(template => ({ ...template, data: template.data!.split(/\r?\n/) }));
+      return model.templates.map(modelTemplate =>
+        dataTemplates.find(dataTemplate => dataTemplate.experimentId === modelTemplate.experimentId && dataTemplate.condition === modelTemplate.condition) || {
+          ...modelTemplate,
+          data: ''
+        }
+      );
+    }),
+    filterNullish()
   );
 
   constructor(
@@ -161,14 +201,17 @@ export class TaskResultsComponent {
     }
   }
 
-  downloadTemplate(result: TaskResult, task: Task) {
-    if (result.fileFDS) {
-      this.download(result.fileFDS!);
+  downloadTemplate(result: TaskResult, task: Task, experimentId: string, condition: number) {
+    const file = result.templates?.find(template => template.experimentId === experimentId && template.condition === condition)?.file;
+    if (file) {
+      this.download(file);
     } else {
-      this.store.select(templateFile(task.id, result.filename)).pipe(filter(blobFile => !!blobFile), take(1)).subscribe(blobFile => this.download(blobFile!));
+      this.store.select(templateFile(task.id, result.filename, experimentId, condition)).pipe(filter(blobFile => !!blobFile), take(1)).subscribe(blobFile => this.download(blobFile!));
       this.store.dispatch(findTaskResultTemplateFile({
         taskId: task.id,
-        fileId: result.filename
+        fileId: result.filename,
+        experimentId,
+        condition
       }));
     }
   }

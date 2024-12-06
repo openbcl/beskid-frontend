@@ -119,8 +119,14 @@ export class TaskEffects {
     ofType(TaskActions.findTaskResultTemplateFile),
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
-      this.taskService.findTaskResultTemplateFile(action.taskId, action.fileId).pipe(
-        switchMap(fileFDS => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateFileSuccess({ taskId: action.taskId, fileId: action.fileId, fileFDS: fileFDS }))),
+      this.taskService.findTaskResultTemplateFile(action.taskId, action.fileId, action.experimentId, action.condition).pipe(
+        switchMap(fileFDS => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateFileSuccess({
+          taskId: action.taskId,
+          fileId: action.fileId,
+          experimentId: action.experimentId, 
+          condition: action.condition,
+          fileFDS: fileFDS
+        }))),
         catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateFileFailure({ error })))
       )
     )
@@ -130,8 +136,14 @@ export class TaskEffects {
     ofType(TaskActions.findTaskResultTemplateData),
     tap(action => this.store.dispatch(startProcessing({id: action.type}))),
     switchMap(action =>
-      this.taskService.findTaskResultTemplateData(action.taskId, action.fileId).pipe(
-        switchMap(plaintext => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateDataSuccess({ taskId: action.taskId, fileId: action.fileId, dataFDS: plaintext }))),
+      this.taskService.findTaskResultTemplateData(action.taskId, action.fileId, action.experimentId, action.condition).pipe(
+        switchMap(plaintext => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateDataSuccess({
+          taskId: action.taskId,
+          fileId: action.fileId,
+          experimentId: action.experimentId, 
+          condition: action.condition,
+          dataFDS: plaintext
+        }))),
         catchError(error => of(finishProcessing({id: action.type}), TaskActions.findTaskResultTemplateDataFailure({ error })))
       )
     )

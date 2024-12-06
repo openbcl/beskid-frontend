@@ -16,6 +16,11 @@ export interface Experiment {
   conditionMU: string
 }
 
+export interface Template {
+  experimentId: string;
+  condition: number;
+}
+
 export interface Model {
   id: number;
   description: string,
@@ -23,7 +28,7 @@ export interface Model {
   resolution: number;
   experiments: Experiment[];
   fds: FDS;
-  hasTemplate: boolean;
+  templates: Template[];
   disabled: boolean;
 }
 
@@ -31,4 +36,4 @@ export interface LockableModel extends Model {
   locked: boolean;
 }
 
-export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds' | 'hasTemplate' | 'disabled'> {}
+export interface ModelPartial extends Pick<Model, 'id' | 'name' | 'fds' | 'disabled'> {}
