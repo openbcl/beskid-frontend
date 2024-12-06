@@ -42,13 +42,13 @@ const mergeTasksState = (task: Task, tasks: Task[]) => {
 
 const updateTemplates = (result: TaskResult, experimentId: string, condition: number, value: BlobFile | string) => {
   const templates = result.templates || [];
-  const template = templates.find(template => template.experimentId === experimentId && template.condition === condition) || { experimentId, condition }
+  const template = { ...(templates.find(template => template.experimentId === experimentId && template.condition === condition) || { experimentId, condition }) }
   if (typeof value === 'string' || value instanceof String) {
     template.data = value as string;
   } else {
     template.file = value as BlobFile;
   }
-  return { templates: [ ...templates.filter(template => template.experimentId === experimentId && template.condition === condition), template] };
+  return { templates: [ ...templates.filter(template => template.experimentId !== experimentId || template.condition !== condition), template] };
 }
 
 export const taskReducer = createReducer(
@@ -100,9 +100,10 @@ export const taskReducer = createReducer(
       ...(action.type === TaskAction.findTaskResultTemplateFileSuccess.type ? updateTemplates(result, action.experimentId, action.condition, action.fileFDS) : {}),
       ...(action.type === TaskAction.findTaskResultTemplateDataSuccess.type ? updateTemplates(result, action.experimentId, action.condition, action.dataFDS) : {}),
       ...(action.type === TaskAction.findTaskResultSuccess.type ? {
-        dataResult: !isBlob ? action.resultValue.dataResult : result.dataResult,
-        fileResult: isBlob ? action.resultValue.fileResult : result.fileResult
-      } : {}),
+          dataResult: !isBlob ? action.resultValue.dataResult : result.dataResult,
+          fileResult: isBlob ? action.resultValue.fileResult : result.fileResult
+        } : {}
+      )
     });
     return {
       ...state,

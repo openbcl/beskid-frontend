@@ -56,16 +56,19 @@ html {
   overflow: hidden;
 }
 
+p-dialog p-tabView {
+  max-width: calc(100vw);
+  .p-tabview-nav-container {
+    max-width: calc(100vw - 3rem);
+  }
+}
+
 p-dialog.be-dialog-tabView {
   .p-dialog-resizable {
     width: 100vw;
     height: min(85vh, 625px) ;
   }
   p-tabView {
-    max-width: calc(100vw);
-    .p-tabview-nav-container {
-      max-width: calc(100vw - 3rem);
-    }
     .p-tabview-panels {
       padding-bottom: 0;
     }

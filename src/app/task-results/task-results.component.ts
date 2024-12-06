@@ -22,7 +22,6 @@ import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 import { filterNullish } from '../shared/rx.filter';
 import { models } from '../store/model.selector';
-import { findModels } from '../store/model.actions';
 
 @Component({
   selector: 'be-task-results',
@@ -52,7 +51,9 @@ export class TaskResultsComponent {
     { header: '', width: '10rem' }
   ];
 
-  rows$ = combineLatest([this.task$, this.store.select(models).pipe(filterNullish())]).pipe(
+  models$ = this.store.select(models).pipe(filterNullish());
+
+  rows$ = combineLatest([this.task$, this.models$]).pipe(
     map(combinedArray => ({task: combinedArray[0], models: combinedArray[1]})),
     map(combined => combined.task.results?.map(result => {
       const model = combined.models.find(model => model.id === result.model.id);
@@ -92,22 +93,42 @@ export class TaskResultsComponent {
       )
     )
   );
-  /*
-  taskTemplate$ = this.selectedResult$.pipe(
-    filterNullish(),
-    switchMap(selectedResult =>
-      this.task$.pipe(
-        map(task => task.results.find(result => result.filename === selectedResult.filename)),
-        tap(taskResult => !!taskResult && !taskResult.dataFDS && this.store.dispatch(findTaskResultTemplateData({
-          taskId: selectedResult.taskId,
-          fileId: selectedResult.filename
-        }))),
-        filterNullish(),
-        map(taskResult => taskResult.dataFDS?.split(/\r?\n/))
-      )
-    )
+
+  templates$ = combineLatest([this.task$, this.selectedResult$.pipe(filterNullish()), this.models$]).pipe(
+    map(combinedArray => ({task: combinedArray[0], selectedResult: combinedArray[1], models: combinedArray[2]})),
+    map(combined => {
+      const taskResult = combined.task.results.find(result => result.filename === combined.selectedResult.filename);
+      if (!taskResult) {
+        return undefined;
+      }
+      const model = combined.models.find(model => model.id === taskResult.model.id);
+      if (!model) {
+        return undefined;
+      }
+      const templates = taskResult.templates || [];
+      const template = model.templates.find(modelTemplate => 
+        !templates.find(resultTemplate => 
+          modelTemplate.experimentId == resultTemplate.experimentId && modelTemplate.condition === resultTemplate.condition && !!resultTemplate.data
+        )
+      );
+      if (!!template) {
+        this.store.dispatch(findTaskResultTemplateData({
+          taskId: combined.selectedResult.taskId,
+          fileId: combined.selectedResult.filename,
+          ...template
+        }))
+      }
+      const dataTemplates = templates.filter(template => !!template.data).map(template => ({ ...template, data: template.data!.split(/\r?\n/) }));
+      return model.templates.map(modelTemplate =>
+        dataTemplates.find(dataTemplate => dataTemplate.experimentId === modelTemplate.experimentId && dataTemplate.condition === modelTemplate.condition) || {
+          ...modelTemplate,
+          data: ''
+        }
+      );
+    }),
+    filterNullish()
   );
-  */
+
   constructor(
     private store: Store,
     private confirmationService: ConfirmationService,

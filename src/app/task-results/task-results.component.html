@@ -78,7 +78,7 @@
     <p-dialog [header]="'Task Result (' + selectedResult?.model?.name + ': FDS ' + selectedResult?.model?.fds?.version + ')'" [(visible)]="showResultDialog" [modal]="true" [maximizable]="true">
       <label class="flex justify-content-center pt-2 pb-2 bg-primary border-noround-bottom border-round-2xl">{{ selectedResult?.date | date:'medium' }}</label>
       @if (taskResult$ | async; as taskResultData) {
-        <p-tabView class="be-result-tabView">
+        <p-tabView class="be-result-tabView" [scrollable]="true">
           <p-tabPanel header="Values">
             <p-table [value]="taskResultData" styleClass="p-datatable-striped">
               <ng-template pTemplate="header">
@@ -95,17 +95,19 @@
               </ng-template>
             </p-table>
           </p-tabPanel>
-          <!--
-            @if (taskTemplate$ | async; as taskTemplatetData) {
-              <p-tabPanel header="FDS Template">
-                <div class="be-code-viewer ">
-                  @for (line of taskTemplatetData; track $index) {
+          @for (template of templates$ | async; track $index) {
+            <p-tabPanel header="FDS: {{template.experimentId}} ({{template.condition}})">
+              <div class="be-code-viewer ">
+                @if (!template.data.length) {
+                  <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+                } @else {
+                  @for (line of template.data; track $index) {
                     <p>{{line}}</p>
                   }
-                </div>
-              </p-tabPanel>
-            }
-          -->
+                }
+              </div>
+            </p-tabPanel>
+          }
         </p-tabView>
       } @else {
         <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
