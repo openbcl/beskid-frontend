@@ -43,15 +43,15 @@ export class TaskService {
     return this.http.get<any>(`${environment.api}/v1/tasks/${taskId}/results/${fileId}`).pipe(map(dataResult => ({ dataResult })));
   }
 
-  findTaskResultTemplateFile(taskId: string, fileId: string): Observable<BlobFile> {
-    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-file`, { observe: 'response', responseType: 'blob' }).pipe(map(response =>  ({
-        blob: response?.body ? new Blob([response.body], { type:  'text/plain' }) : null,
+  findTaskResultTemplateFile(taskId: string, fileId: string, experimentId: string, condition: number): Observable<BlobFile> {
+    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-file?experimentId=${experimentId}&condition=${condition}`, { observe: 'response', responseType: 'blob' }).pipe(map(response =>  ({
+        blob: response?.body ? new Blob([response.body], { type: 'text/plain' }) : null,
         filename: response.headers.get('content-disposition')?.match(/filename="(.+?)"/)?.[1]
     } as BlobFile)));
   }
 
-  findTaskResultTemplateData(taskId: string, fileId: string) {
-    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-data`, { responseType: 'text' });
+  findTaskResultTemplateData(taskId: string, fileId: string, experimentId: string, condition: number) {
+    return this.http.get(`${environment.api}/v1/tasks/${taskId}/results/${fileId}/template-data?experimentId=${experimentId}&condition=${condition}`, { responseType: 'text' });
   }
 
   evaluateTaskResult(taskId: string, fileId: string, evaluation: TaskResultEvaluation) {

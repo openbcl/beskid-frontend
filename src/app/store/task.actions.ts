@@ -97,12 +97,12 @@ export const findTaskResultFailure = createAction(
 
 export const findTaskResultTemplateFile = createAction(
   '[Task] Find Task Result Template File',
-  props<{ taskId: string, fileId: string }>()
+  props<{ taskId: string, fileId: string, experimentId: string, condition: number }>()
 );
 
 export const findTaskResultTemplateFileSuccess = createAction(
   '[Task] Find Task Result Template File Success',
-  props<{ taskId: string, fileId: string, fileFDS: BlobFile }>()
+  props<{ taskId: string, fileId: string, experimentId: string, condition: number, fileFDS: BlobFile }>()
 );
 
 export const findTaskResultTemplateFileFailure = createAction(
@@ -112,12 +112,12 @@ export const findTaskResultTemplateFileFailure = createAction(
 
 export const findTaskResultTemplateData = createAction(
   '[Task] Find Task Result Template Data',
-  props<{ taskId: string, fileId: string }>()
+  props<{ taskId: string, fileId: string, experimentId: string, condition: number }>()
 );
 
 export const findTaskResultTemplateDataSuccess = createAction(
   '[Task] Find Task Result Template Data Success',
-  props<{ taskId: string, fileId: string, dataFDS: string }>()
+  props<{ taskId: string, fileId: string, experimentId: string, condition: number, dataFDS: string }>()
 );
 
 export const findTaskResultTemplateDataFailure = createAction(
