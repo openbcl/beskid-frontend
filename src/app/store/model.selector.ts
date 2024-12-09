@@ -81,6 +81,9 @@ export const experimentOptions = createSelector(
         }
       }));
     }
-    return experimentOptions;
+    return experimentOptions.map(experimentOption => ({
+      ...experimentOption,
+      conditions: experimentOption.conditions.sort((a, b) => a.value - b.value)
+    }));
   }
 );

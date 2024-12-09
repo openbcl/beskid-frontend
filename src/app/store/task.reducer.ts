@@ -21,10 +21,10 @@ export const initialTaskState: TaskState = {
   error: null
 };
 
-const mergeTasksState = (task: Task, tasks: Task[]) => {
+const mergeTasksState = (actionTask: Task, tasks: Task[], stateTask?: Task ) => {
   const updatedTask = {
-    ...task,
-    values: !!task.values?.length ? task.values : tasks.find(stateTask => stateTask.id === task.id)?.values || [],
+    ...actionTask,
+    values: !!actionTask.values?.length ? actionTask.values : tasks.find(stateTask => stateTask.id === actionTask.id)?.values || [],
   }
   let merged = false;
   const mergedTasks = [ ...tasks ].map(stateTask => {
@@ -37,7 +37,7 @@ const mergeTasksState = (task: Task, tasks: Task[]) => {
   if (!merged) {
     mergedTasks.push(updatedTask)
   }
-  return { task: updatedTask, tasks: mergedTasks }
+  return { task: stateTask?.id === actionTask.id ? updatedTask : stateTask, tasks: mergedTasks }
 }
 
 const updateTemplates = (result: TaskResult, experimentId: string, condition: number, value: BlobFile | string) => {
@@ -71,11 +71,11 @@ export const taskReducer = createReducer(
   }),
 
   on(TaskAction.runTaskSuccess, (state, action) => {
-    return { ...state, ...mergeTasksState(action.task, state.tasks), running: state.running.filter(taskId => taskId !== action.task.id ) };
+    return { ...state, ...mergeTasksState(action.task, state.tasks, state.task), running: state.running.filter(taskId => taskId !== action.task.id ) };
   }),
 
   on(...[TaskAction.addTaskSuccess, TaskAction.findTaskSuccess, TaskAction.evaluateTaskResultSuccess, TaskAction.deleteTaskResultSuccess], (state, action) => {
-    return { ...state, ...mergeTasksState(action.task, state.tasks), creating: false };
+    return { ...state, ...mergeTasksState(action.task, state.tasks, state.task), creating: false };
   }),
 
   on(TaskAction.findTasksSuccess, (state, action) => {

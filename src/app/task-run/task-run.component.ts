@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AsyncPipe } from '@angular/common';
 import { NonNullableFormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -23,7 +23,7 @@ import { RecreateViewDirective } from '../shared/recreate-view.directive';
   templateUrl: './task-run.component.html',
   styleUrl: './task-run.component.scss'
 })
-export class TaskRunComponent {
+export class TaskRunComponent implements OnChanges {
   @Input({ required: true }) task!: Task;
   @Input({ required: true }) running!: boolean;
   @Input({ required: true }) lockableModels!: LockableModel[];
@@ -48,6 +48,17 @@ export class TaskRunComponent {
     private store: Store,
     private fb: NonNullableFormBuilder
   ) { }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['task']?.currentValue.id !== changes['task']?.previousValue?.id) {
+      const lockableModelIds = (changes['lockableModels'].currentValue as LockableModel[]).map((model) => model.id);
+      const selection = [ ...(this.form.value.selectedModels || []).filter(model => !!lockableModelIds.find(id => id === model.id)) ];
+      this.form.controls.selectedModels.setValue(selection);
+      if (this.beModelTable) {
+        this.beModelTable.selection = selection;
+      }
+    }
+  }
 
   runTask() {
     this.form.value.selectedModels?.forEach(model => {
