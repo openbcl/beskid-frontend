@@ -22,11 +22,12 @@ import { breakpoint } from '../store/ui.selector';
 import { RecreateViewDirective } from '../shared/recreate-view.directive';
 import { filterNullish } from '../shared/rx.filter';
 import { models } from '../store/model.selector';
+import { NumberLengthPipe } from '../shared/number-length.pipe';
 
 @Component({
   selector: 'be-task-results',
   standalone: true,
-  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, TabViewModule, MenuModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule],
+  imports: [AsyncPipe, FormsModule, ReactiveFormsModule, DatePipe, ButtonModule, TabViewModule, MenuModule, InputSwitchModule, PanelModule, TableModule, SelectButtonModule, DialogModule, ProgressSpinnerModule, TooltipModule, RecreateViewDirective, TagModule, NumberLengthPipe],
   templateUrl: './task-results.component.html',
   styleUrl: './task-results.component.scss'
 })

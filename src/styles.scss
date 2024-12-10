@@ -106,7 +106,7 @@ p-dialog.be-dialog-tabView {
       padding: 0 .5em 0 0;
       margin-right: .5em;
       background-color: var(--surface-200);
-      width: 3.5ch;
+      width: var(--line-numbers-width);
       text-align: right;
     }
     &:last-of-type::before {

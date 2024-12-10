@@ -97,7 +97,7 @@
           </p-tabPanel>
           @for (template of templates$ | async; track $index) {
             <p-tabPanel header="FDS: {{template.experimentId}} ({{template.condition}})">
-              <div class="be-code-viewer ">
+              <div class="be-code-viewer" [style.--line-numbers-width]="(template?.data?.length | numberLength:1) + 'ch'">
                 @if (!template.data.length) {
                   <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
                 } @else {
