@@ -92,8 +92,11 @@ p-dialog.be-dialog-tabView {
   color: var(--surface-400);
 }
 
-.be-code-viewer {
+.be-code, .be-code-viewer  {
   font-family: monospace;
+}
+
+.be-code-viewer {
   counter-reset: line;
   max-width: calc(100vw - 3rem);
   overflow: auto; 
@@ -106,7 +109,7 @@ p-dialog.be-dialog-tabView {
       padding: 0 .5em 0 0;
       margin-right: .5em;
       background-color: var(--surface-200);
-      width: 3.5ch;
+      width: var(--line-numbers-width);
       text-align: right;
     }
     &:last-of-type::before {

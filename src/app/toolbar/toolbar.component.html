@@ -47,6 +47,31 @@
 </p-toolbar>
 <p-dialog header="About this application" class="be-dialog-tabView" [modal]="true" [(visible)]="showInfoDialog" [maximizable]="true">
   <p-tabView [scrollable]="true">
+    <p-tabPanel leftIcon="fab fa-github" header="App Info">
+      @if (info$ | async; as info) {
+        <p>Version: <span class="be-code">{{ info.frontend.version }}</span></p>
+        <h4>Frontend: <a target="_blank" [href]="frontendURL">{{frontendURL}}</a></h4>
+        <div class="flex flex-wrap flex-column mb-4">
+          <div class="grid align-items-center">
+           <i class="col-fixed fa-brands fa-github"></i>
+           Source:&nbsp;<a href="https://github.com/openbcl/beskid-frontend" target="_blank">https://github.com/openbcl/beskid-frontend</a>
+          </div>
+          <span>Branch: <span class="be-code">{{ info.frontend.branch }}</span></span>
+          <span>Commit: <span class="be-code">{{ info.frontend.commit }}</span></span>
+        </div>
+        <h4>Backend: <a target="_blank" [href]="backendURL">{{backendURL}}</a></h4>
+        <div class="flex flex-wrap flex-column mb-4">
+          <div class="grid align-items-center">
+            <i class="col-fixed fa-brands fa-github"></i>
+            Source:&nbsp;<a href="https://github.com/openbcl/beskid-backend" target="_blank">https://github.com/openbcl/beskid-backend</a>
+          </div>
+          <span>Branch: <span class="be-code">{{ info.backend.branch }}</span></span>
+          <span>Commit: <span class="be-code">{{ info.backend.commit }}</span></span>
+        </div>
+      } @else {
+        <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+      }
+    </p-tabPanel>
     <p-tabPanel leftIcon="fas fa-section" header="Legal Notice">
       <p>
         The BESKID project is funded by the Federal Ministry of Education and Research (BMBF) within the program "Research for Civil Security".
@@ -97,7 +122,7 @@
       </p>
       <p>
         @if(validityPeriodInDays$ | async; as validityPeriodInDays) {
-          A session is valid for {{ validityPeriodInDays }} days. If the website is not reloaded within this time,
+          <u>A session is valid for {{ validityPeriodInDays }} days</u>. If the website is not reloaded within this time,
           the session is not automatically extended for a further {{ validityPeriodInDays }} days.
           At the end of this period, the session and all data associated with it,
           such as tasks and their results, will be irrevocably deleted.
@@ -129,17 +154,5 @@
         <span>04315 Leipzig</span>
       </div>
     </p-tabPanel>
-    <p-tabPanel leftIcon="fab fa-github" header="Source Code">
-      <h4>Frontend</h4>
-      <div class="grid align-items-center">
-       <i class="col-fixed fa-brands fa-github"></i>
-       <a href="https://github.com/openbcl/beskid-frontend" target="_blank">https://github.com/openbcl/beskid-frontend</a>
-      </div>
-      <h4>Backend</h4>
-      <div class="grid">
-       <i class="col-fixed fa-brands fa-github"></i>
-       <a href="https://github.com/openbcl/beskid-backend" target="_blank">https://github.com/openbcl/beskid-backend</a>
-      </div>
-   </p-tabPanel>
   </p-tabView>
 </p-dialog>

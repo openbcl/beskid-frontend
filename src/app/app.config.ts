@@ -10,18 +10,20 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideServiceWorker } from '@angular/service-worker';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AuthEffects } from './store/auth.effects';
-import { authFeatureKey, authReducer } from './store/auth.reducer';
 import { tokenInterceptor } from './shared/token.interceptor';
-import { ModelEffects } from './store/model.effects';
+import { authFeatureKey, authReducer } from './store/auth.reducer';
 import { modelFeatureKey, modelReducer } from './store/model.reducer';
 import { taskFeatureKey, taskReducer } from './store/task.reducer';
+import { uiFeatureKey, uiReducer } from './store/ui.reducer';
+import { jobFeatureKey, jobReducer } from './store/job.reducer';
+import { infoFeatureKey, infoReducer } from './store/info.reducer';
+import { AuthEffects } from './store/auth.effects';
+import { ModelEffects } from './store/model.effects';
 import { TaskEffects } from './store/task.effects';
 import { ToastEffects } from './store/toast.effects';
 import { UiEffects } from './store/ui.effects';
-import { uiFeatureKey, uiReducer } from './store/ui.reducer';
-import { jobFeatureKey, jobReducer } from './store/job.reducer';
 import { JobEffects } from './store/job.effects';
+import { InfoEffects } from './store/info.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -49,7 +51,8 @@ export const appConfig: ApplicationConfig = {
     provideState({ name: taskFeatureKey, reducer: taskReducer }),
     provideState({ name: jobFeatureKey, reducer: jobReducer }),
     provideState({ name: uiFeatureKey, reducer: uiReducer }),
-    provideEffects(AuthEffects, ModelEffects, TaskEffects, JobEffects, ToastEffects, UiEffects),
+    provideState({ name: infoFeatureKey, reducer: infoReducer }),
+    provideEffects(AuthEffects, ModelEffects, TaskEffects, JobEffects, ToastEffects, UiEffects, InfoEffects),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
