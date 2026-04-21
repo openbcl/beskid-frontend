@@ -29,6 +29,9 @@ You will find two files under the path "src/environments" in which the address t
 ## Running the app
 
 ```bash
+# install dependencies (one time)
+npm install
+
 # development watch mode
 # (The application will automatically reload if you change any of the source files.)
 $ npm run start:dev
