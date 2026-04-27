@@ -5,8 +5,7 @@ export interface TaskSetting {
   id: string;
   name: string;
   resolution: number;
-  condition: number;
-  conditionMU: string;
+  conditions: Record<string, number>;
 }
 
 export interface Task {
@@ -19,7 +18,7 @@ export interface Task {
 }
 
 export interface CreateTask extends Pick<Task, 'values'> {
-  setting: Omit<TaskSetting, 'name' | 'conditionMU'>
+  setting: Omit<TaskSetting, 'name'>
 };
 
 export enum TaskResultEvaluation {

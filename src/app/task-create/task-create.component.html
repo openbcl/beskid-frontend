@@ -4,15 +4,28 @@
       @if(experimentOptions$ | async; as experimentOptions) {
         <div class="md:col-4 col-12 flex flex-column">
           <label class="mb-1 pl-2">Experiment</label>
-          <p-dropdown [class.be-highlighted]="!form.controls.experimentOption.valid" class="w-100" formControlName="experimentOption" [options]="experimentOptions" optionLabel="name" placeholder="Pick experiment type" (onChange)="onChanges(form.controls.experimentCondition)"></p-dropdown>
+          <p-dropdown [class.be-highlighted]="!form.controls.experimentOption.valid" class="w-100" formControlName="experimentOption" [options]="experimentOptions" optionLabel="name" placeholder="Pick experiment type" (onChange)="onExperimentChange()"></p-dropdown>
         </div>
-        <div class="md:col-4 col-12 flex flex-column">
-          <label class="mb-1 pl-2">Condition</label>
-          <p-dropdown [class.be-highlighted]="form.controls.experimentOption.valid && !form.controls.experimentCondition.valid" class="w-100" formControlName="experimentCondition" [options]="form.value.experimentOption?.conditions" optionLabel="name" placeholder="Pick experiment condition" (onChange)="onChanges(form.controls.experimentResolution, $event)"></p-dropdown>
+        <div formGroupName="conditionValues" class="md:col-4 col-12 grid m-0 p-0">
+          @for(conditionOption of conditionOptions; track conditionOption.id) {
+            <div class="col-12 flex flex-column">
+              <label class="mb-1 pl-2">{{conditionOption.label}}</label>
+              <p-dropdown
+                [class.be-highlighted]="form.controls.experimentOption.valid && !form.controls.conditionValues.controls[conditionOption.id].valid"
+                class="w-100"
+                [formControlName]="conditionOption.id"
+                [options]="conditionOption.values"
+                optionLabel="value"
+                optionValue="value"
+                placeholder="Pick condition value"
+                (onChange)="onConditionChange()">
+              </p-dropdown>
+            </div>
+          }
         </div>
         <div class="md:col-4 col-12 flex flex-column">
           <label class="mb-1 pl-2">Resolution</label>
-          <p-dropdown [class.be-highlighted]="form.controls.experimentCondition.valid && !form.controls.experimentResolution.valid" class="w-100" formControlName="experimentResolution" [options]="form.value.experimentCondition?.resolutions" placeholder="Pick number of input values"></p-dropdown>
+          <p-dropdown [class.be-highlighted]="form.controls.experimentOption.valid && !form.controls.experimentResolution.valid" class="w-100" formControlName="experimentResolution" [options]="resolutionOptions" placeholder="Pick number of input values"></p-dropdown>
         </div>
       }
     </div>
@@ -52,7 +65,7 @@
                       {{ columns[5].header }}
                       <p-sortIcon field="experiment.scale.name" />
                     </th>
-  
+
                   </tr>
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -68,7 +81,7 @@
                       </div>
                     </td>
                     <td><span class="p-column-title pr-2 font-semibold">{{ columns[3].header }}</span>{{ rowData.experiment.name }}</td>
-                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[4].header }}</span>{{ rowData.experiment.condition }} {{ rowData.experiment.conditionMU }}</td>
+                    <td><span class="p-column-title pr-2 font-semibold">{{ columns[4].header }}</span>{{ rowData.experiment.conditionSummary }}</td>
                     <td><span class="p-column-title pr-2 font-semibold">{{ columns[5].header }}</span>
                       <div>
                         {{ rowData.experiment?.scale.name }}
@@ -94,7 +107,7 @@
     </ng-template>
     @if(values$ | async; as values) {
       @if(!!values?.length) {
-        <be-task-chart class="p-2 pt-0" [values]="values" [title]="form.value.experimentOption?.name || ''" label="Input values, condition: {{form.value.experimentCondition?.name}}"></be-task-chart>
+        <be-task-chart class="p-2 pt-0" [values]="values" [title]="form.value.experimentOption?.name || ''" label="Input values, condition: {{selectedConditionsLabel()}}"></be-task-chart>
       }
     }
     <p-table [value]="form.controls.values.controls" styleClass="p-datatable-striped">
@@ -125,7 +138,7 @@
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
-        <ng-container formArrayName="values">  
+        <ng-container formArrayName="values">
           <tr >
               <td class="table-nr-column">{{rowIndex + 1}}</td>
               <td class="table-input-column">

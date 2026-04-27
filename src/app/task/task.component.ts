@@ -31,7 +31,7 @@ import { jobs } from '../store/job.selector';
     imports: [AsyncPipe, DatePipe, TaskChartComponent, PanelModule, TooltipModule, ButtonModule, NumbersToStringsPipe, TaskRunComponent, TaskResultsComponent, TaskJobsComponent]
 })
 export class TaskComponent implements OnInit {
-  
+
   private activatedRoute = inject(ActivatedRoute);
 
   task$ = this.activatedRoute.params.pipe(
@@ -50,7 +50,7 @@ export class TaskComponent implements OnInit {
     }),
     filter(task => !!task.values?.length)
   )
-  
+
   running$ = this.store.select(isTaskRunning$(this.task$)).pipe(switchMap(running => running));
   compatibleModels$ = this.store.select(compatibleModels$(this.task$)).pipe(switchMap(models => models));
   lockableModels$ = combineLatest([this.task$, this.store.select(jobs), this.compatibleModels$]).pipe(map(combined => combined[2].map(model => ({
@@ -79,5 +79,11 @@ export class TaskComponent implements OnInit {
       accept: () => this.store.dispatch(deleteTask({ taskId: task.id }))
     };
     this.confirmationService.confirm(dialog);
+  }
+
+  formatConditions(conditions: Record<string, number>) {
+    return Object.entries(conditions || {})
+      .map(([key, value]) => `${key}=${value}`)
+      .join(', ');
   }
 }

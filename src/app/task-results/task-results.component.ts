@@ -69,7 +69,7 @@ export class TaskResultsComponent {
             const experiment = model.experiments.find(exp => exp.id === template.experimentId);
             return !!experiment ? {
               icon: 'fas fa-file-code',
-              label: `${experiment.name}: ${template.condition} ${experiment.conditionMU}`,
+              label: `${experiment.name}: ${template.condition} ${experiment.conditions.find(condition => condition.values.includes(template.condition))?.label || ''}`,
               command: () => this.downloadTemplate(result, combined.task, template.experimentId, template.condition)
             } : undefined
           }).filter(item => !!item)
@@ -79,7 +79,7 @@ export class TaskResultsComponent {
   ));
 
   selectedResult$ = new BehaviorSubject<TaskResult & { taskId: string }>(null!);
-  
+
   taskResult$ = this.selectedResult$.pipe(
     filterNullish(),
     switchMap(selectedResult =>
@@ -107,8 +107,8 @@ export class TaskResultsComponent {
         return undefined;
       }
       const templates = taskResult.templates || [];
-      const template = model.templates.find(modelTemplate => 
-        !templates.find(resultTemplate => 
+      const template = model.templates.find(modelTemplate =>
+        !templates.find(resultTemplate =>
           modelTemplate.experimentId == resultTemplate.experimentId && modelTemplate.condition === resultTemplate.condition && !!resultTemplate.data
         )
       );
@@ -180,7 +180,7 @@ export class TaskResultsComponent {
       }, 500)
     });
   }
-  
+
   download(blobFile: BlobFile) {
     const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blobFile.blob);
