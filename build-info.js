@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const packageJson = require('./package.json');
+const process = require('process');
 
 const data = `export const version = '';
 export const commit = '';
@@ -24,3 +25,21 @@ fs.readFile('.git/HEAD', (err, head) => {
     });
   }
 });
+
+const host = process.argv[2] || 'beskid.bcl-leipzig.net';
+const tls = ['true', 'yes', '1'].includes((process.argv[3]?.toLowerCase() || 'true').trim());
+const port = process.argv[4] ? parseInt(process.argv[4]) : tls ? 443 : 3000;
+const protocol = tls ? 'https' : 'http';
+const backend = tls && port === 443 || !tls && port === 80 ? host : `${host}:${port}`;
+const api = `${protocol}://${backend}`
+
+const envConfigFile = `export const environment = {
+  production: false,
+  domain: '${host}',
+  backend: '${backend}',
+  api: '${api}',
+};`;
+
+console.log(envConfigFile);
+
+fs.writeFileSync('./src/environments/environment.ts', envConfigFile);

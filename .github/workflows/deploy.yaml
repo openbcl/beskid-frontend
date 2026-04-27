@@ -20,7 +20,7 @@ jobs:
       - name: Install npm packages 
         run: npm install
       - name: Build PWA
-        run: npm run build:prod
+        run: node ./build-info ${{ vars.HOST }} ${{ vars.TLS }} ${{ vars.PORT }} && ng build --base-href=/beskid-frontend/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
