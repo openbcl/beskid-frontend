@@ -25,4 +25,10 @@ export class TaskItemComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.taskId$.next(this.task.id);
   }
+
+  formatConditions(conditions: Record<string, number>) {
+    return Object.entries(conditions || {})
+      .map(([key, value]) => `${key}=${value}`)
+      .join(', ');
+  }
 }

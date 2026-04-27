@@ -25,9 +25,12 @@ export const fdsVersions = createSelector(
 );
 
 export interface ExperimentConditionOption {
-  value: number,
-  name: string,
-  resolutions: number[]
+  id: string,
+  label: string,
+  values: {
+    value: number,
+    resolutions: number[]
+  }[]
 }
 
 export interface ExperimentOption {
@@ -39,10 +42,23 @@ export interface ExperimentOption {
 export const compatibleModels$ = (task$: Observable<Task>) => createSelector(
   getModelState,
   modelState => task$.pipe(
-    map(task => modelState.models.filter(model => 
-      task.setting.resolution === model.resolution &&
-      model.experiments.find(e => e.id === task.setting.id && e.conditions.includes(task.setting.condition))
-    ))
+    map(task => modelState.models.filter(model => {
+      if (task.setting.resolution !== model.resolution) {
+        return false;
+      }
+      const experiment = model.experiments.find(e => e.id === task.setting.id);
+      if (!experiment) {
+        return false;
+      }
+      const selectedConditions = task.setting.conditions || {};
+      const expectedConditionIds = experiment.conditions.map((condition) => condition.id);
+      return (
+        expectedConditionIds.every((conditionId) => conditionId in selectedConditions) &&
+        Object.entries(selectedConditions).every(([conditionId, value]) =>
+          !!experiment.conditions.find((condition) => condition.id === conditionId && condition.values.includes(value))
+        )
+      );
+    }))
   )
 )
 
@@ -53,37 +69,61 @@ export const experimentOptions = createSelector(
       id: experiment.id,
       name: experiment.name,
       conditions: experiment.conditions.map(condition => ({
-        value: condition,
-        name: `${condition} ${experiment.conditionMU}`,
-        resolutions: [model.resolution]
+        id: condition.id,
+        label: condition.label,
+        values: condition.values.map(value => ({
+          value,
+          resolutions: [model.resolution]
+        }))
       }))
-    })
+    });
+
     const experimentOptions = !!modelState.models?.length ?
       modelState.models[0].experiments.map(experiment => newExperimentOption(modelState.models[0], experiment)) : [];
+
     if (modelState.models?.length > 1) {
       modelState.models.slice(1).forEach(model => model.experiments.forEach(experiment => {
         const experimentOption = experimentOptions.find(expeimentOption => expeimentOption.id === experiment.id);
         if (!experimentOption) {
-          experimentOptions.push(newExperimentOption(model, experiment))
+          experimentOptions.push(newExperimentOption(model, experiment));
         } else {
           experiment.conditions.forEach(condition => {
-            const conditionR = experimentOption.conditions.find(conditionR => conditionR.value === condition);
-            if (!conditionR) {
+            const conditionOption = experimentOption.conditions.find(conditionOption => conditionOption.id === condition.id);
+            if (!conditionOption) {
               experimentOption.conditions.push({
-                value: condition,
-                name: `${condition} ${experiment.conditionMU}`,
-                resolutions: [model.resolution]
-              })
-            } else if (!conditionR.resolutions.includes(model.resolution)) {
-              conditionR.resolutions.push(model.resolution);
+                id: condition.id,
+                label: condition.label,
+                values: condition.values.map(value => ({
+                  value,
+                  resolutions: [model.resolution]
+                }))
+              });
+            } else {
+              condition.values.forEach(value => {
+                const valueOption = conditionOption.values.find((conditionValue) => conditionValue.value === value);
+                if (!valueOption) {
+                  conditionOption.values.push({
+                    value,
+                    resolutions: [model.resolution]
+                  });
+                } else if (!valueOption.resolutions.includes(model.resolution)) {
+                  valueOption.resolutions.push(model.resolution);
+                }
+              });
             }
-          })
+          });
         }
       }));
     }
+
     return experimentOptions.map(experimentOption => ({
       ...experimentOption,
-      conditions: experimentOption.conditions.sort((a, b) => a.value - b.value)
+      conditions: experimentOption.conditions
+        .map((conditionOption) => ({
+          ...conditionOption,
+          values: conditionOption.values.sort((a, b) => a.value - b.value)
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label))
     }));
   }
 );

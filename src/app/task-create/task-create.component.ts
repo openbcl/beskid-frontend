@@ -22,7 +22,6 @@ import { RecreateViewDirective } from '../shared/recreate-view.directive';
 import { ExperimentOption, ExperimentConditionOption, experimentOptions, models } from '../store/model.selector';
 import { filter, first, map } from 'rxjs';
 import { findModels } from '../store/model.actions';
-import { Experiment, Model } from '../store/model';
 import { breakpoint } from '../store/ui.selector';
 import { isCreatingTask } from '../store/task.selector';
 
@@ -44,9 +43,12 @@ export class TaskCreateComponent implements OnInit {
   form = this.fb.group({
     values: this.fb.array<FormControl<string>>([], { validators: [Validators.required]}),
     experimentOption: this.fb.control<ExperimentOption | undefined>(undefined, { validators: [Validators.required] }),
-    experimentCondition: this.fb.control<ExperimentConditionOption | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
+    conditionValues: this.fb.group<Record<string, FormControl<number | undefined>>>({}),
     experimentResolution: this.fb.control<number | undefined>({ value: undefined, disabled: true }, { validators: [Validators.required] }),
   });
+
+  conditionOptions: ExperimentConditionOption[] = [];
+  resolutionOptions: number[] = [];
 
   help = () => `You should submit exactly ${this.form.value.experimentResolution} values (numbers), separated either by commas, semicolons, line breaks or spaces.`;
 
@@ -69,20 +71,14 @@ export class TaskCreateComponent implements OnInit {
   rows$ = this.store.select(models).pipe(
     filter(models => !!models.length),
     map(models =>
-      models.map(model => model.experiments
-        .map(exp => exp.conditions
-          .map(condition => {
-            const experiment: Experiment & { condition: number } = {
-              ...exp,
-              condition
-            }
-            const row: Model & { experiment: Experiment & { condition: number } } = {
-              ...model,
-              experiment
-            }
-            return row;
-          }).flat()
-        ).flat()
+      models.map(model =>
+        model.experiments.map(exp => ({
+          ...model,
+          experiment: {
+            ...exp,
+            conditionSummary: exp.conditions.map(condition => `${condition.label}: ${condition.values.join(', ')}`).join(' | ')
+          }
+        }))
       ).flat()
     )
   );
@@ -96,19 +92,77 @@ export class TaskCreateComponent implements OnInit {
     this.store.dispatch(findModels());
   }
 
-  onChanges(fc: FormControl, event?: { value: ExperimentConditionOption }) {
-    if (event?.value.resolutions.length === 1) {
-      fc.setValue(event.value.resolutions[0]);
-    } else if (!event?.value || !this.form.value.experimentResolution || !event.value.resolutions.includes(this.form.value.experimentResolution)) {
-      fc.setValue(undefined);
+   onExperimentChange() {
+     this.conditionOptions = this.form.value.experimentOption?.conditions || [];
+     const conditionControls = this.form.controls.conditionValues.controls;
+     Object.keys(conditionControls).forEach((key) => (this.form.controls.conditionValues as any).removeControl(key));
+     this.conditionOptions.forEach((conditionOption) => {
+       (this.form.controls.conditionValues as any).addControl(
+         conditionOption.id,
+         this.fb.control<number | undefined>(undefined, { validators: [Validators.required] })
+       );
+     });
+     this.form.controls.experimentResolution.setValue(undefined);
+     this.form.controls.experimentResolution.disable();
+     this.form.controls.values.clear();
+     this.updateResolutionOptions();
+   }
+
+  onConditionChange() {
+    this.updateResolutionOptions();
+  }
+
+  selectedConditionsLabel() {
+    return this.conditionOptions
+      .map((conditionOption) => {
+        const conditionValue = this.form.controls.conditionValues.controls[conditionOption.id]?.value;
+        return conditionValue === undefined ? undefined : `${conditionOption.label}: ${conditionValue}`;
+      })
+      .filter((conditionLabel): conditionLabel is string => !!conditionLabel)
+      .join(', ');
+  }
+
+  private updateResolutionOptions() {
+    const selectedConditions = this.selectedConditions();
+    const allSelected = this.conditionOptions.every((conditionOption) => selectedConditions[conditionOption.id] !== undefined);
+    if (!allSelected) {
+      this.resolutionOptions = [];
+      this.form.controls.experimentResolution.setValue(undefined);
+      this.form.controls.experimentResolution.disable();
+      this.form.controls.values.clear();
+      return;
+    }
+
+    const resolutionSets = this.conditionOptions
+      .map((conditionOption) => conditionOption.values.find((valueOption) => valueOption.value === selectedConditions[conditionOption.id])?.resolutions || [])
+      .filter((resolutions) => !!resolutions.length);
+
+    const compatibleResolutions = resolutionSets.length
+      ? resolutionSets.slice(1).reduce((acc, resolutions) => acc.filter((resolution) => resolutions.includes(resolution)), resolutionSets[0])
+      : [];
+
+    this.resolutionOptions = [...new Set(compatibleResolutions)].sort((a, b) => a - b);
+    if (!this.resolutionOptions.length) {
+      this.form.controls.experimentResolution.setValue(undefined);
+      this.form.controls.experimentResolution.disable();
+      this.form.controls.values.clear();
+      return;
+    }
+
+    this.form.controls.experimentResolution.enable();
+    if (!this.form.value.experimentResolution || !this.resolutionOptions.includes(this.form.value.experimentResolution)) {
+      this.form.controls.experimentResolution.setValue(this.resolutionOptions.length === 1 ? this.resolutionOptions[0] : undefined);
       this.form.controls.values.clear();
     }
-    if (!this.form.value.experimentCondition?.value) {
-      this.form.controls.experimentCondition.enable();
-      this.form.controls.experimentResolution.disable();
-    } else {
-      this.form.controls.experimentResolution.enable();
-    }
+  }
+
+  private selectedConditions(): Record<string, number> {
+    return Object.entries(this.form.controls.conditionValues.controls).reduce((acc, [conditionId, control]) => {
+      if (control.value !== undefined) {
+        acc[conditionId] = control.value;
+      }
+      return acc;
+    }, {} as Record<string, number>);
   }
 
   async pasteFromClipboard() {
@@ -167,7 +221,7 @@ export class TaskCreateComponent implements OnInit {
       setting: {
         id: this.form.value.experimentOption!.id,
         resolution: this.form.value.experimentResolution as number,
-        condition: this.form.value.experimentCondition!.value as number
+        conditions: this.selectedConditions()
       }
     };
     this.store.dispatch(addTask({ createTask }));

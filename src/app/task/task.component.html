@@ -14,7 +14,7 @@
           </div>
         </div>
       </ng-template>
-      <be-task-chart [values]="(task.values) | numbersToStrings" [title]="task.setting.name" label="Input values, condition: {{task.setting.condition}} {{task.setting.conditionMU}}"></be-task-chart>
+      <be-task-chart [values]="(task.values) | numbersToStrings" [title]="task.setting.name" label="Input values, condition(s): {{formatConditions(task.setting.conditions)}}"></be-task-chart>
     </p-panel>
     <be-task-jobs class="col-12 xl:col-6" [taskId]="task.id"></be-task-jobs>
   </div>

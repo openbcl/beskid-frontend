@@ -12,8 +12,13 @@ export interface Experiment {
   id: string;
   name: string;
   scale: Scale;
-  conditions: number[];
-  conditionMU: string
+  conditions: ExperimentCondition[];
+}
+
+export interface ExperimentCondition {
+  id: string;
+  label: string;
+  values: number[];
 }
 
 export interface Template {
