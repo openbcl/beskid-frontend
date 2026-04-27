@@ -6,7 +6,7 @@
     "start": "node ./build-info && ng serve",
     "start:dev": "node ./build-info && ng serve --host 0.0.0.0 --configuration development",
     "build": "node ./build-info && ng build",
-    "build:prod": "node ./build-info && ng build --base-href=/beskid-frontend/",
+    "ghpages": "ng build --base-href=/beskid-frontend/",
     "watch": "node ./build-info && ng build --watch --configuration development",
     "test": "node ./build-info && ng test --watch=false"
   },
